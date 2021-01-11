@@ -3,6 +3,7 @@ local autoRepair = false
 playersIdInPassive = {} -- Global
 local open = false
 local passive = false
+local voicechat = true
 local lastSpawned = nil
 local activeCamName = nil
 local cachedEntity = {}
@@ -229,6 +230,20 @@ function OpenMainMenu()
                             end,
                         });
                     end
+
+                    RageUI.Button('Toggle voice chat', "This allows you to enable or disable voice chat. By default, it is enabled", {}, true, {
+                            onSelected = function()
+                                voicechat = not voicechat
+                                NetworkSetVoiceActive(voicechat)
+                                if voicechat then
+                                    NetworkClearVoiceChannel()
+                                    ShowNotification("Voice chat enabled !")
+                                else
+                                    NetworkSetVoiceChannel(math.random(1,99999999))
+                                    ShowNotification("Voice chat disabled !")
+                                end
+                            end,
+                        });
                 end)
 
                 Wait(1)
