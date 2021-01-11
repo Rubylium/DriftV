@@ -159,7 +159,13 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     for k,v in pairs(race) do
-        zone.addZone(v.label, v.start.xyz, "Press [e] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170)
+        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170)
+
+        local blip = AddBlipForCoord(v.start.xyz)
+        SetBlipSprite(blip, 38)
+        SetBlipColour(blip, 44)
+
+        AddBlip(v.start.xyz, 38, 2, 0.85, 44, v.label)
     end
 end)
 
