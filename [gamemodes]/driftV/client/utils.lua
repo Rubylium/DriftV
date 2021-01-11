@@ -233,3 +233,16 @@ function GetVehicles()
 
 	return vehicles
 end
+
+function AddBlip(pos, sprite, display, scale, color, label)
+    local blip = AddBlipForCoord(pos)
+    SetBlipSprite(blip, sprite)
+    SetBlipDisplay(blip, display)
+    SetBlipScale(blip, scale)
+    SetBlipColour(blip, color)
+    SetBlipAsShortRange(blip, true)
+
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentSubstringPlayerName(label)
+    EndTextCommandSetBlipName(blip)
+end
