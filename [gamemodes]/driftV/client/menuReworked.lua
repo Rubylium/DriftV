@@ -33,6 +33,7 @@ local camera =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift parad
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 main.Closed = function()
     open = false
+    RageUI.CloseAll()
     RageUI.Visible(main, false)
 end
 
@@ -40,6 +41,7 @@ end
 function OpenMainMenu()
     if open then
         open = false
+        RageUI.CloseAll()
         RageUI.Visible(main, false)
     else
         open = true
@@ -164,6 +166,7 @@ function OpenMainMenu()
                     for k,v in pairs(mapsArea) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
+                                open = false
                                 RageUI.CloseAll()
                                 p:Teleport(v.pos.xyz)
                                 ExtendWorldBoundaryForPlayer(-9000.0,-11000.0,30.0)
