@@ -113,7 +113,7 @@ Citizen.CreateThread(function()
                     p:SubmitDriftScore(score)
                     score = 0
                     waiting = 0
-                    SendNUIMessage({ShowHud = false})
+                    SendNUIMessage({HideHud = true})
                 else
                     if newScore ~= score and p:speed() >= 10.0 then
                         waiting = 0
@@ -124,7 +124,7 @@ Citizen.CreateThread(function()
                             p:SubmitDriftScore(score)
                             score = 0
                             waiting = 0
-                            SendNUIMessage({ShowHud = false})
+                            SendNUIMessage({HideHud = true})
                         end
                     end
                 end
@@ -138,7 +138,7 @@ Citizen.CreateThread(function()
                         {
                             ShowHud = true,
                             driftPoints = math.floor(score),
-                            driftDisplayMulti = tostring(mult),
+                            driftDisplayMulti = "x"..tostring(mult),
                         }
                     )
                 end
@@ -146,7 +146,7 @@ Citizen.CreateThread(function()
             end
 
         else
-            SendNUIMessage({ShowHud = false})
+            SendNUIMessage({HideHud = true})
             Wait(500)
         end
     end

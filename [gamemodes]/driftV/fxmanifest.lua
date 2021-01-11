@@ -6,7 +6,6 @@ ui_page "client/web/hud.html"
 
 files {
     "client/web/hud.html",
-    "client/web/js/gauge.min.js",
     "client/web/js/hud.js",
     "client/web/css/hud.css",
     "client/web/fonts/Oswald-Light.eot",
@@ -19,7 +18,7 @@ files {
     "client/web/fonts/Oswald-Regular.ttf",
     "client/web/fonts/Oswald-Regular.woff",
     "client/web/fonts/Oswald-Regular.woff2",
-    "client/web/images/speedcircle.png"
+    "client/web/images/drifting.png"
 }
 
 client_scripts {

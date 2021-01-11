@@ -245,5 +245,4 @@ function AddBlip(pos, sprite, display, scale, color, label)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentSubstringPlayerName(label)
     EndTextCommandSetBlipName(blip)
-    table.insert(blips, blip)
 end

@@ -38,6 +38,7 @@
   font-weight: 100;
   color: #fff;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
 }
 .driftDisplayMulti {
   font-size: 30px;

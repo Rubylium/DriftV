@@ -9,7 +9,7 @@ $(function () {
     if (item.ShowHud) {
       // Drift points
       $(".driftDisplay").html(betterNumber(item.driftPoints));
-      $(".driftDisplayMulti").html(driftDisplayMulti);
+      $(".driftDisplayMulti").html(item.driftDisplayMulti);
 
       $("#container").fadeIn(500);
     } else if (item.HideHud) {
