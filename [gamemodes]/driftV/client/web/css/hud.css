@@ -21,12 +21,12 @@
   font-style: normal;
 }
 
-body {
+/* body {
   background-image: url(https://media.discordapp.net/attachments/797632218234093568/797932721024401418/unknown.png);
-}
+} */
 
 #container {
-  /* display: none; */
+  display: none;
 }
 .driftDisplay {
   font-size: 50px;
