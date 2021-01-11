@@ -116,6 +116,7 @@ function player:Teleport(pos)
         if GetGameTimer() - sceneLoadTimer > 2000 then
             break
         end
+        SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
         DrawDriftV()
         Citizen.Wait(0)
     end
@@ -126,6 +127,7 @@ function player:Teleport(pos)
         if GetGameTimer() - sceneLoadTimer > 2000 then
             break
         end
+        SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
         DrawDriftV()
         Citizen.Wait(0)
     end
@@ -151,6 +153,7 @@ function player:Teleport(pos)
             while GetPlayerSwitchState() ~= 12 do
                 Wait(1)
 
+                SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
                 if GetPlayerSwitchState() < 9 then
                     DrawDriftV()
                 end
