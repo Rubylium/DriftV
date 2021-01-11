@@ -8,6 +8,7 @@ local lastSpawned = nil
 local activeCamName = nil
 local cachedEntity = {}
 local playersInPassiveVeh = {}
+local playerInstances = {}
 
 local mapsArea = {
     {label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
@@ -31,7 +32,9 @@ local vehicleOptionsExtra =  RageUI.CreateSubMenu(vehicleOptions, "DriftV", "Wel
 local vehicleOptionsLivery =  RageUI.CreateSubMenu(vehicleOptions, "DriftV", "Welcome to the drift paradise")
 local maps =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local camera =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+local instance =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+
 main.Closed = function()
     open = false
     RageUI.CloseAll()
@@ -57,6 +60,11 @@ function OpenMainMenu()
                     RageUI.Button('My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
                     RageUI.Button('Camera', "Unlocked when inside a vehicle", {}, p:isInVeh(), {}, camera);
+                    RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
+                        onSelected = function()
+                            TriggerServerEvent("drift:GetServerInstance")
+                        end,
+                    }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     
                     RageUI.Button("Toggle freecam", "", {}, true, {
@@ -246,6 +254,16 @@ function OpenMainMenu()
                         });
                 end)
 
+                RageUI.IsVisible(instance, function()
+                    for k,v in pairs(playerInstances) do
+                        RageUI.Button("Instance #"..tostring(k - 1), nil, {RightLabel = "Players: ~b~"..v}, true, {
+                            onSelected = function()
+                                TriggerServerEvent("drift:ChangeServerInstance", k)
+                            end,
+                        });
+                    end
+                end)
+
                 Wait(1)
             end
         end)
@@ -330,7 +348,6 @@ Citizen.CreateThread(function()
                         playersInPassiveVeh[k][veh] = veh
                     end
 
-                    print("Removed collision for veh "..veh)
                 else
                     for i,j in pairs(playersInPassiveVeh[k]) do
                         ResetEntityAlpha(j)
@@ -338,7 +355,6 @@ Citizen.CreateThread(function()
                         SetEntityNoCollisionEntity(p:currentVeh(), j, true)
                         SetEntityCollision(j, true, true)
                         playersInPassiveVeh[k][i] = nil 
-                        print("Activated collision for veh "..j)
                     end
                     
                 end
@@ -354,7 +370,6 @@ Citizen.CreateThread(function()
                         SetEntityNoCollisionEntity(p:ped(), j, true)
                         SetEntityNoCollisionEntity(p:currentVeh(), j, true)
                         SetEntityCollision(j, true, true)
-                        print("Removed collision for veh "..j)
                     end
                     playersInPassiveVeh[GetPlayerServerId(v)] = nil
                 end
@@ -373,4 +388,9 @@ AddEventHandler("dirft:SetInPassive", function(list)
             playersInPassiveVeh[k] = {}
         end
     end
+end)
+
+RegisterNetEvent("drift:GetServerInstance")
+AddEventHandler("drift:GetServerInstance", function(info)
+    playerInstances = info
 end)
