@@ -14,6 +14,7 @@ function InitPlayer(source)
             driftPoint = 0,
             xp = 0,
             cars = {},
+            needSave = false
         }
         player[source] = data
         SavePlayer(source)
@@ -23,7 +24,7 @@ function InitPlayer(source)
         debugPrint("Loaded player for database ("..data.money .. " " .. data.driftPoint ..")")
     end
 
-
+    SetPlayerInstance(source, 1)
     RefreshPlayerData(source)
 end
 
@@ -35,8 +36,25 @@ function SavePlayer(source)
     local db = rockdb:new()
     local license = GetLicense(source)
     db:SaveTable("player_"..tostring(license)..saison, player[source])
-    debugPrint("Player saved")
+    debugPrint("Player ("..source..") saved")
+    player[source].needSave = false
 end
+
+Citizen.CreateThread(function()
+    while true do
+        for k,v in pairs(player) do
+
+            if GetPlayerPing(k) == 0 then
+                player[source] = nil
+            else
+                if v.needSave then
+                    SavePlayer(k)
+                end
+            end
+        end
+        Wait(10*1000)
+    end
+end)
 
 RegisterNetEvent("driftV:InitPlayer")
 AddEventHandler("driftV:InitPlayer", function()
@@ -60,7 +78,7 @@ AddEventHandler("driftV:SubmitDriftPoint", function(point)
     TriggerClientEvent("FeedM:showNotification", source, "+ ~g~"..tostring(math.floor(point / 200)).."~s~$", 2000, "success")
 
     RefreshPlayerData(source)
-    SavePlayer(source)
+    player[source].needSave = true
 
 end)
 
@@ -70,7 +88,7 @@ AddEventHandler("driftV:SubmitExpPoints", function(point)
     player[source].xp = point
 
     RefreshPlayerData(source)   
-    SavePlayer(source)
+    player[source].needSave = true
 
 end)
 
@@ -105,6 +123,6 @@ AddEventHandler("drift:BuyVehicle", function(price, label, model)
         TriggerClientEvent("FeedM:showNotification", source, "New vehicle added to your garage !", 5000, "success")
 
         RefreshPlayerData(source)
-        SavePlayer(source)
+        player[source].needSave = true
     end
 end)
