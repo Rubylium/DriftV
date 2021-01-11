@@ -1,0 +1,35 @@
+/* Color for single progressbar. */
+#pb0::-webkit-progress-value
+{
+    background: rgb(233, 198, 70);
+}
+
+/* Color for multiple progressbars, #1 */
+#pb1::-webkit-progress-value
+{
+    background-color: rgb(255, 102, 102);
+}
+
+/* Color for multiple progressbars, #2 */
+#pb2::-webkit-progress-value
+{
+    background-color: rgb(102, 194, 255);
+}
+
+/* Color for multiple progressbars, #3 */
+#pb3::-webkit-progress-value
+{
+    background-color: rgb(133, 224, 133);
+}
+
+/* Color for multiple progressbars, #4 */
+#pb4::-webkit-progress-value
+{
+    background-color: rgb(102, 102, 255);
+}
+
+/* Color for multiple progressbars, #5 */
+#pb5::-webkit-progress-value
+{
+    background-color: rgb(255, 239, 177);
+}

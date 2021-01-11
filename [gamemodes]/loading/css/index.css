@@ -1,0 +1,256 @@
+@font-face 
+{
+    font-family: gravity;
+    src: url(../fonts/gravity.otf);
+}
+
+@keyframes slideright {
+    0%   {margin-left:0px}
+    100% {margin-left:110% }
+}
+@keyframes zoomin {
+    0% {width:100%;height: 100%; opacity: 0.3}
+    50% {width: 300%;height: 300%;opacity: 0}
+    100% {width:100%;height: 100%;opacity:0.3}
+}
+
+body
+{
+    overflow: hidden;
+    background-color: rgb(30,30,30);
+    box-shadow: 0 0 500px rgba(0,1,1,1) inset;
+    background-color: rgb(30,30,30);
+    margin: 0;
+}
+
+#background
+{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity: 0.3;
+    transition: opacity 1s; 
+}
+#background2 {
+    opacity:0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    -o-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    opacity:0;
+    transition: opacity 1s; 
+}
+.slideright {
+    animation-name: slideright;
+    animation-duration: 3.2s;
+}
+
+.zoomin
+{
+    
+    animation-name: zoomin;
+    animation-duration: 4.2s;
+    justify-content: center;
+    
+
+}
+
+*
+{
+    font-family: gravity;
+    color: rgb(230,230,230);  
+
+    animation-name: hammer;
+    animation-duration: 10s;
+}
+
+#logo
+{
+    max-width: 1024;
+    max-height: 1024;
+
+    display: block;
+    margin: auto;
+}
+
+.content-container
+{
+    display: block;
+    margin: auto;
+
+    width: 60%;
+}
+
+/*
+    Progressbar styling.
+*/
+progress
+{
+    margin-top: 5px;
+}
+
+progress[value] 
+{
+   -webkit-appearance: none;
+   appearance: none;
+
+   width: 100%;
+   height: 30px;
+}
+
+progress[value]::-webkit-progress-bar
+{
+  background-color: rgb(60,60,60);
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+progress::-webkit-progress-value
+{
+    animation-name: example;
+    animation-duration: 10s;
+    animation-play-state: running;
+    border-radius: 20px;
+    background-size: 60px 30px, 100% 100%, 100% 100%;
+}
+
+.pbCollapse
+{
+    width: 24.63% !important
+
+}
+
+/*
+    General purpose classes.
+*/
+.stick-to-right
+{
+    float:right;
+}
+
+.hide 
+{
+    display: none;
+}
+
+.loading-text
+{
+    display: inline-block;
+}
+
+/*
+    Messages styling + fade in and fadeout animations
+*/
+#message 
+{
+    opacity:1;
+    transition: opacity 0.3s; 
+}
+
+/*
+    Music player styling.
+*/
+#music-info
+{
+    padding:20px;
+}
+
+#player
+{
+    display: none;
+}
+
+#now-playing
+{
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+}
+
+.icon-button
+{
+    color:white;
+    font-size: 24px;
+    display: inline-block;
+    padding-top: 10px;
+
+}
+
+#volumeSlider
+{
+    width: 200px;
+    height: 15px;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,0.1);
+    outline: none;
+    position: absolute;
+    margin-top: 15px;
+    margin-left: 10px
+}
+
+#volumeSlider::-webkit-slider-thumb 
+{
+    -webkit-appearance: none;
+    width: 10px;
+    height: 25px;
+    background: white;
+}
+
+#cursor
+{
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#log
+{
+    list-style-type: none;
+    font-size: 0.66em;
+    margin: 0;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    position:fixed;
+    right:0;
+    bottom:0;
+}
+
+#log > li
+{
+    color: red;
+}
+
+.important{
+    opacity: 0.9;
+    transition-delay: 0.2s;
+    transition-duration: 0.5s;border-bottom: 10px solid rgba(0,0,0,0.7);
+}
+.important:hover{
+    opacity: 1;border-bottom: 10px solid rgba(0,0,0,0.8);
+}
+
+.info1{
+    background-color: rgba(0,0,0,0.4);
+    transition-delay: 0.2s;
+    transition-duration: 0.5s;
+}
+
+.info1:hover{
+    background-color: rgba(0,0,0,0.25);
+}
+
