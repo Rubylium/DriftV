@@ -8,7 +8,7 @@ local vehs = {
     {
         label = "BMW",
         vehs = {
-            {price = 65000,label = "BMW e36 drift",model = "e36drift"},
+            {price = 65000,label = "BMW e46",model = "bmwe"},
         },
     },
     {
