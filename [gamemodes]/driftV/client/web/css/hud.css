@@ -22,12 +22,12 @@
 }
 
 body {
-  background-color: gray;
+  /* background-color: gray; */
 }
 
-/* #container {
+#container {
   display: none;
-} */
+}
 .driftDisplay {
   font-size: 50px;
   position: absolute;
@@ -63,7 +63,7 @@ body {
 
 
 #containerSucces {
-  /* display: none; */
+  display: none;
 }
 
 .succesImage {

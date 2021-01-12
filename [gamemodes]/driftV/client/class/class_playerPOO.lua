@@ -2,6 +2,7 @@ player = {
     cars = {},
     money = 0,
     driftPoint = 0,
+    sessionDriftPoint = 0,
     passive = false,
     succes = {}
 }
@@ -15,9 +16,14 @@ function player:new()
     obj.cars = {}
     obj.money = 0
     obj.driftPoint = 0
+    obj.sessionDriftPoint = 0
     obj.passive = false
 
     p = obj
+end
+
+function player:getSessionDrift()
+    return self.sessionDriftPoint
 end
 
 function player:GetCars()
@@ -77,6 +83,7 @@ function player:currentVeh()
 end
 
 function player:SubmitDriftScore(score)
+    self.sessionDriftPoint = self.sessionDriftPoint + score
     TriggerServerEvent("driftV:SubmitDriftPoint", score)
     XNL_AddPlayerXP(math.floor(score / 150))
 end
