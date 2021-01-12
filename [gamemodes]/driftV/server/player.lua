@@ -1,7 +1,9 @@
 local player = {}
 saison = "_testServer19"
+pCount = 1
 
 function InitPlayer(source)
+    pCount = pCount + 1
     local source = tonumber(source)
     local license = GetLicense(source)
 
