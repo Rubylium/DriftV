@@ -14,7 +14,7 @@ local Colour = {
 ---@param Colours thread
 ---@param MinimumIndex number
 ---@param CurrentIndex number
----@param Callback function
+
 ---@return nil
 ---@public
 function RageUI.ColourPanel(Title, Colours, MinimumIndex, CurrentIndex, Action, Index, Style)
