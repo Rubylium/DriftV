@@ -13,7 +13,9 @@ $(function () {
     if (item.ShowHud) {
       // Drift points
       $(".driftDisplay").html(betterNumber(item.driftPoints));
-      $(".driftDisplayMulti").html(item.driftDisplayMulti);
+      $(".driftDisplayMulti").html(item.driftDisplayMulti)
+
+
       lastPoints = item.driftPoints
       lastMulti = item.driftDisplayMulti
 

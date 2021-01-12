@@ -188,7 +188,7 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     for k,v in pairs(race) do
-        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 9, 1.0, {255, 255, 255}, 170, "markers", "finish", 90.0, 0.0, 0.0)
+        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
 
         AddBlip(v.start.xyz, 38, 2, 0.85, 44, v.label)
     end
@@ -247,12 +247,22 @@ function StartRace(data, raceKey)
         local model = GetEntityModel(pVeh)
 
         TriggerServerEvent("drift:EndRace", data.label, endPoints, GetDisplayNameFromVehicleModel(model))
+
+        p:SetSucces(data.label)
+        SendNUIMessage( {
+            ShowSucces = true,
+            label = "Race: "..data.label,
+        })
+
         local wait = 0
         while wait < 1000 do
             wait = wait + 1
             ShowHelpNotification("Drift point: ~b~"..math.floor(endPoints).."~s~ !", false)
             Wait(1)
         end
+        SendNUIMessage( {
+            HideSucces = true,
+        })
     else
         ShowNotification("Race cancelled ! You need to go faster !")
     end

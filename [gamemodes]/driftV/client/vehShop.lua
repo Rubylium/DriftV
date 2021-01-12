@@ -38,6 +38,12 @@ local vehs = {
             {price = 450000,label = "2015 Ford Mustang GT",model = "MGT"},
         },
     },
+    {
+        label = "Acura",
+        vehs = {
+            {price = 550000,label = "Acura NSX LB",model = "filthynsx"},
+        },
+    },
 }
 
 local open = false
@@ -52,6 +58,7 @@ local main = RageUI.CreateMenu("DriftV", "Welcome to the drift paradise")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 main.Closed = function()
     open = false
+    RageUI.CloseAll()
     RageUI.Visible(main, false)
     DeleteEntity(previewVeh.entity)
 end
@@ -81,6 +88,8 @@ function OpenVehShopMenu()
                         RageUI.Button(v.label, nil, {RightLabel = "~g~"..v.price.."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
+                                    RageUI.CloseAll()
+                                    open = false
                                     TriggerServerEvent("drift:BuyVehicle", v.price, v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
                                 else

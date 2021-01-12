@@ -57,21 +57,21 @@ Citizen.CreateThread(function()
                 pNear = true
                 if v.haveMarker then
 
-                    if v.dict ~= nil then
-                        if not HasStreamedTextureDictLoaded(v.dict) then
-                            RequestStreamedTextureDict(v.dict, true)
-                            while not HasStreamedTextureDictLoaded(v.dict) do
-                                print("Loading custom marker ... ", v.dict, v.marker)
-                                Wait(1)
-                            end
-                            SetStreamedTextureDictAsNoLongerNeeded(v.dict)
-                        end
+                    -- if v.dict ~= nil then
+                    --     if not HasStreamedTextureDictLoaded(v.dict) then
+                    --         RequestStreamedTextureDict(v.dict, true)
+                    --         while not HasStreamedTextureDictLoaded(v.dict) do
+                    --             print("Loading custom marker ... ", v.dict, v.marker)
+                    --             Wait(1)
+                    --         end
+                    --         SetStreamedTextureDictAsNoLongerNeeded(v.dict)
+                    --     end
 
-                        DrawMarker(v.markerType, v.pos, 0.0, 0.0, 0.0, v.rotX, v.rotY, v.rotZ, v.markerSize, v.markerSize, v.markerSize, v.markerColor[1], v.markerColor[2], v.markerColor[3], v.markerAlpha, 0, 1, 2, 0, v.dict, v.marker, 0)
-                    else
+                    --     DrawMarker(v.markerType, v.pos, 0.0, 0.0, 0.0, v.rotX, v.rotY, v.rotZ, v.markerSize, v.markerSize, v.markerSize, v.markerColor[1], v.markerColor[2], v.markerColor[3], v.markerAlpha, 0, 1, 2, 0, v.dict, v.marker, 0)
+                    -- else
                         DrawMarker(v.markerType, v.pos, 0.0, 0.0, 0.0, v.rotX, v.rotY, v.rotZ, v.markerSize, v.markerSize, v.markerSize, v.markerColor[1], v.markerColor[2], v.markerColor[3], v.markerAlpha, 0, 1, 2, 0, nil, nil, 0)
 
-                    end
+                    -- end
                 end
 
                 if dst <= 2.0 then
