@@ -3,6 +3,7 @@ player = {
     money = 0,
     driftPoint = 0,
     passive = false,
+    succes = {}
 }
 
 p = nil ---@type player
@@ -23,6 +24,13 @@ function player:GetCars()
     return self.cars
 end
 
+function player:GetSucces()
+    return self.succes
+end
+
+function player:SetSucces(value)
+    self.succes[value] = true
+end
 
 function player:SetCars(cars)
     self.cars = cars

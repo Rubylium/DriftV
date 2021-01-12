@@ -27,9 +27,10 @@ $(function () {
     }
 
     if (item.ShowSucces) {
-
+      $("#containerSucces").fadeIn(100);
+      $(".succesText").html(item.label);
     } else if (item.HideSucces) {
-
+      $("#containerSucces").fadeOut(500);
     }
   });
 });
