@@ -3,12 +3,16 @@ local vehs = {
         label = "Honda",
         vehs = {
             {price = 50000,label = "Honda Accord 86",model = "accord86"},
+            {price = 120000,label = "Honda Civic EK9 Rocket Bunny",model = "civicek9rb"},
+            {price = 750000,label = "1992 Honda NSX-R Rocket Bunny",model = "nsxtypr"}
+
         },
     },
     {
         label = "BMW",
         vehs = {
             {price = 65000,label = "BMW e46",model = "bmwe"},
+            {price = 90000,label = "1992 BMW M3 E36 Pandem Rocket Bunny",model = "e36prb"},
         },
     },
     {
@@ -24,6 +28,7 @@ local vehs = {
             {price = 120000,label = "Nissan s15 RB",model = "s15rb"},
             {price = 250000,label = "Nissan r35",model = "gtrp"},
             {price = 350000,label = "Nissan r33",model = "r33"},
+            {price = 140000,label = "Nissan 350z Rocket Bunny Kit Stanced",model = "350zrb"},
         },
     },
     {
@@ -42,6 +47,18 @@ local vehs = {
         label = "Acura",
         vehs = {
             {price = 550000,label = "Acura NSX LB",model = "filthynsx"},
+        },
+    },
+    {
+        label = "Subaru",
+        vehs = {
+            {price = 190000,label = "Subaru BRZ Rocket Bunny",model = "brz"},
+        },
+    },
+    {
+        label = "Lexus",
+        vehs = {
+            {price = 70000,label = "Lexus RC350 Rocket Bunny",model = "RC350"},
         },
     },
 }
