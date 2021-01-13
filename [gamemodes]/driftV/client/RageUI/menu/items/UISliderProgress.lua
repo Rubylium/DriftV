@@ -28,7 +28,7 @@ local SettingsSlider = {
 ---@param ProgressMax number
 ---@param Description string
 ---@param Enabled boolean
----@param Callback function
+
 function RageUI.SliderProgress(Label, ProgressStart, ProgressMax, Description, Style, Enabled, Actions)
 
     ---@type table

@@ -13,7 +13,7 @@ local Percentage = {
 ---@param HeaderText string
 ---@param MinText string
 ---@param MaxText string
----@param Callback function
+
 ---@param Index number
 ---@return nil
 ---@public

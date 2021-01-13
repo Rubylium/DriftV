@@ -2,7 +2,9 @@ player = {
     cars = {},
     money = 0,
     driftPoint = 0,
+    sessionDriftPoint = 0,
     passive = false,
+    succes = {}
 }
 
 p = nil ---@type player
@@ -14,15 +16,27 @@ function player:new()
     obj.cars = {}
     obj.money = 0
     obj.driftPoint = 0
+    obj.sessionDriftPoint = 0
     obj.passive = false
 
     p = obj
+end
+
+function player:getSessionDrift()
+    return self.sessionDriftPoint
 end
 
 function player:GetCars()
     return self.cars
 end
 
+function player:GetSucces()
+    return self.succes
+end
+
+function player:SetSucces(value)
+    self.succes[value] = true
+end
 
 function player:SetCars(cars)
     self.cars = cars
@@ -69,6 +83,7 @@ function player:currentVeh()
 end
 
 function player:SubmitDriftScore(score)
+    self.sessionDriftPoint = self.sessionDriftPoint + score
     TriggerServerEvent("driftV:SubmitDriftPoint", score)
     XNL_AddPlayerXP(math.floor(score / 150))
 end
@@ -116,6 +131,7 @@ function player:Teleport(pos)
         if GetGameTimer() - sceneLoadTimer > 2000 then
             break
         end
+        SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
         DrawDriftV()
         Citizen.Wait(0)
     end
@@ -126,6 +142,7 @@ function player:Teleport(pos)
         if GetGameTimer() - sceneLoadTimer > 2000 then
             break
         end
+        SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
         DrawDriftV()
         Citizen.Wait(0)
     end
@@ -151,6 +168,7 @@ function player:Teleport(pos)
             while GetPlayerSwitchState() ~= 12 do
                 Wait(1)
 
+                SetPedCoordsKeepVehicle(p:ped(), pos.xyz)
                 if GetPlayerSwitchState() < 9 then
                     DrawDriftV()
                 end

@@ -4,12 +4,19 @@
         <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
 		<script src="js/gauge.min.js"></script>
         <script src="js/hud.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     </head>
     <body>
         <div id="container">
 			<img class="driftImage" src="images/drifting.png" />
 			<div class="driftDisplay"><span>784 654</span></div>
-			<div class="driftDisplayMulti"><span>x0.0</span></div>
+			<div class="driftDisplayMulti"><span>x0.0</span></div> 
+        </div>
+
+        <div id="containerSucces">
+			<img class="animate__animated animate__bounceIn succesImage" src="images/success.png" />
+			<div class="animate__animated animate__bounceIn succesTitle"><span>Success</span></div>
+			<div class="animate__animated animate__fadeInUp animate__delay-1s succesText"><span>You just passed 1m points !</span></div>
         </div>
     </body>
 </html>

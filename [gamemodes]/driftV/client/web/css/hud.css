@@ -21,9 +21,9 @@
   font-style: normal;
 }
 
-/* body {
-  background-image: url(https://media.discordapp.net/attachments/797632218234093568/797932721024401418/unknown.png);
-} */
+body {
+  /* background-color: gray; */
+}
 
 #container {
   display: none;
@@ -59,4 +59,47 @@
   right: 44%;
   filter: invert();
   transform: rotate(180deg);
+}
+
+
+#containerSucces {
+  display: none;
+}
+
+.succesImage {
+  max-width: 20%;
+  height: 70px;
+  position: absolute;
+  top: 10%;
+  right: 50%;
+}
+.succesTitle {
+  font-size: 50px;
+  position: absolute;
+  top: 15%;
+  right: 48%;
+  font-family: "Oswald-Light"; 
+  font-style: italic;
+  font-weight: 100;
+  color: rgb(255, 196, 0);
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+}
+.succesText {
+  font-size: 20px;
+  position: absolute;
+  top: 22%;
+  right: 44%;
+  font-family: "Oswald-Light";
+  font-style: italic;
+  font-weight: 100;
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 2px;
+
+  text-align: justify;
+  text-align-last: center;
+  overflow-wrap: normal;
+  word-break:keep-all;
+  width: 300px
 }

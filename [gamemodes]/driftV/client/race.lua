@@ -3,7 +3,7 @@ local inRace = false
 local race = {
     {
         label = "Ebisu Drift race",
-        start =  vector4(963.13128662109, 1062.2911376953, 458.47320556641, 279.91229248047),
+        start =  vector4(963.13128662109, 1062.2911376953, 459.47320556641, 279.91229248047),
         points = {
             {pos = vector4(1030.7563476562, 1117.5638427734, 458.73199462891, 65.086318969727), passed = false},
             {pos = vector4(920.74230957031, 1125.4340820312, 460.48587036133, 298.26525878906), passed = false},
@@ -17,7 +17,7 @@ local race = {
     },
     {
         label = "Haruna Drift Race",
-        start =  vector4(2207.2216796875, -1905.7115478516, 584.87384033203, 181.34503173828),
+        start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
         points = {
             {pos = vector4(2205.0871582031, -2020.2974853516, 577.94848632812, 165.34571838379), passed = false},
             {pos = vector4(2141.7658691406, -2171.6223144531, 571.142578125, 191.59320068359), passed = false},
@@ -56,7 +56,7 @@ local race = {
     },
     {
         label = "Iro Drift Race",
-        start =  vector4(-5356.0327148438, 4325.556640625, 753.83813476562, 287.53540039062),
+        start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
         points = {
             {pos = vector4(-5090.6884765625, 4394.7895507812, 749.99359130859, 276.93649291992), passed = false},
             {pos = vector4(-4922.9633789062, 4434.7470703125, 738.38854980469, 292.50164794922), passed = false},
@@ -89,6 +89,35 @@ local race = {
             {pos = vector4(-4225.8588867188, 3715.0085449219, 452.53656005859, 170.86181640625), passed = false},
             {pos = vector4(-4207.5004882812, 3550.3041992188, 448.59201049805, 180.91749572754), passed = false},
         }
+    },
+    {
+        label = "Hakone Ohiradai",
+        start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
+        points = {
+            {pos = vector4(-4370.8544921875, -4236.6669921875, 156.77291870117, 307.23013305664), passed = false},
+            {pos = vector4(-4337.1616210938, -4135.1987304688, 155.56088256836, 32.008346557617), passed = false},
+            {pos = vector4(-4293.556640625, -3965.9389648438, 154.45910644531, 292.59219360352), passed = false},
+            {pos = vector4(-4376.7534179688, -3767.2392578125, 145.20780944824, 16.220779418945), passed = false},
+            {pos = vector4(-4307.7124023438, -3650.3283691406, 141.69039916992, 10.491148948669), passed = false},
+            {pos = vector4(-4491.5571289062, -3535.6274414062, 133.88722229004, 102.83293914795), passed = false},
+        }
+    },
+    {
+        label = "Hakone Nanamagari",
+        start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
+        points = {
+            {pos = vector4(-3348.3273925781, 20.953716278076, 124.79309082031, 2.0219919681549), passed = false},
+            {pos = vector4(-3359.953125, 104.76797485352, 119.0277557373, 128.85185241699), passed = false},
+            {pos = vector4(-3405.53515625, 123.92734527588, 103.20555877686, 114.98023223877), passed = false},
+            {pos = vector4(-3435.9731445312, 19.809186935425, 93.895538330078, 69.338043212891), passed = false},
+            {pos = vector4(-3474.9020996094, 97.70059967041, 80.163208007812, 183.88726806641), passed = false},
+            {pos = vector4(-3519.7687988281, 23.791673660278, 70.536140441895, 330.82345581055), passed = false},
+            {pos = vector4(-3558.1000976562, 78.191139221191, 60.505268096924, 219.40840148926), passed = false},
+            {pos = vector4(-3554.66015625, -10.606527328491, 53.495666503906, 27.373497009277), passed = false},
+            {pos = vector4(-3627.7741699219, -12.655278205872, 30.566467285156, 232.22280883789), passed = false},
+            {pos = vector4(-3668.3010253906, -36.083034515381, 19.026634216309, 220.3563079834), passed = false},
+        
+        },
     },
 }
 
@@ -159,11 +188,7 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     for k,v in pairs(race) do
-        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170)
-
-        local blip = AddBlipForCoord(v.start.xyz)
-        SetBlipSprite(blip, 38)
-        SetBlipColour(blip, 44)
+        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
 
         AddBlip(v.start.xyz, 38, 2, 0.85, 44, v.label)
     end
@@ -222,12 +247,22 @@ function StartRace(data, raceKey)
         local model = GetEntityModel(pVeh)
 
         TriggerServerEvent("drift:EndRace", data.label, endPoints, GetDisplayNameFromVehicleModel(model))
+
+        p:SetSucces(data.label)
+        SendNUIMessage( {
+            ShowSucces = true,
+            label = "Race: "..data.label,
+        })
+
         local wait = 0
         while wait < 1000 do
             wait = wait + 1
             ShowHelpNotification("Drift point: ~b~"..math.floor(endPoints).."~s~ !", false)
             Wait(1)
         end
+        SendNUIMessage( {
+            HideSucces = true,
+        })
     else
         ShowNotification("Race cancelled ! You need to go faster !")
     end

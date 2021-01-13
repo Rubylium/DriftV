@@ -3,12 +3,16 @@ local vehs = {
         label = "Honda",
         vehs = {
             {price = 50000,label = "Honda Accord 86",model = "accord86"},
+            {price = 120000,label = "Honda Civic EK9 Rocket Bunny",model = "civicek9rb"},
+            {price = 750000,label = "1992 Honda NSX-R Rocket Bunny",model = "nsxtypr"}
+
         },
     },
     {
         label = "BMW",
         vehs = {
-            {price = 65000,label = "BMW e36 drift",model = "e36drift"},
+            {price = 65000,label = "BMW e46",model = "bmwe"},
+            {price = 90000,label = "1992 BMW M3 E36 Pandem Rocket Bunny",model = "e36prb"},
         },
     },
     {
@@ -24,6 +28,7 @@ local vehs = {
             {price = 120000,label = "Nissan s15 RB",model = "s15rb"},
             {price = 250000,label = "Nissan r35",model = "gtrp"},
             {price = 350000,label = "Nissan r33",model = "r33"},
+            {price = 140000,label = "Nissan 350z Rocket Bunny Kit Stanced",model = "350zrb"},
         },
     },
     {
@@ -36,6 +41,24 @@ local vehs = {
         label = "Ford",
         vehs = {
             {price = 450000,label = "2015 Ford Mustang GT",model = "MGT"},
+        },
+    },
+    {
+        label = "Acura",
+        vehs = {
+            {price = 550000,label = "Acura NSX LB",model = "filthynsx"},
+        },
+    },
+    {
+        label = "Subaru",
+        vehs = {
+            {price = 190000,label = "Subaru BRZ Rocket Bunny",model = "brz"},
+        },
+    },
+    {
+        label = "Lexus",
+        vehs = {
+            {price = 70000,label = "Lexus RC350 Rocket Bunny",model = "RC350"},
         },
     },
 }
@@ -52,6 +75,7 @@ local main = RageUI.CreateMenu("DriftV", "Welcome to the drift paradise")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 main.Closed = function()
     open = false
+    RageUI.CloseAll()
     RageUI.Visible(main, false)
     DeleteEntity(previewVeh.entity)
 end
@@ -81,6 +105,8 @@ function OpenVehShopMenu()
                         RageUI.Button(v.label, nil, {RightLabel = "~g~"..v.price.."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
+                                    RageUI.CloseAll()
+                                    open = false
                                     TriggerServerEvent("drift:BuyVehicle", v.price, v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
                                 else

@@ -6,6 +6,8 @@ function LoadModel(name)
             ShowLoadingMessageTimed(20, "Loading model ...", 1)
             Wait(1)
         end
+    else
+        ShowNotification("Unknow model, report this issue to the devs ("..tostring(name)..")")
     end
     SetModelAsNoLongerNeeded(model)
 end

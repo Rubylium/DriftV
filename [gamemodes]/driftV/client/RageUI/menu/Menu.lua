@@ -191,7 +191,7 @@ end
 
 ---SetStyleSize
 ---@param Int string
----@return void
+
 ---@public
 function RageUI.Menus:SetCursorStyle(Int)
     self.CursorStyle = Int or 1 or 0
@@ -199,7 +199,7 @@ function RageUI.Menus:SetCursorStyle(Int)
 end
 
 ---ResetCursorStyle
----@return void
+
 ---@public
 function RageUI.Menus:ResetCursorStyle()
     self.CursorStyle = 1
@@ -207,14 +207,14 @@ function RageUI.Menus:ResetCursorStyle()
 end
 
 ---UpdateCursorStyle
----@return void
+
 ---@public
 function RageUI.Menus:UpdateCursorStyle()
     SetMouseCursorSprite(self.CursorStyle)
 end
 
 ---RefreshIndex
----@return void
+
 ---@public
 function RageUI.Menus:RefreshIndex()
     self.Index = 1
@@ -256,7 +256,6 @@ function RageUI.Menus:SetPageCounter(Subtitle)
 end
 
 ---EditSpriteColor
----@param Colors table
 ---@return nil
 ---@public
 function RageUI.Menus:EditSpriteColor(R, G, B, A)

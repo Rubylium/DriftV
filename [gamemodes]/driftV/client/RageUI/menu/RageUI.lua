@@ -618,7 +618,7 @@ end
 
 ---SetStyleAudio
 ---@param StyleAudio string
----@return void
+
 ---@public
 function RageUI.SetStyleAudio(StyleAudio)
     RageUI.Settings.Audio.Use = StyleAudio or "RageUI"

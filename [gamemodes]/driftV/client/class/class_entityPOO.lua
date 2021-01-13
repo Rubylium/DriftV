@@ -155,7 +155,7 @@ end
 
 function entity:delete()
     if self:isNetworked() then
-        TriggerServerEvent("DeleteEntity", token, {self.netId})
+        TriggerServerEvent("DeleteEntity", {self.netId})
     else
         DeleteEntity(self.id)
     end

@@ -18,7 +18,7 @@ files {
     "client/web/fonts/Oswald-Regular.ttf",
     "client/web/fonts/Oswald-Regular.woff",
     "client/web/fonts/Oswald-Regular.woff2",
-    "client/web/images/drifting.png"
+    "client/web/images/*.png"
 }
 
 client_scripts {

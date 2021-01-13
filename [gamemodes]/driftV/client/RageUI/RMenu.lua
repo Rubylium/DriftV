@@ -68,7 +68,6 @@ end
 ---@param Name string
 ---@param Settings string
 ---@param Value any optional
----@return void
 ---@public
 function RMenu:Settings(Type, Name, Settings, Value)
     if Value ~= nil then
@@ -81,8 +80,7 @@ end
 ---Delete
 ---@param Type string
 ---@param Name string
----@return void
----@public
+
 function RMenu:Delete(Type, Name)
     self[Type][Name] = nil
     collectgarbage()
@@ -90,8 +88,7 @@ end
 
 ---DeleteType
 ---@param Type string
----@return void
----@public
+
 function RMenu:DeleteType(Type)
     self[Type] = nil
     collectgarbage()
