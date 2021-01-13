@@ -22,6 +22,10 @@ local mapsArea = {
     {map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
 }
 
+local hours = {
+    {label = "Midnight", hours = 23, minutes = 0},
+    {label = "Day", hours = 12, minutes = 0},
+}
 
 
 local main = RageUI.CreateMenu("DriftV", "Welcome to the drift paradise")
@@ -34,6 +38,7 @@ local maps =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradis
 local camera =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local instance =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local succes =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+local time =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 
 main.Closed = function()
@@ -68,6 +73,7 @@ function OpenMainMenu()
                     }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     RageUI.Button('Succes', "See all your succes", {}, true, {}, succes);
+                    RageUI.Button('Times', "Change your time", {}, true, {}, time);
                     RageUI.Button("Toggle freecam", "", {}, true, {
                         onSelected = function()
                             ToogleNoClip()
@@ -269,6 +275,16 @@ function OpenMainMenu()
                 RageUI.IsVisible(succes, function()
                     for k,v in pairs(p:GetSucces()) do
                         RageUI.Button(k, nil, {RightLabel = "x~b~"..v}, true, {});
+                    end
+                end)
+
+                RageUI.IsVisible(time, function()
+                    for k,v in pairs(hours) do
+                        RageUI.Button(v.label, nil, {}, true, {
+                            onSelected = function()
+                                changeTime(v.hours, v.minutes)
+                            end,
+                        });
                     end
                 end)
 

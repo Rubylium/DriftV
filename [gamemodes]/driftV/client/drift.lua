@@ -138,8 +138,6 @@ Citizen.CreateThread(function()
 
                 if score ~= 0 then
                     SetMulti()
-                    -- DrawDriftText(tostring(math.floor(score)), {3, 252, 182, 200},0.50,0.9, 0.8, 0.9)
-                    -- DrawDriftText("x"..tostring(mult), GetMultiColor(),0.50,0.95, 0.8, 0.7)
 
                     SendNUIMessage(
                         {
@@ -223,7 +221,11 @@ Citizen.CreateThread(function()
             if dst > 100 then
                 TriggerServerEvent("DeleteEntity", v.netPed)
                 TriggerServerEvent("DeleteEntity", v.netVeh)
-                table.remove(spawnedPolice, k)
+                if spawnedPolice[k] ~= nil then
+                    table.remove(spawnedPolice, k)
+                else
+                    break
+                end
             end
 
             while dst <= 15.0 and p:speed() <= 20.0 and near < 350 do
