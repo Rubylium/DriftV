@@ -1,56 +1,50 @@
 Succes = {
     {
-        name = "points_succes1",
+        name = "Session: 100k",
         label = "Session: You have exceeded 100k drift points! Bravo !",
         xpReward = 130*500,
         funcToCheck = function()
-            local value = 100000
-            return CheckDriftPoints(value)
+            CheckDriftPoints(100000)
         end,
     },
     {
-        name = "points_succes2",
+        name = "Session: 200k",
         label = "Session: You have exceeded 200k drift points! Bravo !",
         xpReward = 140*500,
         funcToCheck = function()
-            local value = 200000
-            return CheckDriftPoints(value)
+            CheckDriftPoints(200000)
         end,
     },
     {
-        name = "points_succes3",
+        name = "Session: 500k",
         label = "Session: You have exceeded 500k drift points! Bravo !",
         xpReward = 150*500,
         funcToCheck = function()
-            local value = 500000
-            return CheckDriftPoints(value)
+            CheckDriftPoints(500000)
         end,
     },
     {
-        name = "points_succes4",
+        name = "Session: 1m",
         label = "Session: You have exceeded 1m drift points! Bravo !",
         xpReward = 160*500,
         funcToCheck = function()
-            local value = 1000000
-            return CheckDriftPoints(value)
+            CheckDriftPoints(1000000)
         end,
     },
     {
-        name = "points_succes5",
+        name = "Session: 2m",
         label = "Session: You have exceeded 2m drift points! Bravo !",
         xpReward = 170*500,
         funcToCheck = function()
-            local value = 2000000
-            return CheckDriftPoints(value)
+            CheckDriftPoints(2000000)
         end,
     },
     {
-        name = "points_succes6",
+        name = "Session: 6m",
         label = "Session: You have exceeded 6m drift points! Bravo !",
         xpReward = 180*500,
         funcToCheck = function()
-            local value = 3000000
-            return CheckDriftPoints(value)
+            return CheckDriftPoints(3000000)
         end,
     },
 }

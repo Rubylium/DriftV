@@ -16,12 +16,16 @@ function InitPlayer(source)
             driftPoint = 0,
             xp = 0,
             cars = {},
+            succes = {},
             needSave = false
         }
         player[source] = data
         SavePlayer(source)
         debugPrint("Player created into database")
     else
+        if data.succes == nil then
+            data.succes = {}
+        end
         player[source] = data
         debugPrint("Loaded player for database ("..data.money .. " " .. data.driftPoint ..")")
     end
@@ -71,7 +75,7 @@ AddEventHandler('playerDropped', function (reason)
         player[source] = nil
     end
 end)
-  
+
 RegisterNetEvent("driftV:SubmitDriftPoint")
 AddEventHandler("driftV:SubmitDriftPoint", function(point)
     local source = source
@@ -89,9 +93,15 @@ AddEventHandler("driftV:SubmitExpPoints", function(point)
     local source = source
     player[source].xp = point
 
-    RefreshPlayerData(source)   
+    RefreshPlayerData(source)
     player[source].needSave = true
 
+end)
+
+RegisterNetEvent("driftV:SetPlayerArchivement")
+AddEventHandler("driftV:SetPlayerArchivement", function(arch)
+    player[source].succes = arch
+    player[source].needSave = true
 end)
 
 RegisterNetEvent("drift:RequestSync")

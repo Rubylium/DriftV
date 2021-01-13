@@ -35,7 +35,14 @@ function player:GetSucces()
 end
 
 function player:SetSucces(value)
-    self.succes[value] = true
+    if self.succes[value] == nil then
+        self.succes[value] = 0
+    end
+    self.succes[value] = self.succes[value] + 1
+end
+
+function player:InitSucces(value)
+    self.succes = value
 end
 
 function player:SetCars(cars)

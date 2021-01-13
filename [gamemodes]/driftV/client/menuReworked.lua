@@ -33,6 +33,7 @@ local vehicleOptionsLivery =  RageUI.CreateSubMenu(vehicleOptions, "DriftV", "We
 local maps =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local camera =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local instance =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+local succes =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 
 main.Closed = function()
@@ -66,7 +67,7 @@ function OpenMainMenu()
                         end,
                     }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    
+                    RageUI.Button('Succes', "See all your succes", {}, p:isInVeh(), {}, camera);
                     RageUI.Button("Toggle freecam", "", {}, true, {
                         onSelected = function()
                             ToogleNoClip()
