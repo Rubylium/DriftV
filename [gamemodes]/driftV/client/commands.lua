@@ -9,3 +9,14 @@ end, false)
 RegisterCommand("clean", function(source, args, rawCommand)
     SetVehicleDirtLevel(p:currentVeh(), 0.0)
 end, false)
+
+local recording = false
+RegisterCommand("record", function(source, args, rawCommand)
+    if not recording then
+        StartRecording(1)
+        recording = true
+    else
+        StopRecordingAndSaveClip()
+        recording = false
+    end
+end, false)

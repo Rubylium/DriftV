@@ -179,23 +179,23 @@ XNL_CurrentPlayerXP = 0
 --===================================================================================
 --   !!WARNING!!  !!WARNING!!  !!WARNING!!  !!WARNING!!  !!WARNING!!  !!WARNING!!
 --===================================================================================
-RegisterCommand("XNLAddXPExample",function(source, args)
-	local FirstParam = args[1]
-	TestNR = tonumber(FirstParam)
-	XNL_AddPlayerXP(TestNR)
-end)
+-- RegisterCommand("XNLAddXPExample",function(source, args)
+-- 	local FirstParam = args[1]
+-- 	TestNR = tonumber(FirstParam)
+-- 	XNL_AddPlayerXP(TestNR)
+-- end)
 
-RegisterCommand("XNLRemoveXPExample",function(source, args)
-	local FirstParam = args[1]
-	TestNR = tonumber(FirstParam)
-	XNL_RemovePlayerXP(TestNR)
-end)
+-- RegisterCommand("XNLRemoveXPExample",function(source, args)
+-- 	local FirstParam = args[1]
+-- 	TestNR = tonumber(FirstParam)
+-- 	XNL_RemovePlayerXP(TestNR)
+-- end)
 
-RegisterCommand("XNLSetBaseXPExample",function(source, args)
-	local FirstParam = args[1]
-	TestNR = tonumber(FirstParam)
-	XNL_SetInitialXPLevels(TestNR, true, true)
-end)
+-- RegisterCommand("XNLSetBaseXPExample",function(source, args)
+-- 	local FirstParam = args[1]
+-- 	TestNR = tonumber(FirstParam)
+-- 	XNL_SetInitialXPLevels(TestNR, true, true)
+-- end)
 
 
 
