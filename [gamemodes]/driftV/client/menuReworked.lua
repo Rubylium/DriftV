@@ -11,15 +11,15 @@ local playersInPassiveVeh = {}
 local playerInstances = {}
 
 local mapsArea = {
-    {label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
-    {label = "LS: Vehicle Shop", pos = vector3(-51.129165649414, -1110.4876708984, 27.4358253479)},
-    {label = "Addon: Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
-    {label = "Addon: Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
-    {label = "Addon: Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
-    {label = "Addon: Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
-    {label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
-    {label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
-    {label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
+    {map = "LS", label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
+    {map = "LS", label = "LS: Vehicle Shop", pos = vector3(-51.129165649414, -1110.4876708984, 27.4358253479)},
+    {map = "Harugahara", label = "Addon: Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
+    {map = "Ebisu", label = "Addon: Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
+    {map = "Haruna", label = "Addon: Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
+    {map = "Ohiradai", label = "Addon: Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
+    {map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
+    {map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
+    {map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
 }
 
 
@@ -176,6 +176,7 @@ function OpenMainMenu()
                     for k,v in pairs(mapsArea) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
+                                p:SetMap(v.map)
                                 open = false
                                 RageUI.CloseAll()
                                 p:Teleport(v.pos.xyz)
@@ -267,11 +268,7 @@ function OpenMainMenu()
 
                 RageUI.IsVisible(succes, function()
                     for k,v in pairs(p:GetSucces()) do
-                        RageUI.Button(k .. " x"..v, nil, {RightLabel = ""}, true, {
-                            onSelected = function()
-                                TriggerServerEvent("drift:ChangeServerInstance", k)
-                            end,
-                        });
+                        RageUI.Button(k, nil, {RightLabel = "x~b~"..v}, true, {});
                     end
                 end)
 

@@ -15,7 +15,7 @@
       <animConvRoofName>null</animConvRoofName>
       <animConvRoofWindowsAffected />
       <ptfxAssetName>null</ptfxAssetName>
-      <audioNameHash>elegy2</audioNameHash>
+      <audioNameHash>r35sound</audioNameHash>
       <layout>LAYOUT_STD_RHDI</layout>
       <coverBoundOffsets>RHDI_COVER_OFFSET_INFO</coverBoundOffsets>
       <explosionInfo>EXPLOSION_INFO_DEFAULT</explosionInfo>

@@ -1,4 +1,4 @@
-local score = 0
+score = 0
 local tablemultiplier = {350,1400,4200,11200}
 local mult = 0.1
 local waiting = 0
@@ -101,14 +101,21 @@ end
 Citizen.CreateThread(function()
     while not loaded do Wait(1) end
     while true do
-        --DrawDriftText("86546854646541", {3, 252, 182, 200},0.50,0.9, 0.8, 0.9)
         if p:isInVeh() then
             Wait(50)
 
             score = 0
             while p:isInVeh() do
                 local angle, velocity = angle(p:currentVeh())
-                local newScore = score + math.floor(angle * velocity) * mult
+                local bonus = 0
+                if angle ~= 0 and p:GetMap() == "LS" then
+                    bonus = math.floor(score * GetCopLimitByScore()) / 3000
+                end
+                if bonus > 30000 then
+                    bonus = 30000
+                end
+
+                local newScore = (score + math.floor(angle * velocity) * mult) + bonus
                 if p:speed() <= 4 and score ~= 0 and not inRace then
                     p:SubmitDriftScore(score)
                     score = 0
@@ -151,3 +158,161 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+
+local policeCars = {
+    "polamggtr",
+    "polgs350",
+    "polmp4",
+}
+local policePed = {
+    "s_m_y_cop_01"
+}
+local possibleSirenes = {
+    "VEHICLES_HORNS_SIREN_1",
+    "VEHICLES_HORNS_SIREN_2",
+    "VEHICLES_HORNS_AMBULANCE_WARNING",
+    "VEHICLES_HORNS_POLICE_WARNING",
+}
+local spawnedPolice = {}
+
+function GetCopLimitByScore()
+    if score > 100000 and score < 200000 then
+        return 1
+    elseif score < 350000 then
+        return 2
+    elseif score < 600000 then
+        return 3
+    elseif score < 700000 then
+        return 4
+    elseif score >= 1000000 then
+        return 5
+    end
+    return 1
+end
+
+Citizen.CreateThread(function()
+    while not loaded do Wait(500) end
+    while true do
+        if score > 100000 and p:GetMap() == "LS" then
+            if #spawnedPolice < GetCopLimitByScore() then
+                local get, pos, id = GetClosestVehicleNodeWithHeading(p:pos().x + math.random(-50, 50), p:pos().y + math.random(-50, 50), p:pos().z, 0, 3, 0)
+                local ped = policePed[math.random(1, #policePed)]
+                local veh = policeCars[math.random(1, #policeCars)]
+
+                LoadModel(ped)
+
+                local vehicle = entity:CreateVehicle(veh, pos, p:heading())
+                local peds = CreatePedInsideVehicle(vehicle:getEntityId(), 1, GetHashKey(ped), -1, 1, 1)
+                SetVehicleSiren(vehicle:getEntityId(), true)
+                SetVehicleHasMutedSirens(vehicle:getEntityId(), false)
+                SetVehicleDoorsLocked(vehicle:getEntityId(), 4)
+                SetPedCombatAttributes(peds, 3, false)
+                PlaySoundFromEntity(GetSoundId(), possibleSirenes[math.random(1,#possibleSirenes)], vehicle:getEntityId(), 0, 0, 0)
+
+                TaskVehicleChase(peds, p:ped())
+                AddBlipForEntity(peds)
+                SetTaskVehicleChaseIdealPursuitDistance(peds, 1.0)
+                table.insert(spawnedPolice, {veh = vehicle, ped = peds, netPed = NetworkGetNetworkIdFromEntity(peds), netVeh = vehicle:getNetId()})
+            end
+        end
+
+        local near = 0
+        for k,v in pairs(spawnedPolice) do
+            local dst = #(GetEntityCoords(v.ped) - p:pos())
+            if dst > 100 then
+                TriggerServerEvent("DeleteEntity", v.netPed)
+                TriggerServerEvent("DeleteEntity", v.netVeh)
+                table.remove(spawnedPolice, k)
+            end
+
+            while dst <= 15.0 and p:speed() <= 20.0 and near < 350 do
+                dst = #(GetEntityCoords(v.ped) - p:pos())
+                near = near + 1
+
+                Visual.Subtitle("You are being arrested ! You need to move ! ("..near..")")
+
+                if near == 350 then
+                    near = 0
+                    ArrestPlayer()
+                end
+                Wait(1)
+            end
+
+        end
+
+        SetPlayerWantedLevelNoDrop(p:index(), #spawnedPolice, 1)
+        SetPlayerWantedLevelNow(p:index(), 1)
+        ClearAreaOfCops(p:pos().xyz, 400.0)
+        Wait(2000)
+    end
+end)
+
+function ArrestPlayer()
+    local veh = VehToNet(p:currentVeh())
+    DisplayRadar(false)
+
+    SetPlayerControl(p:index(), false, 1)
+
+    local campos1 = GetOffsetFromEntityInWorldCoords(p:ped(), 5.0, 7.0, 3.0)
+    local campos2 = GetOffsetFromEntityInWorldCoords(p:ped(), 9.0, 8.0, 2.0)
+
+    cam.create("WASTED")
+    cam.setPos("WASTED", campos1)
+    cam.lookAtCoords("WASTED", p:pos())
+    cam.setFov("WASTED", 50.0)
+    cam.setActive("WASTED", true)
+    cam.render("WASTED", true, false, 1)
+
+    cam.create("WASTED_2")
+    cam.setPos("WASTED_2", campos2)
+    cam.lookAtCoords("WASTED_2", p:pos())
+    cam.setFov("WASTED_2", 40.0)
+    cam.setActive("WASTED_2", true)
+    cam.switchToCam("WASTED", "WASTED_2", 10000)
+
+    TaskLeaveAnyVehicle(p:ped(), 1, 1)
+    while IsPedInAnyVehicle(p:ped(), false) do Wait(1) end
+
+
+    for k,v in pairs(spawnedPolice) do
+        ClearPedTasksImmediately(v.ped)
+        TaskLeaveAnyVehicle(v.ped, 1, 1)
+        GiveWeaponToPed(v.ped, GetHashKey("weapon_combatpistol"), 255, 0, 1)
+        TaskAimGunAtEntity(v.ped, p:ped(), -1, 1)
+    end
+
+    p:PlayAnim("random@arrests", "idle_2_hands_up", 1)
+    Wait(GetAnimDuration("random@arrests", "idle_2_hands_up") * 1000)
+    p:PlayAnim("random@arrests@busted", "enter", 2)
+    Wait(GetAnimDuration("random@arrests@busted", "enter") * 1000)
+
+    Wait(2000)
+    DoScreenFadeOut(1000)
+    while not IsScreenFadedOut() do Wait(1) end
+
+    for k,v in pairs(spawnedPolice) do
+        TriggerServerEvent("DeleteEntity", v.netPed)
+        TriggerServerEvent("DeleteEntity", v.netVeh)
+        DeleteEntity(v.veh:getEntityId())
+        DeleteEntity(v.ped)
+        table.remove(spawnedPolice, k)
+    end
+
+    TeleportPlayer(vector3(439.21105957031, -981.87091064453, 30.689611434937))
+    ClearPedTasksImmediately(p:ped())
+    TaskGoStraightToCoord(p:ped(), 431.31030273438, -982.06469726562, 30.710628509521, 1.0, -1, 100, 1.0)
+
+    
+    TriggerServerEvent("DeleteEntity", veh)
+    spawnedPolice = {}
+
+    DoScreenFadeIn(2500)
+    cam.setActive("WASTED", false)
+    cam.delete("WASTED")
+
+    ClearPlayerWantedLevel(p:index())
+    ResetDriftPoint()
+    DisplayRadar(true)
+    SetPlayerControl(p:index(), true, 1)
+end

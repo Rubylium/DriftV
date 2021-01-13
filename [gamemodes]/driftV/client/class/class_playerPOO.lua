@@ -4,6 +4,7 @@ player = {
     driftPoint = 0,
     sessionDriftPoint = 0,
     passive = false,
+    actualMap = "LS",
     succes = {}
 }
 
@@ -20,6 +21,18 @@ function player:new()
     obj.passive = false
 
     p = obj
+end
+
+function player:GetMap()
+    return self.actualMap
+end
+
+function player:SetMap(map)
+    self.actualMap = map
+end
+
+function player:index()
+    return GetPlayerIndex()
 end
 
 function player:getSessionDrift()
@@ -203,4 +216,14 @@ end
 
 function player:setPassive(status)
     self.passive = status
+end
+
+function player:PlayAnim(dict, anim, flag)
+    if dict ~= "" then
+        RequestAnimDict(dict)
+        print("requesting anim dict "..dict)
+        while not HasAnimDictLoaded(dict) do Wait(1) end
+        print("Start anim")
+        TaskPlayAnim(self:ped(), dict, anim, 2.0, 2.0, -1, flag, 0, false, false, false)
+    end
 end

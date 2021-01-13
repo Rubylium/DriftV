@@ -9,7 +9,7 @@ cam = {
 
     delete = function(name)
         if cam.cams[name] ~= nil then
-            RenderScriptCams(0, 0, 1, 500, 1)
+            RenderScriptCams(0, 0, 0, 0, 1)
             SetCamActive(cam.cams[name], false)
             DestroyCam(cam.cams[name], false)
             cam.cams[name] = nil
@@ -72,6 +72,14 @@ cam = {
             RenderScriptCams(render, animation, time, 1, 1)
         else
             print("^2WARNING: ^7La cam "..name.." n'éxiste pas !")
+        end
+    end,
+
+    switchToCam = function(name, newName, time)
+        if cam.cams[name] ~= nil then
+            if cam.cams[newName] ~= nil then
+                SetCamActiveWithInterp(cam.cams[name], cam.cams[newName], time, 1, 1)
+            end
         end
     end,
 

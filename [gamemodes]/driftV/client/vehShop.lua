@@ -106,6 +106,7 @@ function OpenVehShopMenu()
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
                                     RageUI.CloseAll()
+                                    DeleteEntity(previewVeh.entity)
                                     open = false
                                     TriggerServerEvent("drift:BuyVehicle", v.price, v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
