@@ -67,7 +67,7 @@ function OpenMainMenu()
                         end,
                     }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    RageUI.Button('Succes', "See all your succes", {}, p:isInVeh(), {}, camera);
+                    RageUI.Button('Succes', "See all your succes", {}, true, {}, succes);
                     RageUI.Button("Toggle freecam", "", {}, true, {
                         onSelected = function()
                             ToogleNoClip()
@@ -241,23 +241,33 @@ function OpenMainMenu()
                     end
 
                     RageUI.Button('Toggle voice chat', "This allows you to enable or disable voice chat. By default, it is enabled", {}, true, {
-                            onSelected = function()
-                                voicechat = not voicechat
-                                NetworkSetVoiceActive(voicechat)
-                                if voicechat then
-                                    NetworkClearVoiceChannel()
-                                    ShowNotification("Voice chat enabled !")
-                                else
-                                    NetworkSetVoiceChannel(math.random(1,99999999))
-                                    ShowNotification("Voice chat disabled !")
-                                end
-                            end,
-                        });
+                        onSelected = function()
+                            voicechat = not voicechat
+                            NetworkSetVoiceActive(voicechat)
+                            if voicechat then
+                                NetworkClearVoiceChannel()
+                                ShowNotification("Voice chat enabled !")
+                            else
+                                NetworkSetVoiceChannel(math.random(1,99999999))
+                                ShowNotification("Voice chat disabled !")
+                            end
+                        end,
+                    });
                 end)
 
                 RageUI.IsVisible(instance, function()
                     for k,v in pairs(playerInstances) do
                         RageUI.Button("Instance #"..tostring(k - 1), nil, {RightLabel = "Players: ~b~"..v}, true, {
+                            onSelected = function()
+                                TriggerServerEvent("drift:ChangeServerInstance", k)
+                            end,
+                        });
+                    end
+                end)
+
+                RageUI.IsVisible(succes, function()
+                    for k,v in pairs(p:GetSucces()) do
+                        RageUI.Button(k .. " x"..v, nil, {RightLabel = ""}, true, {
                             onSelected = function()
                                 TriggerServerEvent("drift:ChangeServerInstance", k)
                             end,

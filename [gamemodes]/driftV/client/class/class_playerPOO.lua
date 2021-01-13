@@ -39,6 +39,7 @@ function player:SetSucces(value)
         self.succes[value] = 0
     end
     self.succes[value] = self.succes[value] + 1
+    TriggerServerEvent("driftV:SetPlayerArchivement", self.succes)
 end
 
 function player:InitSucces(value)
