@@ -245,6 +245,19 @@ Citizen.CreateThread(function()
                 TriggerServerEvent("DeleteEntity", v.netVeh)
                 if spawnedPolice[k] ~= nil then
                     table.remove(spawnedPolice, k)
+
+                    Citizen.CreateThread(function()
+                        SendNUIMessage( {
+                            ShowSucces = true,
+                            label = "Police: Escape!",
+                        })
+                        p:SetSucces("Police: Escape!")
+                        XNL_AddPlayerXP(50000)
+                        Wait(3000)
+                        SendNUIMessage( {
+                            HideSucces = true,
+                        })
+                    end)
                 else
                     break
                 end
@@ -319,6 +332,7 @@ function ArrestPlayer(spawned)
     Wait(GetAnimDuration("random@arrests@busted", "enter") * 1000)
 
     Wait(2000)
+    TriggerServerEvent("drift:GotBusted", #spawned)
 
     
 
@@ -347,7 +361,7 @@ function ArrestPlayer(spawned)
     end
 
 
-    DoScreenFadeOut(1000)
+    DoScreenFadeOut(500)
     while not IsScreenFadedOut() do Wait(1) end
 
 
@@ -363,11 +377,20 @@ function ArrestPlayer(spawned)
     cam.setActive("WASTED", false)
     cam.delete("WASTED")
     cam.delete("WASTED_2")
-    cam.delete("WASTED_3")
 
     ClearPlayerWantedLevel(p:index())
     ResetDriftPoint()
     DisplayRadar(true)
     SetPlayerControl(p:index(), true, 1)
 
+    SendNUIMessage( {
+        ShowSucces = true,
+        label = "BUSTED",
+    })
+    p:SetSucces("Police: BUSTED!")
+    XNL_RemovePlayerXP(300000)
+    Wait(5000)
+    SendNUIMessage( {
+        HideSucces = true,
+    })
 end

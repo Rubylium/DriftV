@@ -1,5 +1,5 @@
 local player = {}
-saison = "_testServer19x"
+saison = "_testServer19x0"
 pCount = 1
 
 function InitPlayer(source)
@@ -137,4 +137,10 @@ AddEventHandler("drift:BuyVehicle", function(price, label, model)
         RefreshPlayerData(source)
         player[source].needSave = true
     end
+end)
+
+
+RegisterNetEvent("drift:GotBusted")
+AddEventHandler("drift:GotBusted", function(cops)
+    TriggerClientEvent("FeedM:showNotification", -1, "The player "..GetPlayerName(source).." got busted with "..cops.." cops !", 15000, "danger")
 end)

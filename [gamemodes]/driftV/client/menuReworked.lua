@@ -23,8 +23,8 @@ local mapsArea = {
 }
 
 local hours = {
-    {name = "night", label = "Midnight", hours = 23, minutes = 0},
-    {name = "day", label = "Day", hours = 12, minutes = 0},
+    {desc = "The night is agitated! From 100k points, the police will come for you and won't let you go! Vehicle repairs will be very limited, but the night rewards are much better! Participate in illegal activities and dominate the city!", name = "night", label = "Midnight", hours = 23, minutes = 0},
+    {desc = "The day is calm, train yourself to drift in the middle of the city without fearing anything, participate in legal activities with your drift vehicles.", name = "day", label = "Day", hours = 12, minutes = 0},
 }
 
 
@@ -113,9 +113,13 @@ function OpenMainMenu()
                             RandomUpgrade(p:currentVeh())
                         end,
                     });
-                    RageUI.Button("Repair", nil, {}, true, {
+                    RageUI.Button("Repair", "Not avalaible at night", {}, true, {
                         onSelected = function()
-                            SetVehicleFixed(p:currentVeh())
+                            if p:getTime() ~= "night" then
+                                SetVehicleFixed(p:currentVeh())
+                            else
+                                ShowNotification("Sorry, repairs are not avalaible at night. Go to a repair station !")
+                            end
                         end,
                     });
                     RageUI.Button("Clean", nil, {}, true, {
@@ -133,7 +137,7 @@ function OpenMainMenu()
                             end
                         end,
                     });
-                    RageUI.Button("Auto Repair", nil, {}, true, {
+                    RageUI.Button("Auto Repair", "Not avalaible at night", {}, true, {
                         onSelected = function()
                             autoRepair = not autoRepair
                             if autoRepair then
@@ -281,7 +285,7 @@ function OpenMainMenu()
 
                 RageUI.IsVisible(time, function()
                     for _,v in pairs(hours) do
-                        RageUI.Button(v.label, nil, {}, true, {
+                        RageUI.Button(v.label, v.desc, {}, true, {
                             onSelected = function()
                                 cam.create("TIME")
                                 cam.setPos("TIME", GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -2.0, 0.0))
@@ -329,7 +333,7 @@ Citizen.CreateThread(function()
                 SetVehicleDirtLevel(p:currentVeh(), 0.0)
             end
 
-            if autoRepair then
+            if autoRepair and p:getTime() ~= "night" then
                 if IsVehicleDamaged(p:currentVeh()) then
                     SetVehicleFixed(p:currentVeh())
                 end

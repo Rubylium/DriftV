@@ -16,7 +16,6 @@ function SubmitRaceScore(source, race, points, vehicle)
         for k,v in pairs(races[race].scores) do
             if v.points < points then
                 added = true
-                print(k, points, v.points)
                 table.insert(races[race].scores, k, {name = GetPlayerName(source), points = points, veh = vehicle})
 
                 TriggerClientEvent('chat:addMessage', -1, {
