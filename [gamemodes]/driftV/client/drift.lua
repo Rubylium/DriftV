@@ -202,36 +202,38 @@ Citizen.CreateThread(function()
         if score > 100000 and p:GetMap() == "LS" and p:getTime() == "night" then
             if #spawnedPolice < GetCopLimitByScore() then
                 local get, pos, id = GetClosestVehicleNodeWithHeading(p:pos().x + math.random(-50, 50), p:pos().y + math.random(-50, 50), p:pos().z, 0, 3, 0)
+                
                 local ped = policePed[math.random(1, #policePed)]
                 local veh = policeCars[math.random(1, 3)]
 
                 LoadModel(ped)
+                if #(pos - p:pos()) > 20.0 then
+                    local vehicle = entity:CreateVehicle(veh, pos, p:heading())
+                    local peds = CreatePedInsideVehicle(vehicle:getEntityId(), 1, GetHashKey(ped), -1, 1, 0)
+                    SetVehicleSiren(vehicle:getEntityId(), true)
+                    SetVehicleHasMutedSirens(vehicle:getEntityId(), false)
+                    SetVehicleDoorsLocked(vehicle:getEntityId(), 4)
+                    SetPedCombatAttributes(peds, 3, false)
+                    PlaySoundFromEntity(GetSoundId(), possibleSirenes[math.random(1,#possibleSirenes)], vehicle:getEntityId(), 0, 0, 0)
 
-                local vehicle = entity:CreateVehicle(veh, pos, p:heading())
-                local peds = CreatePedInsideVehicle(vehicle:getEntityId(), 1, GetHashKey(ped), -1, 1, 0)
-                SetVehicleSiren(vehicle:getEntityId(), true)
-                SetVehicleHasMutedSirens(vehicle:getEntityId(), false)
-                SetVehicleDoorsLocked(vehicle:getEntityId(), 4)
-                SetPedCombatAttributes(peds, 3, false)
-                PlaySoundFromEntity(GetSoundId(), possibleSirenes[math.random(1,#possibleSirenes)], vehicle:getEntityId(), 0, 0, 0)
-
-                TaskVehicleChase(peds, p:ped())
-                SetTaskVehicleChaseBehaviorFlag(peds, 1, true)
-                SetTaskVehicleChaseIdealPursuitDistance(peds, 1.0)
+                    TaskVehicleChase(peds, p:ped())
+                    SetTaskVehicleChaseBehaviorFlag(peds, 1, true)
+                    SetTaskVehicleChaseIdealPursuitDistance(peds, 1.0)
 
 
-                -- * Flag 8: Medium-aggressive boxing tactic with a bit of PIT
-                -- * Flag 1: Aggressive ramming of suspect
-                -- * Flag 2: Ram attempts
-                -- * Flag 32: Stay back from suspect, no tactical contact. Convoy-like.
-                -- * Flag 16: Ramming, seems to be slightly less aggressive than 1-2.
+                    -- * Flag 8: Medium-aggressive boxing tactic with a bit of PIT
+                    -- * Flag 1: Aggressive ramming of suspect
+                    -- * Flag 2: Ram attempts
+                    -- * Flag 32: Stay back from suspect, no tactical contact. Convoy-like.
+                    -- * Flag 16: Ramming, seems to be slightly less aggressive than 1-2.
 
-                
-                SetDriverAggressiveness(peds, 1.0)
-                SetDriverAbility(peds, 1.0)
-                AddBlipForEntity(peds)
-                
-                table.insert(spawnedPolice, {veh = vehicle, ped = peds, netPed = NetworkGetNetworkIdFromEntity(peds), netVeh = vehicle:getNetId()})
+                    
+                    SetDriverAggressiveness(peds, 1.0)
+                    SetDriverAbility(peds, 1.0)
+                    AddBlipForEntity(peds)
+                    
+                    table.insert(spawnedPolice, {veh = vehicle, ped = peds, netPed = NetworkGetNetworkIdFromEntity(peds), netVeh = vehicle:getNetId()})
+                end
             end
         end
 
