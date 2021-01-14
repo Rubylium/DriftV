@@ -287,5 +287,8 @@
         "SetConvarServerInfo",
         "SetConvarReplicated",
         "GetNumPlayerIndices"
+    ],
+    "Lua.diagnostics.disable": [
+        "undefined-global"
     ]
 }
