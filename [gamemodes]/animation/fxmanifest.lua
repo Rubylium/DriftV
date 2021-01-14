@@ -12,5 +12,7 @@ client_scripts {
     "client/RageUI/menu/items/*.lua",
     "client/RageUI/menu/panels/*.lua",
     "client/RageUI/menu/windows/*.lua",
-    "client/**/*.lua"
+    
+    "client/animDictsCompact.json",
+    "client/*.lua",
 }
