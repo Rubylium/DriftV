@@ -6,6 +6,10 @@ for i = 1,63 do
 end
 
 function SetPlayerInstance(source, instance)
+    local pPed = GetPlayerPed(source)
+    if GetVehiclePedIsIn(pPed, false) ~= 0 then
+        SetEntityRoutingBucket(GetVehiclePedIsIn(pPed, false), tonumber(instance))
+    end
     SetPlayerRoutingBucket(source, tonumber(instance))
     pInstance[source] = tonumber(instance)
 end

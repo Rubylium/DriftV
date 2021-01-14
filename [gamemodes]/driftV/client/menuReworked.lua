@@ -65,15 +65,15 @@ function OpenMainMenu()
                     RageUI.Button('Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
                     RageUI.Button('My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
-                    RageUI.Button('Camera', "Unlocked when inside a vehicle", {}, p:isInVeh(), {}, camera);
+                    RageUI.Button('Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
                     --     onSelected = function()
                     --         TriggerServerEvent("drift:GetServerInstance")
                     --     end,
                     -- }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    RageUI.Button('Succes', "See all your succes", {}, true, {}, succes);
-                    RageUI.Button('Times', "Change your time", {}, true, {}, time);
+                    RageUI.Button('Succes', "See all your succes", {RightLabel = ">"}, true, {}, succes);
+                    RageUI.Button('Times', "Change your time", {RightLabel = ">"}, true, {}, time);
                     RageUI.Button("Toggle freecam", "", {}, true, {
                         onSelected = function()
                             ToogleNoClip()
@@ -284,11 +284,11 @@ function OpenMainMenu()
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
                                 cam.create("TIME")
-                                cam.setPos("TIME", GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 0.0, 0.0))
-                                cam.setFov("TIME", 110)
+                                cam.setPos("TIME", GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -2.0, 0.0))
+                                cam.setFov("TIME", 150.0)
                                 cam.setActive("TIME", true)
                                 cam.render("TIME", true, true, 3000)
-                                cam.rotation("TIME", 0.0, 90.0, 0.0)
+                                cam.rotation("TIME", 0.0, 70.0, 0.0)
 
                                 if p:getTime() == "day" then
                                     TriggerServerEvent("drift:ChangeServerInstance", 2)

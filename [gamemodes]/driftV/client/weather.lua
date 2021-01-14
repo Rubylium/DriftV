@@ -4,7 +4,7 @@ local hours = 8
 function changeTime(hour, minute)
     Citizen.CreateThread(function()
         while hours ~= hour do
-            minutes = minutes + 3
+            minutes = minutes + 2
             if minutes > 60 then
                 minutes = 0
                 hours = hours + 1
