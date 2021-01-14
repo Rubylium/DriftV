@@ -80,6 +80,7 @@ function OpenMainMenu()
                         end,
                     });
                 end)
+                
 
                 RageUI.IsVisible(information, function()
                     RageUI.Button("Money: "..GroupDigits(tostring(p:GetMoney())) .. "$", nil, {}, true, {});
@@ -282,14 +283,26 @@ function OpenMainMenu()
                     for _,v in pairs(hours) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
-                                changeTime(v.hours, v.minutes)
-                                p:setTime(v.name)
+                                cam.create("TIME")
+                                cam.setPos("TIME", GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 0.0, 0.0))
+                                cam.setFov("TIME", 110)
+                                cam.setActive("TIME", true)
+                                cam.render("TIME", true, true, 3000)
+                                cam.rotation("TIME", 0.0, 90.0, 0.0)
 
                                 if p:getTime() == "day" then
                                     TriggerServerEvent("drift:ChangeServerInstance", 2)
                                 else
                                     TriggerServerEvent("drift:ChangeServerInstance", 1)
                                 end
+
+                                changeTime(v.hours, v.minutes)
+                                p:setTime(v.name)
+                                Wait(2500)
+                                cam.render("TIME", false, true, 1000)
+                                Wait(1000)
+                                cam.delete("TIME")
+
                                 
                             end,
                         });

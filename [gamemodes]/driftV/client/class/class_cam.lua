@@ -83,5 +83,10 @@ cam = {
         end
     end,
 
+    rotation = function(name, rotX, rotY, rotZ)
+        if cam.cams[name] ~= nil then
+            SetCamRot(cam.cams[name], rotX, rotY, rotZ, 2)
+        end
+    end,
     
 }
