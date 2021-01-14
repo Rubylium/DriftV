@@ -8,9 +8,9 @@ local settings = {
 
 
 local main = RageUI.CreateMenu("", "Animations")
-local setting =  RageUI.CreateSubMenu(main, "", "Animations")
-local animation =  RageUI.CreateSubMenu(main, "", "Animations")
-local animationsSub =  RageUI.CreateSubMenu(main, "", "Animations")
+local setting = RageUI.CreateSubMenu(main, "", "Animations")
+local animation = RageUI.CreateSubMenu(main, "", "Animations")
+local animationsSub = RageUI.CreateSubMenu(main, "", "Animations")
 main:DisplayGlare(false)
 main.Closed = function()
     open = false
@@ -20,7 +20,7 @@ end
 
 -- Credit: https://raw.githubusercontent.com/DurtyFree/gta-v-data-dumps/master/animDictsCompact.json
 function LoadAnimations()
-    local encoded = LoadResourceFile(GetCurrentResourceName(), "./animDictsCompact.json")
+    local encoded = LoadResourceFile(GetCurrentResourceName(), "client/animDictsCompact.json")
     animations = json.decode(encoded)
 end
 
@@ -32,6 +32,7 @@ function OpenAnimationMenu()
         RageUI.Visible(main, false)
         return
     else
+        LoadAnimations()
         open = true
         RageUI.Visible(main, true)
 
@@ -69,7 +70,7 @@ function OpenAnimationMenu()
                                     if not found then
                                         table.remove(animations, k)
                                     end
-                                    ShowHelpNotification("Filtering animations ...", false)
+                                    ShowHelpNotification("Filtering animations ... ("..k.."/"..#animations..")", false)
                                 end
 
                             else
@@ -93,6 +94,7 @@ function OpenAnimationMenu()
                     for _,v in pairs(animations[selectedAnimation].Animations) do
                         RageUI.Button(v, nil, {}, true, {
                             onSelected = function()
+                                ClearPedTasksImmediately(GetPlayerPed(-1))
                                 print("Dict: ".. animations[selectedAnimation].DictionaryName .." Anim: ".. v .. " Time: ".. GetAnimDuration(animations[selectedAnimation].DictionaryName, v))
                                 PlayAnim(animations[selectedAnimation].DictionaryName, v, settings.flag)
                             end

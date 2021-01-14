@@ -5,6 +5,7 @@ player = {
     sessionDriftPoint = 0,
     passive = false,
     actualMap = "LS",
+    actualTime = "day",
     succes = {}
 }
 
@@ -21,6 +22,14 @@ function player:new()
     obj.passive = false
 
     p = obj
+end
+
+function player:setTime(time)
+    self.actualTime = time
+end
+
+function player:getTime()
+    return self.actualTime
 end
 
 function player:GetMap()

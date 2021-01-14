@@ -23,7 +23,7 @@ function PlayAnim(dict, anim, flag)
             print("requesting anim dict "..dict)
             while not HasAnimDictLoaded(dict) do Wait(1) end
             print("Start anim")
-            TaskPlayAnim(self:ped(), dict, anim, 2.0, 2.0, -1, flag, 0, false, false, false)
+            TaskPlayAnim(GetPlayerPed(-1), dict, anim, 2.0, 2.0, -1, flag, 0, false, false, false)
         end
     end
 end

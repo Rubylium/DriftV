@@ -4,8 +4,8 @@ playersIdInPassive = {} -- Global
 local open = false
 local passive = false
 local voicechat = true
-local lastSpawned = nil
-local activeCamName = nil
+local lastSpawned
+local activeCamName
 local cachedEntity = {}
 local playersInPassiveVeh = {}
 local playerInstances = {}
@@ -23,8 +23,8 @@ local mapsArea = {
 }
 
 local hours = {
-    {label = "Midnight", hours = 23, minutes = 0},
-    {label = "Day", hours = 12, minutes = 0},
+    {name = "night", label = "Midnight", hours = 23, minutes = 0},
+    {name = "day", label = "Day", hours = 12, minutes = 0},
 }
 
 
@@ -66,11 +66,11 @@ function OpenMainMenu()
                     RageUI.Button('My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
                     RageUI.Button('Camera', "Unlocked when inside a vehicle", {}, p:isInVeh(), {}, camera);
-                    RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
-                        onSelected = function()
-                            TriggerServerEvent("drift:GetServerInstance")
-                        end,
-                    }, instance);
+                    -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
+                    --     onSelected = function()
+                    --         TriggerServerEvent("drift:GetServerInstance")
+                    --     end,
+                    -- }, instance);
                     RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     RageUI.Button('Succes', "See all your succes", {}, true, {}, succes);
                     RageUI.Button('Times', "Change your time", {}, true, {}, time);
@@ -87,7 +87,7 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(vehicle, function()
-                    for k,v in pairs(p:GetCars()) do
+                    for _,v in pairs(p:GetCars()) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
                                 if lastSpawned ~= nil then
@@ -179,7 +179,7 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(maps, function()
-                    for k,v in pairs(mapsArea) do
+                    for _,v in pairs(mapsArea) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
                                 p:SetMap(v.map)
@@ -279,10 +279,18 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(time, function()
-                    for k,v in pairs(hours) do
+                    for _,v in pairs(hours) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
                                 changeTime(v.hours, v.minutes)
+                                p:setTime(v.name)
+
+                                if p:getTime() == "day" then
+                                    TriggerServerEvent("drift:ChangeServerInstance", 2)
+                                else
+                                    TriggerServerEvent("drift:ChangeServerInstance", 1)
+                                end
+                                
                             end,
                         });
                     end
@@ -329,7 +337,7 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
     while true do
         if p:isPassive() then
-            for k,v in pairs(GetActivePlayers()) do
+            for _,v in pairs(GetActivePlayers()) do
                 local pPed = GetPlayerPed(v)
                 if pPed ~= p:ped() then
                     --SetEntityAlpha(pPed, 200, 200)
@@ -349,7 +357,7 @@ Citizen.CreateThread(function()
                 end
             end
         else
-            for k,v in pairs(cachedEntity) do
+            for _,v in pairs(cachedEntity) do
                 SetEntityNoCollisionEntity(p:ped(), v, true)
                 SetEntityNoCollisionEntity(p:currentVeh(), v, true)
                 SetEntityCollision(v, true, true)
@@ -358,7 +366,7 @@ Citizen.CreateThread(function()
             end
         end
 
-        for k,v in pairs(playersIdInPassive) do
+        for k, _ in pairs(playersIdInPassive) do
             local pPed = GetPlayerPed(GetPlayerFromServerId(k))
             if pPed ~= p:ped() then
                 print(pPed)
@@ -385,11 +393,11 @@ Citizen.CreateThread(function()
             end
         end
 
-        for k,v in pairs(GetActivePlayers()) do
+        for _,v in pairs(GetActivePlayers()) do
             local pPed = GetPlayerPed(v)
             if playersIdInPassive[GetPlayerServerId(v)] == nil and pPed ~= p:ped() then
                 if playersInPassiveVeh[GetPlayerServerId(v)] ~= nil then
-                    for i,j in pairs(playersInPassiveVeh[GetPlayerServerId(v)]) do
+                    for _,j in pairs(playersInPassiveVeh[GetPlayerServerId(v)]) do
                         ResetEntityAlpha(j)
                         SetEntityNoCollisionEntity(p:ped(), j, true)
                         SetEntityNoCollisionEntity(p:currentVeh(), j, true)
@@ -407,7 +415,7 @@ end)
 RegisterNetEvent("dirft:SetInPassive")
 AddEventHandler("dirft:SetInPassive", function(list)
     playersIdInPassive = list
-    for k,v in pairs(playersIdInPassive) do
+    for k, _ in pairs(playersIdInPassive) do
         if playersInPassiveVeh[k] == nil then
             playersInPassiveVeh[k] = {}
         end

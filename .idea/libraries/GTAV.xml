@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GTAV" type="Lua">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../cfx/JetbrainIDE-CFX.RE/build/cfx/GTAV" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -192,7 +192,7 @@ end
 Citizen.CreateThread(function()
     while not loaded do Wait(500) end
     while true do
-        if score > 100000 and p:GetMap() == "LS" then
+        if score > 100000 and p:GetMap() == "LS" and p:getTime() == "night" then
             if #spawnedPolice < GetCopLimitByScore() then
                 local get, pos, id = GetClosestVehicleNodeWithHeading(p:pos().x + math.random(-50, 50), p:pos().y + math.random(-50, 50), p:pos().z, 0, 3, 0)
                 local ped = policePed[math.random(1, #policePed)]
@@ -209,6 +209,16 @@ Citizen.CreateThread(function()
                 PlaySoundFromEntity(GetSoundId(), possibleSirenes[math.random(1,#possibleSirenes)], vehicle:getEntityId(), 0, 0, 0)
 
                 TaskVehicleChase(peds, p:ped())
+
+                -- * Flag 8: Medium-aggressive boxing tactic with a bit of PIT
+                -- * Flag 1: Aggressive ramming of suspect
+                -- * Flag 2: Ram attempts
+                -- * Flag 32: Stay back from suspect, no tactical contact. Convoy-like.
+                -- * Flag 16: Ramming, seems to be slightly less aggressive than 1-2.
+
+                SetTaskVehicleChaseBehaviorFlag(peds, 1, true)
+                SetDriverAggressiveness(peds, 1.0)
+                SetDriverAbility(peds, 1.0)
                 AddBlipForEntity(peds)
                 SetTaskVehicleChaseIdealPursuitDistance(peds, 1.0)
                 table.insert(spawnedPolice, {veh = vehicle, ped = peds, netPed = NetworkGetNetworkIdFromEntity(peds), netVeh = vehicle:getNetId()})
