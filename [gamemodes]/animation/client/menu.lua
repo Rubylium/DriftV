@@ -2,7 +2,8 @@ local open = false
 local animations = {}
 local selectedAnimation = 1
 local settings = {
-    flag = 1
+    flag = 1,
+    filter = "",
 }
 
 
@@ -12,7 +13,8 @@ local animation =  RageUI.CreateSubMenu(main, "", "Animations")
 local animationsSub =  RageUI.CreateSubMenu(main, "", "Animations")
 main:DisplayGlare(false)
 main.Closed = function()
-    animations = {}
+    open = false
+    animations = {} -- Unload animations list when not used, we already have to load the json wich is kinda big so keeping this will just make things worse. But i don't recommend keeping this ressource in a prod server
 end
 
 
@@ -41,11 +43,37 @@ function OpenAnimationMenu()
                 end)
 
                 RageUI.IsVisible(setting, function()
-                    RageUI.Button('Change flag ('..tostring(settings.flag)..')', nil, {}, true, {
+                    RageUI.Button('Change animation flag ('..tostring(settings.flag)..')', nil, {}, true, {
                         onSelected = function()
                             local flag = KeyboardImput("Change the flag")
                             if flag ~= nil then
                                 settings.flag = flag
+                            end
+                        end
+                    })
+                    RageUI.Button("Filter by animation name", "Applying a filter can take some time, the system has to browse through all the animations to filter them. Performance may be impacted during processing", {}, true, {
+                        onSelected = function()
+                            local name = KeyboardImput("Change the flag")
+                            if name ~= nil and name ~= "" then
+                                settings.filter = name
+
+                                for k,v in pairs(animations) do
+                                    local found = false
+                                    for i,j in pairs(v.Animations) do
+                                        if string.find(j, settings.filter) then
+                                            found = true
+                                        else
+                                            table.remove(v.Animations, i)
+                                        end
+                                    end
+                                    if not found then
+                                        table.remove(animations, k)
+                                    end
+                                    ShowHelpNotification("Filtering animations ...", false)
+                                end
+
+                            else
+                                LoadAnimations()
                             end
                         end
                     })
@@ -60,8 +88,24 @@ function OpenAnimationMenu()
                         }, animationsSub)
                     end
                 end)
+
+                RageUI.IsVisible(animationsSub, function()
+                    for _,v in pairs(animations[selectedAnimation].Animations) do
+                        RageUI.Button(v, nil, {}, true, {
+                            onSelected = function()
+                                print("Dict: ".. animations[selectedAnimation].DictionaryName .." Anim: ".. v .. " Time: ".. GetAnimDuration(animations[selectedAnimation].DictionaryName, v))
+                                PlayAnim(animations[selectedAnimation].DictionaryName, v, settings.flag)
+                            end
+                        })
+                    end
+                end)
                 Wait(1)
             end
         end)
     end
 end
+
+
+RegisterCommand("animations", function()
+    OpenAnimationMenu()
+end, false)
