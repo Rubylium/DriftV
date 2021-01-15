@@ -236,3 +236,13 @@ function player:PlayAnim(dict, anim, flag)
         TaskPlayAnim(self:ped(), dict, anim, 2.0, 2.0, -1, flag, 0, false, false, false)
     end
 end
+
+function player:PlayAnimOnPed(ped, dict, anim, flag)
+    if dict ~= "" then
+        RequestAnimDict(dict)
+        print("requesting anim dict "..dict)
+        while not HasAnimDictLoaded(dict) do Wait(1) end
+        print("Start anim")
+        TaskPlayAnim(ped, dict, anim, 2.0, 2.0, -1, flag, 0, false, false, false)
+    end
+end

@@ -351,9 +351,40 @@ function ArrestPlayer(spawned)
     Wait(GetAnimDuration("random@arrests@busted", "enter") * 1000)
 
     Wait(2000)
+
+
+
+
+    DoScreenFadeOut(500)
+    while not IsScreenFadedOut() do Wait(1) end
+
+    p:PlayAnim("mp_arresting", "arrest_on_floor_front_left_b", 2)
+    LoadModel("s_m_y_cop_01")
+    local ped = CreatePed(1, GetHashKey("s_m_y_cop_01"), GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -0.8, -1.0), p:heading() + 30.0, 1, 0)
+    TaskSetBlockingOfNonTemporaryEvents(ped, true)
+
+
+    campos2 = GetOffsetFromEntityInWorldCoords(p:ped(), -1.5, -5.0, 3.0)
+    cam.setPos("WASTED", campos2)
+    cam.lookAtCoords("WASTED", p:pos())
+    cam.setActive("WASTED", true)
+    cam.render("WASTED", true, false, 0)
+
+
+    DoScreenFadeIn(500)
+
+
+
+
+    ClearPedTasksImmediately(ped)
+    p:PlayAnimOnPed(ped, "mp_arresting", "arrest_on_floor_front_left_a", 2)
+    Wait(GetAnimDuration("mp_arresting", "arrest_on_floor_front_left_a") * 1000)
+
+
     TriggerServerEvent("drift:GotBusted", #spawned)
 
-    
+    DoScreenFadeOut(500)
+    while not IsScreenFadedOut() do Wait(1) end
 
     for k,v in pairs(spawned) do
         ClearPedTasksImmediately(v.ped)
@@ -364,6 +395,7 @@ function ArrestPlayer(spawned)
         TriggerServerEvent("DeleteEntity", v.netVeh)
         table.remove(spawned, k)
     end
+    TriggerServerEvent("DeleteEntity", PedToNet(ped))
 
     for k,v in pairs(GetGamePool("CPed")) do
         if GetEntityModel(v) == GetHashKey("s_m_y_cop_01") then
@@ -379,9 +411,6 @@ function ArrestPlayer(spawned)
         end
     end
 
-
-    DoScreenFadeOut(500)
-    while not IsScreenFadedOut() do Wait(1) end
 
 
     TeleportPlayer(vector3(439.21105957031, -981.87091064453, 30.689611434937))
