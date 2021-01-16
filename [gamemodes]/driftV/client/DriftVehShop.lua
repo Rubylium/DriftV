@@ -61,6 +61,13 @@ local vehs = {
             {price = 70000,label = "Lexus RC350 Rocket Bunny",model = "RC350"},
         },
     },
+    {
+        label = "Lamborghini",
+        vehs = {
+            {price = 6000000,label = "Lamborghini Gallardo Superleggera LB ",model = "gallardosuperlb"},
+            {price = 9000000,label = "2014 Lamborghini Huracan LB",model = "lbsihu"},
+        },
+    },
 }
 
 local open = false
@@ -79,6 +86,8 @@ main.Closed = function()
     RageUI.Visible(main, false)
     DeleteEntity(previewVeh.entity)
 end
+main.WidthOffset = 100.0
+sub.WidthOffset = 100.0
 
 function OpenVehShopMenu()
     if open then
