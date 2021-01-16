@@ -103,3 +103,13 @@ body {
   word-break:keep-all;
   width: 300px
 }
+
+#containerJoin {
+  /* display: none; */
+}
+
+.joinButton {
+  position: absolute;
+  bottom: 10%;
+  left: 85%
+}
