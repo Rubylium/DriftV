@@ -22,6 +22,7 @@ end
 
 Citizen.CreateThread(function()
     while true do
+        SetWeatherTypeNowPersist("EXTRASUNNY")
         NetworkOverrideClockTime(hours, minutes, 0)
         Wait(500)
     end
