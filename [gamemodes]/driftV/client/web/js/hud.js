@@ -8,8 +8,6 @@ var lastMulti = "x0.0"
 
 
 $(function () {
-  var audio = null
-
   window.addEventListener("message", function (event) {
     var item = event.data;
 
@@ -40,30 +38,13 @@ $(function () {
     }
 
     if (item.containerJoins) {
-
-      console.log("Starting music " + url);
-      audio = new Audio(url);
-      audio.style.display = "none";
-      audio.src = url;
-      audio.autoplay = true;
-      audio.volume = 0.1;
-
-
+      //playSound(item.music);
       $("#containerJoin").fadeIn(0);
-
     } 
 
     if (item.joinClick) {
       $("#containerJoin").fadeOut(500);
-      var fadeOut = setInterval(function(){
-        var newVolum = audio.volume - 0.01;
-        if(newVolum <= 0.0){
-          audio.remove()
-          clearInterval(fadeOut);
-        } else {
-          audio.volume = newVolum;
-        }
-      }, 500);
+      //FadeOutMusic();
     }
 
 

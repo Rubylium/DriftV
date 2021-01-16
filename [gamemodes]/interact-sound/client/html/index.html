@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <!-- Need to include jQuery! -->
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+        <script>
+            var audioPlayer = null;
+            // Listen for NUI Messages.
+            window.addEventListener('message', function(event) {
+                // Check for playSound transaction
+                if (event.data.transactionType == "playSound") {
+				
+                  if (audioPlayer != null) {
+                    audioPlayer.pause();
+                  }
+
+                  audioPlayer = new Howl({src: ["./sounds/" + event.data.transactionFile + ".ogg"]});
+                  audioPlayer.volume(event.data.transactionVolume);
+                  audioPlayer.play();
+
+                } else {
+
+                  audioPlayer.fade(audioPlayer.volume(), 0.0, 4000);
+                  
+                  var fadeOut = setInterval(function(){
+                    if(audioPlayer.volume() <= 0.0){
+                      audioPlayer.pause();
+                      clearInterval(fadeOut);
+                    }
+                  }, 500);
+                  
+                }
+            });
+        </script>
+    </head>
+</html>
