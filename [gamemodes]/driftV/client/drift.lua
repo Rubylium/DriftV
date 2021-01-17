@@ -3,6 +3,7 @@ local tablemultiplier = {350,1400,4200,11200}
 local mult = 0.1
 local waiting = 0
 local inRace = false
+local bonusCops = 0
 
 function DrawDriftText(text,colour,coordsx,coordsy,scalex,scaley)
     SetTextFont(7)
@@ -118,6 +119,8 @@ Citizen.CreateThread(function()
                 local newScore = (score + math.floor(angle * velocity) * mult) + bonus
                 if p:speed() <= 4 and score ~= 0 and not inRace then
                     p:SubmitDriftScore(score)
+                    p:GiveMoney(bonusCops)
+                    bonusCops = 0
                     score = 0
                     waiting = 0
                     SendNUIMessage({HideHud = true})
@@ -129,6 +132,8 @@ Citizen.CreateThread(function()
                         waiting = waiting + 1
                         if waiting >= 300 and score ~= 0 and not inRace then
                             p:SubmitDriftScore(score)
+                            p:GiveMoney(bonusCops)
+                            bonusCops = 0
                             score = 0
                             waiting = 0
                             SendNUIMessage({HideHud = true})
@@ -232,6 +237,25 @@ function SpawnCop()
     end
 end
 
+
+Citizen.CreateThread(function()
+    local timeBar = NativeUI.TimerBarPool()
+    local time = NativeUI.CreateTimerBar("Cops:")
+    local bonuss = NativeUI.CreateTimerBar("Bonus:")
+    timeBar:Add(time)
+    timeBar:Add(bonuss)
+    while true do
+        if #spawnedPolice ~= 0 then
+            time:SetTextTimerBar(tostring(#spawnedPolice))
+            bonuss:SetTextTimerBar(tostring(bonusCops).."$")
+            timeBar:Draw()
+            Wait(1)
+        else
+            Wait(500)
+        end
+    end
+end)
+
 local cooldownSpeed = false
 Citizen.CreateThread(function()
     while not loaded do Wait(500) end
@@ -269,6 +293,7 @@ Citizen.CreateThread(function()
                         })
                         p:SetSucces("Police: Escape!")
                         XNL_AddPlayerXP(10000)
+                        bonusCops = bonusCops + 7500
                         Wait(3000)
                         SendNUIMessage( {
                             HideSucces = true,
@@ -293,6 +318,8 @@ Citizen.CreateThread(function()
                 if near == 100 then
                     ArrestPlayer(spawnedPolice)
                     spawnedPolice = {}
+                    p:GiveMoney(bonusCops)
+                    bonusCops = 0
                     break
                 end
                 Wait(15)

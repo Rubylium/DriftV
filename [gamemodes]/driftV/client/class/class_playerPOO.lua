@@ -118,6 +118,10 @@ function player:SubmitDriftScore(score)
     XNL_AddPlayerXP(math.floor(score / 150))
 end
 
+function player:GiveMoney(money)
+    TriggerServerEvent("driftV:AddMoney", money)
+end
+
 function player:speed()
     return GetEntitySpeed(self:ped()) * 3.6
 end

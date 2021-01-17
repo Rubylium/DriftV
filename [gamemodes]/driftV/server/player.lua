@@ -88,6 +88,13 @@ AddEventHandler("driftV:SubmitDriftPoint", function(point)
 
 end)
 
+RegisterNetEvent("driftV:AddMoney")
+AddEventHandler("driftV:AddMoney", function(money)
+    local source = source
+    player[source].money = math.floor(player[source].money + money)
+    TriggerClientEvent("FeedM:showNotification", source, "+ ~g~"..tostring(math.floor(money)).."~s~$", 2000, "success")
+end)
+
 RegisterNetEvent("driftV:SubmitExpPoints")
 AddEventHandler("driftV:SubmitExpPoints", function(point)
     local source = source
