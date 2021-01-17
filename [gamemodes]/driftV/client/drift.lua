@@ -5,6 +5,47 @@ local waiting = 0
 local inRace = false
 local bonusCops = 0
 
+local inAerorport = false
+Citizen.CreateThread(function()
+    --Name: aeroport | 2021-01-17T16:19:19Z
+    while PolyZone == nil do Wait(100) end
+    local aeroport = PolyZone:Create({
+        vector2(-883.20074462891, -2519.7609863281),
+        vector2(-948.49163818359, -2339.0808105469),
+        vector2(-1022.8463134766, -2324.392578125),
+        vector2(-1213.7489013672, -2213.55859375),
+        vector2(-1229.2888183594, -2177.7319335938),
+        vector2(-1228.8903808594, -2118.3488769531),
+        vector2(-1249.7570800781, -2103.8825683594),
+        vector2(-1260.7379150391, -2112.6394042969),
+        vector2(-1273.2924804688, -2118.142578125),
+        vector2(-1295.2432861328, -2113.2390136719),
+        vector2(-1374.7094726562, -2154.1450195312),
+        vector2(-1420.1635742188, -2222.7099609375),
+        vector2(-1699.29296875, -2693.3354492188),
+        vector2(-1784.2448730469, -2655.17578125),
+        vector2(-2103.0695800781, -3103.2258300781),
+        vector2(-1035.3957519531, -3805.1008300781),
+        vector2(-675.06365966797, -3233.6828613281),
+        vector2(-868.56384277344, -3110.2600097656),
+        vector2(-700.37896728516, -2827.9965820312)
+    }, {
+      name="aeroport",
+      --minZ = 17.846054077148,
+      --maxZ = 123.04996490479
+    })
+  
+  
+    aeroport:onPlayerInOut(function(isPointInside, point)
+        inAerorport = isPointInside
+        if inAerorport then
+            Visual.Subtitle("You have entered a forbidden drift zone, the police will not come. Bonus disabled", 10000)
+        end
+    end)
+    
+end)
+
+
 function DrawDriftText(text,colour,coordsx,coordsy,scalex,scaley)
     SetTextFont(7)
     SetTextProportional(7)
@@ -207,7 +248,7 @@ function SpawnCop()
     local veh = policeCars[math.random(1, 3)]
 
     LoadModel(ped)
-    if #(pos - p:pos()) > 20.0 then
+    if #(pos - p:pos()) > 20.0 and not inAerorport then
         local vehicle = entity:CreateVehicle(veh, pos, p:heading())
         local peds = CreatePedInsideVehicle(vehicle:getEntityId(), 1, GetHashKey(ped), -1, 1, 0)
         SetVehicleSiren(vehicle:getEntityId(), true)
@@ -291,13 +332,15 @@ Citizen.CreateThread(function()
                             ShowSucces = true,
                             label = "Police: Escape!",
                         })
-                        p:SetSucces("Police: Escape!")
-                        XNL_AddPlayerXP(10000)
-                        bonusCops = bonusCops + 7500
-                        Wait(3000)
-                        SendNUIMessage( {
-                            HideSucces = true,
-                        })
+                        if not inAerorport then
+                            p:SetSucces("Police: Escape!")
+                            XNL_AddPlayerXP(10000)
+                            bonusCops = bonusCops + 2500
+                            Wait(3000)
+                            SendNUIMessage( {
+                                HideSucces = true,
+                            })
+                        end
                     end)
                 else
                     break
