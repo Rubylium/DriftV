@@ -188,13 +188,14 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     for k,v in pairs(race) do
-        zone.addZone(v.label, v.start.xyz, "Press [E] to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
+        zone.addZone(v.label, v.start.xyz, "Press ~INPUT_CONTEXT~ to start the race", function() StartRace(v, k) end, true, 5, 1.0, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
 
         AddBlip(v.start.xyz, 38, 2, 0.85, 44, v.label)
     end
 end)
 
 local blip = 0
+local timeBar = nil
 
 function StartRace(data, raceKey)
     inRace = true
@@ -217,17 +218,39 @@ function StartRace(data, raceKey)
 
     blip = AddBlipForCoord(data.start.xyz)
 
+
+    timeBar = NativeUI.TimerBarPool()
+
+    local time = NativeUI.CreateTimerBar("Time:")
+    time:SetTextTimerBar("20s")
+    timeBar:Add(time)
+
+    local checkpoints = NativeUI.CreateTimerBar("Checkpoints:")
+    checkpoints:SetTextTimerBar("??/??")
+    timeBar:Add(checkpoints)
+
+    local distance = NativeUI.CreateTimerBar("Distance:")
+    distance:SetTextTimerBar("??m")
+    timeBar:Add(distance)
+
     for k,v in pairs(data.points) do
         SetBlipCoords(blip, v.pos.xyz)
         local timer = GetGameTimer() + 20000
-        while #(v.pos.xyz - p:pos()) > 13.0 and not raceStopped do
+        checkpoints:SetTextTimerBar(k.."/"..#data.points)
+        local dst = #(v.pos.xyz - p:pos())
+        while dst > 10.0 and not raceStopped do
+            dst = math.floor(#(v.pos.xyz - p:pos()))
             DrawMarker(5, v.pos.xyz, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 5.0, 5.0, 235, 229, 52, 170, 0, 1, 2, 0, nil, nil, 0)
             DrawMarker(0, v.pos.x, v.pos.y, v.pos.z + 1.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 30.0, 66, 245, 111, 170, 0, 1, 2, 0, nil, nil, 0)
 
             if GetGameTimer() >= timer then
                 raceStopped = true
             end
-            ShowHelpNotification("Timer remaning: ~o~"..tostring(math.floor((timer - GetGameTimer()) / 1000)), false)
+
+            time:SetTextTimerBar(tostring(math.floor((timer - GetGameTimer()) / 1000)))
+            distance:SetTextTimerBar(tostring(dst).."m")
+
+            timeBar:Draw()
             Wait(1)
         end
         PlaySoundFrontend(-1, "RACE_PLACED", "HUD_AWARDS")

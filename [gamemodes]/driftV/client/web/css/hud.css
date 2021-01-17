@@ -113,3 +113,7 @@ body {
   bottom: 10%;
   left: 85%
 }
+
+.navbar{
+  visibility: hidden;
+}

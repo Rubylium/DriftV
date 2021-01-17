@@ -147,7 +147,7 @@ end
 Citizen.CreateThread(function()
     while zone == nil do Wait(1) end
 
-    zone.addZone("veh_shop", vehShopCoords, "Press [E] to open vehicle shop", function() OpenVehShopMenu() end, true, 36, 1.0, {133, 255, 92}, 170)
+    zone.addZone("veh_shop", vehShopCoords, "Press ~INPUT_CONTEXT~ to open vehicle shop", function() OpenVehShopMenu() end, true, 36, 1.0, {133, 255, 92}, 170)
     AddBlip(vehShopCoords, 326, 2, 0.85, 17, "Drift vehicle shop")
 end)
 

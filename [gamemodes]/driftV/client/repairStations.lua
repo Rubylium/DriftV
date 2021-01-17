@@ -8,7 +8,7 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     for k,v in pairs(stations) do
-        zone.addZone("Repair_stations"..math.random(1,9999999999), v, "Press [E] To repair your vehicle !", function() RepairVehicle() end, true, 24, 1.3, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
+        zone.addZone("Repair_stations"..math.random(1,9999999999), v, "Press ~INPUT_CONTEXT~ To repair your vehicle !", function() RepairVehicle() end, true, 24, 1.3, {255, 255, 255}, 170, "markers", "finish", 0.0, 0.0, 0.0)
 
         AddBlip(v, 566, 2, 0.85, 2, "Repair stations")
     end

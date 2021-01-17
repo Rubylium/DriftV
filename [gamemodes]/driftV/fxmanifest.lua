@@ -22,6 +22,7 @@ files {
 }
 
 client_scripts {
+    "@drift-extra-assets/src/NativeUIReloaded.lua",
     "RageUI/RMenu.lua",
     "RageUI/menu/RageUI.lua",
     "RageUI/menu/Menu.lua",

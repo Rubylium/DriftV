@@ -1,0 +1,21 @@
+{
+  "name": "rageui-builder",
+  "version": "1.0.0",
+  "description": "RageUI shared file builder",
+  "main": "main.ts",
+  "author": "Dylan Malandain",
+  "license": "MIT",
+  "keywords": [
+    "rageui",
+    "builder"
+  ],
+  "scripts": {
+    "start": "ts-node Main.ts"
+  },
+  "dependencies": {
+    "@types/node": "^7.0.5",
+    "fs-extra": "^8.1.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}
