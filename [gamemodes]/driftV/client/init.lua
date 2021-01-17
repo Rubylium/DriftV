@@ -163,7 +163,7 @@ function startCinematic()
                 end
 
 
-                if not waitingSpawn then break end
+                if not waitingSpawn then DeleteEntity(entity) break end
                 DoScreenFadeOut(2000)
                 Wait(2100)
                 if entity ~= nil then
