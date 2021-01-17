@@ -6,7 +6,6 @@ ui_page "client/web/hud.html"
 
 files {
     "client/web/hud.html",
-    "client/web/js/music.js",
     "client/web/js/hud.js",
     "client/web/css/hud.css",
     "client/web/fonts/Oswald-Light.eot",

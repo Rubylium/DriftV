@@ -1,5 +1,5 @@
 local player = {}
-saison = "_testServer19"
+saison = "_seaon_1"
 pCount = 1
 
 function InitPlayer(source)

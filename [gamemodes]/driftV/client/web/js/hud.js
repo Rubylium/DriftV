@@ -38,13 +38,11 @@ $(function () {
     }
 
     if (item.containerJoins) {
-      //playSound(item.music);
       $("#containerJoin").fadeIn(0);
     } 
 
     if (item.joinClick) {
       $("#containerJoin").fadeOut(500);
-      //FadeOutMusic();
     }
 
 
