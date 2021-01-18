@@ -43,6 +43,21 @@ local function LoadCarsinGarage()
     end
 end
 
+local function GetNearestGarageCar()
+    local nearest = nil
+    local nearestDst = 100.0
+    local pPos = p:pos()
+    for k,v in pairs(loadedVehs) do
+        local dst = #(pPos - v.pos)
+        if dst < nearestDst then
+            nearestDst = dst
+            nearest = v
+        end
+    end
+
+    return nearest, nearestDst
+end
+
 function InitGarageFunction()
     LoadCarsinGarage()
     Citizen.CreateThread(function()
