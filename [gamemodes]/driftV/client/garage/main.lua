@@ -19,6 +19,9 @@ end
 function LeaveGarage()
     p:setInGarage(false)
     
+    for k, v in pairs(loadedVehs) do
+        DeleteEntity(v:getEntityId())
+    end
 
     loadedVehs = {}
 end
@@ -30,7 +33,12 @@ local function LoadCarsinGarage()
             local veh = entity:CreateVehicleLocal(v.model, possibleVehiclePos[k].xyz, possibleVehiclePos[k].w)
             SetVehicleOnGroundProperly(veh:getEntityId())
             FreezeEntityPosition(veh:getEntityId(), true)
-            table.insert(loadedVehs, veh)
+            table.insert(loadedVehs, 
+            {
+                pos = possibleVehiclePos[k], 
+                entity = veh,
+                name = GetDisplayNameFromVehicleModel(veh:getModel())
+            })
         end
     end
 end
@@ -39,7 +47,11 @@ function InitGarageFunction()
     LoadCarsinGarage()
     Citizen.CreateThread(function()
         while p:IsInGarage() do
-            
+            for k,v in pairs(loadedVehs) do
+                Draw3DText(v.pos.x, v.pox.y, v.pos.z, v.name, 1, 1.0, 1.0)
+            end
+
+
             Wait(1)
         end
     end)
