@@ -4,6 +4,7 @@ player = {
     driftPoint = 0,
     sessionDriftPoint = 0,
     passive = false,
+    inGarage = false,
     actualMap = "LS",
     actualTime = "day",
     succes = {}
@@ -20,8 +21,17 @@ function player:new()
     obj.driftPoint = 0
     obj.sessionDriftPoint = 0
     obj.passive = false
+    obj.inGarage = false
 
     p = obj
+end
+
+function player:setInGarage(status)
+    self.inGarage = status
+end
+
+function player:IsInGarage()
+    return self.inGarage
 end
 
 function player:setTime(time)

@@ -519,6 +519,10 @@ end
 --		 you would only need to if you want to make different XP levels than the
 --		 original game has!
 --======================================================================================
+local function GetCorrectExpForLevel(level)
+	return math.floor(1000 * (level^2) - 1)
+end
+
 function XNL_GetXPFloorForLevel(intLevelNr)
 	if is_int(intLevelNr) then
 		
