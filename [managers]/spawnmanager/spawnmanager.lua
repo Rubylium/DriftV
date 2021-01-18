@@ -224,14 +224,6 @@ function spawnPlayer(spawnIdx, cb)
         -- get the spawn from the array
         local spawn = spawnPoints[1]
 
-        if not spawn.skipFade then
-            DoScreenFadeOut(500)
-
-            while not IsScreenFadedOut() do
-                Citizen.Wait(0)
-            end
-        end
-
         -- validate the index
         if not spawn then
             Citizen.Trace("tried to spawn at an invalid spawn index\n")

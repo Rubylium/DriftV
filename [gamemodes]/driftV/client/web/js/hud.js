@@ -5,6 +5,8 @@ function betterNumber(x) {
 var lastPoints = 0;
 var lastMulti = "x0.0"
 
+
+
 $(function () {
   window.addEventListener("message", function (event) {
     var item = event.data;
@@ -28,11 +30,26 @@ $(function () {
       $("#container").fadeOut(1000);
     }
 
-    if (item.ShowSucces) {
+    if (item.ShowSucces) { 
       $("#containerSucces").fadeIn(100);
       $(".succesText").html(item.label);
     } else if (item.HideSucces) {
       $("#containerSucces").fadeOut(500);
     }
+
+    if (item.containerJoins) {
+      $("#containerJoin").fadeIn(0);
+    } 
+
+    if (item.joinClick) {
+      $("#containerJoin").fadeOut(500);
+    }
+
+
   });
+
+  $('.clickJoinButton').on('click', function (e) {
+		e.preventDefault();
+		$.post('https://driftv/joinServer', JSON.stringify(test = false));
+	});
 });

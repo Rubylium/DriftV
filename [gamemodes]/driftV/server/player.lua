@@ -1,5 +1,5 @@
 local player = {}
-saison = "_testServer19"
+saison = "_seaon_1"
 pCount = 1
 
 function InitPlayer(source)
@@ -86,6 +86,13 @@ AddEventHandler("driftV:SubmitDriftPoint", function(point)
     RefreshPlayerData(source)
     player[source].needSave = true
 
+end)
+
+RegisterNetEvent("driftV:AddMoney")
+AddEventHandler("driftV:AddMoney", function(money)
+    local source = source
+    player[source].money = math.floor(player[source].money + money)
+    TriggerClientEvent("FeedM:showNotification", source, "+ ~g~"..tostring(math.floor(money)).."~s~$", 2000, "success")
 end)
 
 RegisterNetEvent("driftV:SubmitExpPoints")
