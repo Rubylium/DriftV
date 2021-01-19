@@ -3,6 +3,7 @@ player = {
     money = 0,
     driftPoint = 0,
     sessionDriftPoint = 0,
+    exp = 0,
     passive = false,
     inGarage = false,
     actualMap = "LS",
@@ -22,8 +23,26 @@ function player:new()
     obj.sessionDriftPoint = 0
     obj.passive = false
     obj.inGarage = false
-
+    obj.exp = 0
     p = obj
+end
+
+function player:setExp(exp)
+    self.exp = exp
+end
+
+function player:getExp()
+    return self.exp
+end
+
+function player:addExp(exp)
+    self.exp = self.exp + exp
+    TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
+end
+
+function player:removeExp(exp)
+    self.exp = self.exp - exp
+    TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
 end
 
 function player:setInGarage(status)
@@ -125,7 +144,7 @@ end
 function player:SubmitDriftScore(score)
     self.sessionDriftPoint = self.sessionDriftPoint + score
     TriggerServerEvent("driftV:SubmitDriftPoint", score)
-    XNL_AddPlayerXP(math.floor(score / 150))
+    p:addExp(math.floor(score / 150))
 end
 
 function player:GiveMoney(money)

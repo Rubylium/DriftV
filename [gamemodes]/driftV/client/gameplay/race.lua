@@ -264,7 +264,7 @@ function StartRace(data, raceKey)
 
 
     if not raceStopped then
-        XNL_AddPlayerXP(math.floor(endPoints / 130))
+        p:addExp(math.floor(endPoints / 130))
 
         local pVeh = p:currentVeh()
         local model = GetEntityModel(pVeh)

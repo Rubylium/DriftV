@@ -334,7 +334,7 @@ Citizen.CreateThread(function()
                         })
                         if not inAerorport then
                             p:SetSucces("Police: Escape!")
-                            XNL_AddPlayerXP(10000)
+                            p:addExp(10000)
                             bonusCops = bonusCops + 2500
                             Wait(3000)
                             SendNUIMessage( {
@@ -506,7 +506,7 @@ function ArrestPlayer(spawned)
         label = "BUSTED",
     })
     p:SetSucces("Police: BUSTED!")
-    XNL_RemovePlayerXP(300000)
+    p:removeExp(300000)
     Wait(5000)
     SendNUIMessage( {
         HideSucces = true,

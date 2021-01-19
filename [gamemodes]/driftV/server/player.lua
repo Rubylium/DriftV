@@ -14,7 +14,7 @@ function InitPlayer(source)
             license = license,
             money = 50000,
             driftPoint = 0,
-            xp = 0,
+            exp = 0,
             cars = {},
             succes = {},
             needSave = false
@@ -98,7 +98,7 @@ end)
 RegisterNetEvent("driftV:SubmitExpPoints")
 AddEventHandler("driftV:SubmitExpPoints", function(point)
     local source = source
-    player[source].xp = point
+    player[source].exp = point
 
     RefreshPlayerData(source)
     player[source].needSave = true

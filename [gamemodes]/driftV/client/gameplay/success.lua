@@ -62,7 +62,7 @@ while not loaded do Wait(1) end
                         ShowSucces = true,
                         label = v.label,
                     })
-                    XNL_AddPlayerXP(v.xpReward)
+                    p:addExp(v.xpReward)
                     Wait(4000)
                     SendNUIMessage( {
                         HideSucces = true,

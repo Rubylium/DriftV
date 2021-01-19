@@ -20,10 +20,7 @@ AddEventHandler("driftV:RefreshData", function(data)
     p:SetDriftPoint(data.driftPoint)
     p:SetMoney(data.money)
     p:InitSucces(data.succes)
-    if first then
-        XNL_SetInitialXPLevels(data.xp, true, true)
-        first = false
-    end
+    p:setExp(data.exp)
 end)
 
 local possibleCam = {
