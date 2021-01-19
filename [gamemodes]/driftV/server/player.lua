@@ -1,4 +1,4 @@
-local player = {}
+player = {}
 saison = "_seaon_1"
 pCount = 1
 
@@ -17,7 +17,9 @@ function InitPlayer(source)
             exp = 0,
             cars = {},
             succes = {},
-            needSave = false
+            needSave = false,
+            crew = "",
+            crewOwner = false,
         }
         player[source] = data
         SavePlayer(source)
@@ -26,6 +28,10 @@ function InitPlayer(source)
         if data.succes == nil then
             data.succes = {}
         end
+        if data.crew == nil then
+            data.crew = ""
+            data.crewOwner = false
+        end
         player[source] = data
         debugPrint("Loaded player for database ("..data.money .. " " .. data.driftPoint ..")")
     end
@@ -33,6 +39,7 @@ function InitPlayer(source)
     SetPlayerInstance(source, 1)
     RefreshPlayerData(source)
 end
+
 
 function RefreshPlayerData(source)
     TriggerClientEvent("driftV:RefreshData", source, player[source])

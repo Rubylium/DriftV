@@ -9,7 +9,9 @@ player = {
     inGarage = false,
     actualMap = "LS",
     actualTime = "day",
-    succes = {}
+    succes = {},
+    crew = "",
+    crewOwner = false,
 }
 
 p = nil ---@type player
@@ -26,7 +28,26 @@ function player:new()
     obj.inGarage = false
     obj.exp = 0
     obj.level = 0
+    obj.crew = ""
+    obj.crewOwner = false
     p = obj
+end
+
+function player:setCrew(crew)
+    self.crew = crew
+    SetStateBagValue("PLAYER_SHARED", "CREW", self.crew, 150, true)
+end
+
+function player:getCrew()
+    return self.crew
+end
+
+function player:setCrewOwner(status)
+    self.crewOwner = status
+end
+
+function player:isPlayerCrewOwner()
+    return self.crewOwner
 end
 
 function player:setLevel(level)
