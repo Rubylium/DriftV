@@ -4,6 +4,7 @@ player = {
     driftPoint = 0,
     sessionDriftPoint = 0,
     exp = 0,
+    level = 0,
     passive = false,
     inGarage = false,
     actualMap = "LS",
@@ -24,11 +25,21 @@ function player:new()
     obj.passive = false
     obj.inGarage = false
     obj.exp = 0
+    obj.level = 0
     p = obj
+end
+
+function player:setLevel(level)
+    self.level = level
+end
+
+function player:getLevel()
+    return self.level
 end
 
 function player:setExp(exp)
     self.exp = exp
+    self.level = GetPlayerLevelFromXp(self.exp)
 end
 
 function player:getExp()
@@ -36,12 +47,29 @@ function player:getExp()
 end
 
 function player:addExp(exp)
+    local oldXp = self.xp
     self.exp = self.exp + exp
+    local oldLevel = GetPlayerLevelFromXp(oldXp)
+    local newLevel = GetPlayerLevelFromXp(self.exp)
+
+    if oldLevel ~= newLevel then
+        -- Level up 
+    end
+
+    DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, false)
+
+    self.level = GetPlayerLevelFromXp(self.exp)
     TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
 end
 
 function player:removeExp(exp)
+    local oldXp = self.xp
     self.exp = self.exp - exp
+    self.level = GetPlayerLevelFromXp(self.exp)
+    local oldLevel = GetPlayerLevelFromXp(oldXp)
+    local newLevel = GetPlayerLevelFromXp(self.exp)
+
+    DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, false)
     TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
 end
 
