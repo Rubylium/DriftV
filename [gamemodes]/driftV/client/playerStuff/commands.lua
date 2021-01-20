@@ -53,7 +53,7 @@ end, false)
 function loopRender() -- Thread in a function so it don't run at all when not called :D
     Citizen.CreateThread(function()
         while renderToggle do
-            Citizen.InvokeNative(0xA76359FC80B2438E, Citizen.PointerValueFloatInitialized(render)) -- Ugly Native yeah, it don't have a name yet so we need to Invoke it
+            Citizen.InvokeNative(0xA76359FC80B2438E, tonumber(render)) -- Ugly Native yeah, it don't have a name yet so we need to Invoke it
             Wait(1) -- Native need to be called every frame tho, the game will reset the custom render if not
         end
     end)

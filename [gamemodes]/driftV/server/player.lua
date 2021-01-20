@@ -1,6 +1,7 @@
 player = {}
 saison = "_seaon_1"
 pCount = 1
+GlobalState.mode = 'open'
 
 function InitPlayer(source)
     pCount = pCount + 1
@@ -15,10 +16,11 @@ function InitPlayer(source)
             money = 50000,
             driftPoint = 0,
             exp = 0,
+            level = 0,
             cars = {},
             succes = {},
             needSave = false,
-            crew = "",
+            crew = "None",
             crewOwner = false,
         }
         player[source] = data
@@ -29,7 +31,7 @@ function InitPlayer(source)
             data.succes = {}
         end
         if data.crew == nil then
-            data.crew = ""
+            data.crew = "None"
             data.crewOwner = false
         end
         player[source] = data

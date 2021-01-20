@@ -10,7 +10,7 @@ player = {
     actualMap = "LS",
     actualTime = "day",
     succes = {},
-    crew = "",
+    crew = "None",
     crewOwner = false,
 }
 
@@ -28,14 +28,13 @@ function player:new()
     obj.inGarage = false
     obj.exp = 0
     obj.level = 0
-    obj.crew = ""
+    obj.crew = "None"
     obj.crewOwner = false
     p = obj
 end
 
 function player:setCrew(crew)
     self.crew = crew
-    SetStateBagValue("PLAYER_SHARED", "CREW", self.crew, 150, true)
 end
 
 function player:getCrew()

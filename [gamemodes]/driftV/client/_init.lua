@@ -21,6 +21,7 @@ AddEventHandler("driftV:RefreshData", function(data)
     p:SetMoney(data.money)
     p:InitSucces(data.succes)
     p:setExp(data.exp)
+    p:setCrew(data.crew)
 end)
 
 local possibleCam = {

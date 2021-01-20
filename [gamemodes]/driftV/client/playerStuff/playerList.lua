@@ -59,12 +59,12 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+while not loaded do Wait(1) end
     while true do
         TriggerServerEvent("drift:RequestSync")
 
-        SetStateBagValue("PLAYER_SHARED", "CREW", p:getCrew(), 150, true)
-        SetStateBagValue("PLAYER_SHARED", "LEVEL", p:getLevel(), 150, true)
-        -- SetStateBagValue("PLAYER_SHARED", "LEVEL", p:getLevel(), 150, true) -- Need title soon
+        SetStateBagValue("PLAYER_SHARED", "CREW", tostring(p:getCrew()), string.len(p:getCrew()), true)
+        SetStateBagValue("PLAYER_SHARED", "LEVEL", tostring(p:getLevel()), string.len(tostring(p:getLevel())), true)
 
         Wait(3000)
     end
