@@ -19,21 +19,18 @@ end
 
 function DisplayRankBar(oldxp, newxp, oldlevel, newlevel, take)
 	Citizen.CreateThread(function()
-		local XP_StartLimit_RankBar = GetCorrectExpForLevel()
-		local XP_EndLimit_RankBar = GetCorrectExpForLevel(oldlevel)
-		local playersPreviousXP = oldxp
-		local playersCurrentXP = newxp
-		local CurrentPlayerLevel = GetCorrectExpForLevel(newxp)
+		local XP_StartLimit_RankBar = math.floor(oldxp)
+		local XP_EndLimit_RankBar = math.floor(GetCorrectExpForLevel(newlevel))
+		local playersPreviousXP = math.floor(oldxp)
+		local playersCurrentXP = math.floor(newxp)
+		local CurrentPlayerLevel = math.floor(GetPlayerLevelFromXp(newxp))
 		local TakingAwayXP = take
-		for i = 1,1000 do
-			CreateRankBar(XP_StartLimit_RankBar, XP_EndLimit_RankBar, playersPreviousXP, playersCurrentXP, CurrentPlayerLevel, TakingAwayXP)
-			Wait(1)
-		end
+		CreateRankBar(XP_StartLimit_RankBar, XP_EndLimit_RankBar, playersPreviousXP, playersCurrentXP, CurrentPlayerLevel, TakingAwayXP)
 	end)
 end
 
 function CreateRankBar(XP_StartLimit_RankBar, XP_EndLimit_RankBar, playersPreviousXP, playersCurrentXP, CurrentPlayerLevel, TakingAwayXP)
-	RankBarColor = 116 -- The Normal Online Ranbar color (IS NOT used for the globes!)
+	local RankBarColor = 116 -- The Normal Online Ranbar color (IS NOT used for the globes!)
 	if TakingAwayXP and XNL_UseRedBarWhenLosingXP then
 		RankBarColor = 6 -- Dark Red
 	end

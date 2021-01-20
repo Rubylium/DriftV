@@ -30,10 +30,6 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        for i = 1,63 do
-            playersInstance[i] = 0
-        end
-
         for k,v in pairs(pInstance) do
             if GetPlayerPing(k) == 0 then
                 pInstance[k] = nil

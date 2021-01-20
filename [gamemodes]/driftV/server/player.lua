@@ -1,5 +1,5 @@
 player = {}
-saison = "_seaon_1"
+saison = "_seaon_1_dev"
 pCount = 1
 GlobalState.mode = 'open'
 
@@ -107,7 +107,7 @@ end)
 RegisterNetEvent("driftV:SubmitExpPoints")
 AddEventHandler("driftV:SubmitExpPoints", function(point)
     local source = source
-    player[source].exp = point
+    player[source].exp = math.floor(point)
 
     RefreshPlayerData(source)
     player[source].needSave = true
@@ -124,7 +124,7 @@ RegisterNetEvent("drift:RequestSync")
 AddEventHandler("drift:RequestSync", function()
     local players = {}
     for k,v in player do
-        table.insert(players, {name = GetPlayerName(k), xp = v.xp, servID = k, ping = GetPlayerPing(k)})
+        table.insert(players, {name = GetPlayerName(k), exp = v.exp, servID = k, ping = GetPlayerPing(k)})
     end
 
     TriggerClientEvent('drift:SyncPlayer', source, players)

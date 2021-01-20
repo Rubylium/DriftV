@@ -67,7 +67,7 @@ function player:getExp()
 end
 
 function player:addExp(exp)
-    local oldXp = self.xp
+    local oldXp = self.exp
     self.exp = self.exp + exp
     local oldLevel = GetPlayerLevelFromXp(oldXp)
     local newLevel = GetPlayerLevelFromXp(self.exp)
@@ -83,13 +83,14 @@ function player:addExp(exp)
 end
 
 function player:removeExp(exp)
-    local oldXp = self.xp
+    local oldXp = self.exp
     self.exp = self.exp - exp
-    self.level = GetPlayerLevelFromXp(self.exp)
     local oldLevel = GetPlayerLevelFromXp(oldXp)
     local newLevel = GetPlayerLevelFromXp(self.exp)
 
-    DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, false)
+    DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, true)
+
+    self.level = GetPlayerLevelFromXp(self.exp)
     TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
 end
 

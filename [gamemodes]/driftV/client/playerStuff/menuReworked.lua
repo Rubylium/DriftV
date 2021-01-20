@@ -184,6 +184,14 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(maps, function()
+                    RageUI.Button("Personnal garage", nil, {}, true, {
+                            onSelected = function()
+                                p:SetMap("garage")
+                                open = false
+                                RageUI.CloseAll()
+                                JoinGarage()
+                            end,
+                        });
                     for _,v in pairs(mapsArea) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()

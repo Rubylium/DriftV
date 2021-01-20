@@ -37,7 +37,7 @@ Citizen.CreateThread(function()
                 PushScaleformMovieFunctionParameterInt(200) -- Color Of Item
                 PushScaleformMovieFunctionParameterInt(2000)
                 PushScaleformMovieFunctionParameterInt(v.servID) -- Left Side Number
-                PushScaleformMovieFunctionParameterInt(GetPlayerLevelFromXp(v.xp)) -- Amount Of JP
+                PushScaleformMovieFunctionParameterInt(GetPlayerLevelFromXp(v.exp)) -- Amount Of JP
                 PushScaleformMovieFunctionParameterString("") -- Clan Tag , Needs 3 Characters Before To Display
                 PushScaleformMovieFunctionParameterInt(1) -- 0 = display no JP icon, 1 = display JP icon, 2+ = display nothing,
                 PopScaleformMovieFunctionVoid()
