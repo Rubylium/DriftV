@@ -38,15 +38,20 @@ function JoinGarage()
     InitGarageFunction()
 end
 
-function LeaveGarage()
+function LeaveGarage(veh)
     TriggerServerEvent("drift:ChangeServerInstance", 0) 
     p:setInGarage(false)
     
     for k, v in pairs(loadedVehs) do
         DeleteEntity(v:getEntityId())
     end
-
     loadedVehs = {}
+
+
+    p:Teleport(oldPlayerPos)
+
+    local nameToSpawn = veh.name
+    
 end
 
 local function LoadCarsinGarage()
@@ -104,6 +109,22 @@ function InitGarageFunction()
                 if IsControlJustReleased(0, 38) then
                     OpenCustomMenu(closetCar.entity:getEntityId())
                 end
+                Wait(1)
+            else
+                Wait(500)
+            end
+        end
+    end)
+
+
+    -- Leave 
+    Citizen.CreateThread(function()
+        while p:IsInGarage() do
+            if p:isInVeh() then
+                ShowHelpNotification("Presse ~INPUT_CONTEXT~ to leave your garage")
+                if IsControlJustReleased(0, 38) then
+                    LeaveGarage(closetCar)
+                end 
                 Wait(1)
             else
                 Wait(500)
