@@ -20,6 +20,7 @@ local mapsArea = {
     {map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
     {map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
     {map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
+    {map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
 }
 
 local hours = {
