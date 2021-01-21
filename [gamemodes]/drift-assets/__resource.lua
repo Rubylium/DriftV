@@ -9,7 +9,6 @@ data_file 'DLC_ITYP_REQUEST' 'stream/haruna/haruna.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/hakonen/hakonen.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/iroh/iroh.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/hunterpark/hunterpark.ytyp'
-data_file 'DLC_ITYP_REQUEST' 'stream/myogi/myogi.ytyp'
 
 data_file 'DLC_ITYP_REQUEST' 'stream/ohiradai/ohiradai.ytyp'
 file 'meta/ohiradai/gtxd.meta'

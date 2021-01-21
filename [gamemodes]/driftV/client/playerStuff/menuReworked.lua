@@ -21,7 +21,6 @@ local mapsArea = {
     {map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
     {map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
     {map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
-    {map = "Myogi", label = "Addon: Myogi (Test)", pos = vector3(5475.418, -289.279, 1246.639)},
 }
 
 local hours = {
