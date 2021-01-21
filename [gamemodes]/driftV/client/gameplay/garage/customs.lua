@@ -639,6 +639,9 @@ function OpenCustomMenu(veh, name)
                         RageUI.Button(v.label, nil, {RightLabel = "[x~b~"..v.max.."~s~] >"}, true, {
                             onSelected = function()
                                 selectedCustom = k
+                                if customs[selectedMod].extraAction ~= nil then
+                                    customs[selectedMod].extraAction(veh)
+                                end
                             end,
                         }, sub2);
                     end
