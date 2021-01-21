@@ -297,6 +297,19 @@ Citizen.CreateThread(function()
     end
 end)
 
+Citizen.CreateThread(function()
+    while not loaded do Wait(500) end
+    while true do
+        if p:GetMap() == "LS" and p:getTime() == "night" then
+            SetRandomVehicleDensityMultiplierThisFrame(0.0)
+            SetVehicleDensityMultiplierThisFrame(0.0)
+            Wait(1)
+        else
+            Wait(500)
+        end
+    end
+end)
+
 local cooldownSpeed = false
 Citizen.CreateThread(function()
     while not loaded do Wait(500) end
