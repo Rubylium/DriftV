@@ -9,6 +9,26 @@ local activeCamName
 local cachedEntity = {}
 local playersInPassiveVeh = {}
 local playerInstances = {}
+local garageTag = "Personnal garage"
+local garageTagState = {
+    "→    " .. garageTag .. "       ←",
+    "→    " .. garageTag .. "      ←",
+    "→    " .. garageTag .. "     ←",
+    "→    " .. garageTag .. "    ←",
+    "→    " .. garageTag .. "   ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "  ←",
+    "→    " .. garageTag .. "   ←",
+    "→    " .. garageTag .. "    ←",
+    "→    " .. garageTag .. "     ←",
+    "→    " .. garageTag .. "      ←",
+    "→    " .. garageTag .. "       ←",
+}
 
 local mapsArea = {
     {map = "LS", label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
@@ -62,20 +82,28 @@ function OpenMainMenu()
             while open do
 
                 RageUI.IsVisible(main, function()
-                    RageUI.Button('My Vehicles', nil, {RightLabel = ">"}, true, {}, vehicle);
-                    RageUI.Button('Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
-                    RageUI.Button('My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
-                    RageUI.Button('Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
-                    RageUI.Button('Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
+                    RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = "~y~NEW!"}, true, {
+                        onSelected = function()
+                            p:SetMap("garage")
+                            open = false
+                            RageUI.CloseAll()
+                            JoinGarage()
+                        end,
+                    });
+                    RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, true, {}, vehicle);
+                    RageUI.Button('→    Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
+                    RageUI.Button('→    My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
+                    RageUI.Button('→    Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
+                    RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
                     --     onSelected = function()
                     --         TriggerServerEvent("drift:GetServerInstance")
                     --     end,
                     -- }, instance);
-                    RageUI.Button('Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    RageUI.Button('Succes', "See all your succes", {RightLabel = ">"}, true, {}, succes);
-                    RageUI.Button('Times', "Change your time", {RightLabel = ">"}, true, {}, time);
-                    RageUI.Button("Toggle freecam", "", {}, true, {
+                    RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
+                    RageUI.Button('→    Succes', "See all your succes", {RightLabel = ">"}, true, {}, succes);
+                    RageUI.Button('→    Times', "Change your time", {RightLabel = ">"}, true, {}, time);
+                    RageUI.Button("→    Toggle freecam", "", {}, true, {
                         onSelected = function()
                             ToogleNoClip()
                         end,
@@ -110,11 +138,11 @@ function OpenMainMenu()
 
 
                 RageUI.IsVisible(vehicleOptions, function()
-                    RageUI.Button("Random mods", "Apply randoms mods to your vehicle (Will max out perf)", {}, true, {
-                        onSelected = function()
-                            RandomUpgrade(p:currentVeh())
-                        end,
-                    });
+                    -- RageUI.Button("Random mods", "Apply randoms mods to your vehicle (Will max out perf)", {}, true, {
+                    --     onSelected = function()
+                    --         RandomUpgrade(p:currentVeh())
+                    --     end,
+                    -- });
                     RageUI.Button("Repair", "Not avalaible at night", {}, true, {
                         onSelected = function()
                             if p:getTime() ~= "night" then
@@ -151,29 +179,29 @@ function OpenMainMenu()
                     });
 
                     -- Submenu
-                    RageUI.Button('Vehicle Extra', nil, {RightLabel = ">"}, true, {}, vehicleOptionsExtra);
-                    RageUI.Button('Vehicle Liverys', nil, {RightLabel = ">"}, true, {}, vehicleOptionsLivery);
+                    -- RageUI.Button('Vehicle Extra', nil, {RightLabel = ">"}, true, {}, vehicleOptionsExtra);
+                    -- RageUI.Button('Vehicle Liverys', nil, {RightLabel = ">"}, true, {}, vehicleOptionsLivery);
                 end)
 
-                RageUI.IsVisible(vehicleOptionsExtra, function()
-                    for i = 1,9 do
-                        if DoesExtraExist(p:currentVeh(), i) then
-                            if IsVehicleExtraTurnedOn(p:currentVeh(), i) then
-                                RageUI.Button('Turn Extra #'..i..' - ~r~off', nil, {}, true, {
-                                    onSelected = function()
-                                        SetVehicleExtra(p:currentVeh(), i, true)
-                                    end,
-                                }); 
-                            else
-                                RageUI.Button('Turn Extra #'..i..' ~g~on', nil, {}, true, {
-                                    onSelected = function()
-                                        SetVehicleExtra(p:currentVeh(), i, false)
-                                    end,
-                                }); 
-                            end
-                        end
-                    end
-                end)
+                -- RageUI.IsVisible(vehicleOptionsExtra, function()
+                --     for i = 1,9 do
+                --         if DoesExtraExist(p:currentVeh(), i) then
+                --             if IsVehicleExtraTurnedOn(p:currentVeh(), i) then
+                --                 RageUI.Button('Turn Extra #'..i..' - ~r~off', nil, {}, true, {
+                --                     onSelected = function()
+                --                         SetVehicleExtra(p:currentVeh(), i, true)
+                --                     end,
+                --                 }); 
+                --             else
+                --                 RageUI.Button('Turn Extra #'..i..' ~g~on', nil, {}, true, {
+                --                     onSelected = function()
+                --                         SetVehicleExtra(p:currentVeh(), i, false)
+                --                     end,
+                --                 }); 
+                --             end
+                --         end
+                --     end
+                -- end)
 
                 RageUI.IsVisible(vehicleOptionsLivery, function()
                     for i = 1, GetVehicleLiveryCount(p:currentVeh()) do
@@ -186,14 +214,7 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(maps, function()
-                    RageUI.Button("Personnal garage", nil, {}, true, {
-                            onSelected = function()
-                                p:SetMap("garage")
-                                open = false
-                                RageUI.CloseAll()
-                                JoinGarage()
-                            end,
-                        });
+
                     for _,v in pairs(mapsArea) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
@@ -452,4 +473,15 @@ end)
 RegisterNetEvent("drift:GetServerInstance")
 AddEventHandler("drift:GetServerInstance", function(info)
     playerInstances = info
+end)
+
+
+Citizen.CreateThread(function()
+    while true do
+        for k,v in pairs(garageTagState) do
+            garageTag = garageTagState[k]
+            Wait(50)
+        end
+        Wait(1)
+    end
 end)

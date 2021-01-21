@@ -39,6 +39,7 @@ function JoinGarage()
     oldPlayerHeading = p:heading()
     p:Teleport(garagePos)
     InitGarageFunction()
+    TriggerEvent("InteractSound_CL:PlayOnOne", "garage", 0.05)
 end
 
 function LeaveGarage(veh)
@@ -50,7 +51,7 @@ function LeaveGarage(veh)
     end
     loadedVehs = {}
 
-
+    TriggerEvent("InteractSound_CL:Stop")
     p:Teleport(oldPlayerPos)
 
     local nameToSpawn = veh.model

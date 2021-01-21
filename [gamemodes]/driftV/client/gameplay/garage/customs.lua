@@ -1,6 +1,10 @@
 local customs = {
     {
         label = "Performance",
+        extraAction = function(veh)
+            SetVehicleDoorOpen(veh, 4, 0, 1)
+            SetVehicleDoorOpen(veh, 5, 0, 1)
+        end,
         customs = {
             {
                 label = "Engine",
@@ -9,8 +13,38 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 2,
                 installed = 0,
-                price = 50000,
-                pricePad = 1500,
+                price = 85000,
+                pricePad = 4500,
+            },
+            {
+                label = "Brakes",
+                mod = 12,
+                bone = "engine",
+                bonePos = vector3(0.0, 0.0, 0.0),
+                max = 2,
+                installed = 0,
+                price = 45000,
+                pricePad = 1350,
+            },
+            {
+                label = "Transmission",
+                mod = 13,
+                bone = "engine",
+                bonePos = vector3(0.0, 0.0, 0.0),
+                max = 2,
+                installed = 0,
+                price = 65000,
+                pricePad = 1350,
+            },
+            {
+                label = "Suspension",
+                mod = 15,
+                bone = "engine",
+                bonePos = vector3(0.0, 0.0, 0.0),
+                max = 2,
+                installed = 0,
+                price = 25000,
+                pricePad = 1750,
             },
         },
     },
@@ -360,6 +394,7 @@ local colors = {
 }
 
 
+
 function RefreshCustomVehicleValues(veh)
     SetVehicleModKit(veh, 0)
     for k,v in pairs(customs) do
@@ -398,11 +433,15 @@ local colorType = {
 local index = {
     color = 1
 }
+local tubroPrice = 350000
 local loadedVeh = nil
+local loadedProps = {}
 local main = RageUI.CreateMenu("DriftV", "~b~Drift customs shop")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
 local colours =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
 local coloursSub =  RageUI.CreateSubMenu(colours, "DriftV", "~b~Drift customs shop")
+local livery =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
+local extra =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
 local sub2 =  RageUI.CreateSubMenu(sub, "DriftV", "~b~Drift customs shop")
 main.Closed = function()
     open = false
@@ -410,12 +449,34 @@ main.Closed = function()
     RageUI.Visible(main, false)
     SetVehicleEngineOn(loadedVeh, false, false, false)
     SetVehicleLightsMode(loadedVeh, 0)
+    SetVehicleDoorsShut(loadedVeh, 1)
+end
+sub.Closed = function()
+    SetVehicleDoorsShut(loadedVeh, 1)
+    SetVehProps(loadedVeh, loadedProps)
+end
+colours.Closed = function()
+    SetVehProps(loadedVeh, loadedProps)
+end
+coloursSub.Closed = function()
+    SetVehProps(loadedVeh, loadedProps)
+end
+livery.Closed = function()
+    SetVehProps(loadedVeh, loadedProps)
+end
+extra.Closed = function()
+    SetVehProps(loadedVeh, loadedProps)
+end
+sub2.Closed = function()
+    SetVehProps(loadedVeh, loadedProps)
 end
 main.WidthOffset = 100.0
 sub.WidthOffset = 100.0
 sub2.WidthOffset = 100.0
 colours.WidthOffset = 100.0
 coloursSub.WidthOffset = 100.0
+livery.WidthOffset = 100.0
+extra.WidthOffset = 100.0
 
 function OpenCustomMenu(veh, name)
     if open then
@@ -430,6 +491,8 @@ function OpenCustomMenu(veh, name)
         SetVehicleBrakeLights(veh, true)
         SetVehicleHandbrake(veh, true)
         loadedVeh = veh
+        local turboStatus = GetVehProps(veh).modTurbo
+        loadedProps = GetVehProps(veh)
 
         Citizen.CreateThread(function()
             while open do
@@ -438,13 +501,91 @@ function OpenCustomMenu(veh, name)
                         RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
                             onSelected = function()
                                 selectedMod = k
+                                if v.extraAction ~= nil then
+                                    v.extraAction(veh)
+                                end
                             end,
                         }, sub);
-                        RageUI.Button("Colours", nil, {RightLabel = ">"}, true, {
+                    end
+                    RageUI.Button("Colours", nil, {RightLabel = ">"}, true, {}, colours);
+                    RageUI.Button("Livery", nil, {RightLabel = ">"}, true, {}, livery);
+                    RageUI.Button("Extra mods", nil, {RightLabel = ">"}, true, {}, extra);
+                end)
+
+                RageUI.IsVisible(extra, function()
+                    RageUI.Checkbox('Turbo (~g~'..GroupDigits(tubroPrice).."~s~$)", nil, turboStatus, {}, {
+                        onSelected = function(Index)
+                            turboStatus = Index
+                            --- Logic on selected items
+                        end,
+                        onChecked = function()
+                            if p:HaveEnoughMoney(tubroPrice) then
+                                p:Pay(tubroPrice)
+                                ToggleVehicleMod(veh, 18, true)
+                                local props = GetVehProps(veh)
+                                p:SetCarProps(name, props)
+                                loadedProps = GetVehProps(veh)
+                            else    
+                                turboStatus = false
+                                ShowNotification("Not enough money")
+                            end
+                        end,
+                    })
+                    for i = 1,9 do
+                        if DoesExtraExist(p:currentVeh(), i) then
+                            if IsVehicleExtraTurnedOn(p:currentVeh(), i) then
+                                RageUI.Button('Turn Extra #'..i..' - ~r~off', nil, {RightLabel = "~g~FREE"}, true, {
+                                    onSelected = function()
+                                        SetVehicleExtra(veh, i, true)
+                                        local props = GetVehProps(veh)
+                                        p:SetCarProps(name, props)
+                                        loadedProps = GetVehProps(veh)
+                                    end,
+                                    onActive = function()
+                                        SetVehicleExtra(veh, i, true)
+                                    end
+                                }); 
+                            else
+                                RageUI.Button('Turn Extra #'..i..' ~g~on', nil, {RightLabel = "~g~FREE"}, true, {
+                                    onSelected = function()
+                                        SetVehicleExtra(veh, i, false)
+                                        local props = GetVehProps(veh)
+                                        p:SetCarProps(name, props)
+                                        loadedProps = GetVehProps(veh)
+                                    end,
+                                    onActive = function()
+                                        SetVehicleExtra(veh, i, true)
+                                    end
+                                }); 
+                            end
+                        end
+                    end
+                end)
+
+                RageUI.IsVisible(livery, function()
+                    RageUI.Button("Livery #0", nil, {}, true, {
+                        onSelected = function()
+                            SetVehProps(veh, {modLivery = 0})
+                            local props = GetVehProps(veh)
+                            p:SetCarProps(name, props)
+                            loadedProps = GetVehProps(veh)
+                        end,
+                        onActive = function()
+                            SetVehProps(veh, {modLivery = 0})
+                        end
+                    });
+                    for i = 1, GetVehicleLiveryCount(veh) do
+                        RageUI.Button("Livery #"..i, nil, {}, true, {
                             onSelected = function()
-                                selectedMod = k
+                                SetVehProps(veh, {modLivery = i})
+                                local props = GetVehProps(veh)
+                                p:SetCarProps(name, props)
+                                loadedProps = GetVehProps(veh)
                             end,
-                        }, colours);
+                            onActive = function()
+                                SetVehProps(veh, {modLivery = i})
+                            end
+                        });
                     end
                 end)
 
@@ -477,6 +618,7 @@ function OpenCustomMenu(veh, name)
                                 end
                                 local props = GetVehProps(veh)
                                 p:SetCarProps(name, props)
+                                loadedProps = GetVehProps(veh)
                             end,
 
                             onActive = function()
@@ -506,6 +648,7 @@ function OpenCustomMenu(veh, name)
                     RageUI.Button(customs[selectedMod].customs[selectedCustom].label.." #Default", nil, {RightLabel = "APPLY FOR ~g~0$"}, true, {
                         onSelected = function()
                             SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, -1, true, name)
+                            loadedProps = GetVehProps(veh)
                         end,
 
                         onActive = function()
@@ -528,6 +671,7 @@ function OpenCustomMenu(veh, name)
                                         p:Pay(math.floor(customs[selectedMod].customs[selectedCustom].price + (i * customs[selectedMod].customs[selectedCustom].pricePad)))
                                         SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, i, true, name)
                                         print(i, customs[selectedMod].customs[selectedCustom].installed, customs[selectedMod].customs[selectedCustom].max)
+                                        loadedProps = GetVehProps(veh)
                                     end
                                 end,
 
