@@ -150,6 +150,18 @@ function player:SetCars(cars)
     self.cars = cars
 end
 
+function player:SetCarProps(car, props)
+    for k,v in pairs(self.cars) do
+        print(v.model, car)
+        print(v.model == car)
+        if v.model == car then
+            v.props = props
+            break
+        end
+    end
+    TriggerServerEvent("drift:UpdateCars", self.cars)
+end
+
 function player:SetMoney(money)
     self.money = money
 end
@@ -160,6 +172,18 @@ end
 
 function player:GetMoney()
     return self.money
+end
+
+function player:Pay(price)
+    TriggerServerEvent("drift:Pay", price)
+end
+
+function player:HaveEnoughMoney(price)
+    if self.money >= price then
+        return true
+    else
+        return false
+    end
 end
 
 function player:GetDrift()
@@ -193,7 +217,7 @@ end
 function player:SubmitDriftScore(score)
     self.sessionDriftPoint = self.sessionDriftPoint + score
     TriggerServerEvent("driftV:SubmitDriftPoint", score)
-    p:addExp(math.floor(score / 150))
+    p:addExp(math.floor(score / 10))
 end
 
 function player:GiveMoney(money)

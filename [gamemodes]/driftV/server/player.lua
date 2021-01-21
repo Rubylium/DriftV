@@ -147,7 +147,7 @@ AddEventHandler("drift:BuyVehicle", function(price, label, model)
 
     if price <= player[source].money and price > 49000 then
         player[source].money = player[source].money - price
-        table.insert(player[source].cars, {label = label, model = model})
+        table.insert(player[source].cars, {label = label, model = model, props = {}})
         TriggerClientEvent("FeedM:showNotification", source, "New vehicle added to your garage !", 5000, "success")
 
         RefreshPlayerData(source)
@@ -155,8 +155,22 @@ AddEventHandler("drift:BuyVehicle", function(price, label, model)
     end
 end)
 
+RegisterNetEvent("drift:UpdateCars")
+AddEventHandler("drift:UpdateCars", function(cars)
+    player[source].cars = cars
+    player[source].needSave = true
+end)
+
 
 RegisterNetEvent("drift:GotBusted")
 AddEventHandler("drift:GotBusted", function(cops)
     TriggerClientEvent("FeedM:showNotification", -1, "The player "..GetPlayerName(source).." got busted with "..cops.." cops !", 15000, "danger")
+end)
+
+RegisterNetEvent("drift:Pay")
+AddEventHandler("drift:Pay", function(price)
+    player[source].money = player[source].money - price
+    TriggerClientEvent("FeedM:showNotification", source, "- ~r~"..tostring(math.floor(price)).."~s~$", 2000, "success")
+    player[source].needSave = true
+    RefreshPlayerData(source)
 end)

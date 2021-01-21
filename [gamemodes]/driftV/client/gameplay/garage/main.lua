@@ -25,6 +25,9 @@ local possibleVehiclePos = {
 }
 
 function JoinGarage()
+    if p:isInVeh() then
+        DeleteEntity(p:currentVeh())
+    end
     TriggerServerEvent("drift:ChangeServerInstance", GetPlayerServerId(p:index())) 
     RequestIpl(garageIpl)
     while not IsIplActive(garageIpl) do ShowLoadingMessageTimed(150, "Loading garage ...", 1) Wait(1) end
@@ -42,16 +45,24 @@ function LeaveGarage(veh)
     TriggerServerEvent("drift:ChangeServerInstance", 0) 
     p:setInGarage(false)
     
-    for k, v in pairs(loadedVehs) do
-        DeleteEntity(v:getEntityId())
+    for k,v in pairs(loadedVehs) do
+        DeleteEntity(v.entity:getEntityId())
     end
     loadedVehs = {}
 
 
     p:Teleport(oldPlayerPos)
 
-    local nameToSpawn = veh.name
-    
+    local nameToSpawn = veh.model
+    local pVeh = p:GetCars()
+    for k,v in pairs(pVeh) do
+        if nameToSpawn == v.model then
+            local veh = entity:CreateVehicle(v.model, p:pos(), p:heading())
+            SetVehProps(veh:getEntityId(), v.props)
+            lastSpawned = veh:getNetId()
+            TaskWarpPedIntoVehicle(p:ped(), veh:getEntityId(), -1)
+        end
+    end
 end
 
 local function LoadCarsinGarage()
@@ -59,13 +70,15 @@ local function LoadCarsinGarage()
     for k,v in pairs(pVeh) do
         if possibleVehiclePos[k] ~= nil then
             local veh = entity:CreateVehicleLocal(v.model, possibleVehiclePos[k].xyz, possibleVehiclePos[k].w)
+            SetVehProps(veh:getEntityId(), v.props)
             SetVehicleOnGroundProperly(veh:getEntityId())
             FreezeEntityPosition(veh:getEntityId(), true)
             table.insert(loadedVehs, 
             {
                 pos = possibleVehiclePos[k], 
                 entity = veh,
-                name = GetDisplayNameFromVehicleModel(veh:getModel())
+                name = GetDisplayNameFromVehicleModel(veh:getModel()),
+                model = v.model,
             })
         end
     end
@@ -105,9 +118,11 @@ function InitGarageFunction()
     Citizen.CreateThread(function()
         while p:IsInGarage() do
             if closetDst <= 3.0 then
-                ShowHelpNotification("Press ~INPUT_CONTEXT~ to change vehicle customs")
-                if IsControlJustReleased(0, 38) then
-                    OpenCustomMenu(closetCar.entity:getEntityId())
+                if not p:isInVeh() then
+                    ShowHelpNotification("Press ~INPUT_CONTEXT~ to change vehicle customs")
+                    if IsControlJustReleased(0, 38) then
+                        OpenCustomMenu(closetCar.entity:getEntityId(), closetCar.model)
+                    end
                 end
                 Wait(1)
             else

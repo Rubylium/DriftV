@@ -146,11 +146,13 @@ function RefreshCustomVehicleValues(veh)
     end
 end
 
-function SetVehicleCustom(veh, mod, value, refresh)
+function SetVehicleCustom(veh, mod, value, refresh, name)
     SetVehicleModKit(veh, 0)
     SetVehicleMod(veh, mod, value, false)
     if refresh then
         RefreshCustomVehicleValues(veh)
+        local props = GetVehProps(veh)
+        p:SetCarProps(name, props)
     end
 end
 
@@ -158,6 +160,7 @@ end
 local open = false
 local selectedMod = {}
 local selectedCustom = {}
+local loadedVeh = nil
 local main = RageUI.CreateMenu("DriftV", "~b~Drift customs shop")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
 local sub2 =  RageUI.CreateSubMenu(sub, "DriftV", "~b~Drift customs shop")
@@ -165,12 +168,14 @@ main.Closed = function()
     open = false
     RageUI.CloseAll()
     RageUI.Visible(main, false)
+    SetVehicleEngineOn(loadedVeh, false, false, false)
+    SetVehicleLightsMode(loadedVeh, 0)
 end
 main.WidthOffset = 100.0
 sub.WidthOffset = 100.0
 sub2.WidthOffset = 100.0
 
-function OpenCustomMenu(veh)
+function OpenCustomMenu(veh, name)
     if open then
         open = false
         RageUI.Visible(main, false)
@@ -178,6 +183,11 @@ function OpenCustomMenu(veh)
         open = true
         RageUI.Visible(main, true)
         RefreshCustomVehicleValues(veh)
+        SetVehicleEngineOn(veh, true, true, false)
+        SetVehicleLightsMode(veh, 2)
+        SetVehicleBrakeLights(veh, true)
+        SetVehicleHandbrake(veh, true)
+        loadedVeh = veh
 
         Citizen.CreateThread(function()
             while open do
@@ -204,12 +214,12 @@ function OpenCustomMenu(veh)
                 RageUI.IsVisible(sub2, function()
                     RageUI.Button(customs[selectedMod].customs[selectedCustom].label.." #Default", nil, {RightLabel = "APPLY FOR ~g~0$"}, true, {
                         onSelected = function()
-                            
-                            SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, -1, true)
+                            SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, -1, true, name)
                         end,
 
                         onActive = function()
                             SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, -1, false)
+                            DrawLine(customs[selectedMod].customs[selectedCustom].bonePos, p:pos(), 255, 255, 255, 255)
                         end
                     });
                     for i = 0, customs[selectedMod].customs[selectedCustom].max - 1 do
@@ -223,9 +233,11 @@ function OpenCustomMenu(veh)
                         else
                             RageUI.Button(customs[selectedMod].customs[selectedCustom].label.." #"..i + 1, nil, {RightLabel = "APPLY FOR ~g~"..math.floor(customs[selectedMod].customs[selectedCustom].price + (i * customs[selectedMod].customs[selectedCustom].pricePad))  .."$"}, true, {
                                 onSelected = function()
-                                    
-                                    SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, i, true)
-                                    print(i, customs[selectedMod].customs[selectedCustom].installed, customs[selectedMod].customs[selectedCustom].max)
+                                    if p:HaveEnoughMoney(math.floor(customs[selectedMod].customs[selectedCustom].price + (i * customs[selectedMod].customs[selectedCustom].pricePad))) then
+                                        p:Pay(math.floor(customs[selectedMod].customs[selectedCustom].price + (i * customs[selectedMod].customs[selectedCustom].pricePad)))
+                                        SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, i, true, name)
+                                        print(i, customs[selectedMod].customs[selectedCustom].installed, customs[selectedMod].customs[selectedCustom].max)
+                                    end
                                 end,
 
                                 onActive = function()

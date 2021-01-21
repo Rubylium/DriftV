@@ -4,7 +4,7 @@ playersIdInPassive = {} -- Global
 local open = false
 local passive = false
 local voicechat = true
-local lastSpawned
+lastSpawned = nil
 local activeCamName
 local cachedEntity = {}
 local playersInPassiveVeh = {}
@@ -98,6 +98,7 @@ function OpenMainMenu()
                                     end
                                 end
                                 local veh = entity:CreateVehicle(v.model, p:pos(), p:heading())
+                                SetVehProps(veh:getEntityId(), v.props)
                                 lastSpawned = veh:getNetId()
                                 TaskWarpPedIntoVehicle(p:ped(), veh:getEntityId(), -1)
                                 
