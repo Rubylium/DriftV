@@ -15,3 +15,9 @@ RegisterNetEvent("DeleteEntity")
 AddEventHandler("DeleteEntity", function(ent)
     DeleteEntity(NetworkGetEntityFromNetworkId(ent)) 
 end)
+
+function GroupDigits(value)
+	local left,num,right = string.match(value,'^([^%d]*%d)(%d*)(.-)$')
+
+	return left..(num:reverse():gsub('(%d%d%d)','%1' .. (' ')):reverse())..right
+end

@@ -23,6 +23,7 @@ function SubmitRaceScore(source, race, points, vehicle)
                     multiline = true,
                     args = {"Drift", "The player "..GetPlayerName(source).." just took the "..k.." place at ".. race .." !"}
                 })
+                SendDriftAttackScore(source, v.name, points, v.points, k, race)
                 break
             end
         end
