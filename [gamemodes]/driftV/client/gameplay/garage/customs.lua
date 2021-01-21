@@ -131,6 +131,234 @@ local customs = {
     },
 }
 
+local colors = {
+    {
+        label = "black",
+        colors = {
+			{ index = 0, label = ('black')},
+			{ index = 1, label = ('graphite')},
+			{ index = 2, label = ('black_metallic')},
+			{ index = 3, label = ('caststeel')},
+			{ index = 11, label = ('black_anth')},
+			{ index = 12, label = ('matteblack')},
+			{ index = 15, label = ('darknight')},
+			{ index = 16, label = ('deepblack')},
+			{ index = 21, label = ('oil')},
+			{ index = 147, label = ('carbon')}
+        }
+    },
+    {
+        label = "white",
+        colors = {
+			{ index = 106, label = ('vanilla')},
+			{ index = 107, label = ('creme')},
+			{ index = 111, label = ('white')},
+			{ index = 112, label = ('polarwhite')},
+			{ index = 113, label = ('beige')},
+			{ index = 121, label = ('mattewhite')},
+			{ index = 122, label = ('snow')},
+			{ index = 131, label = ('cotton')},
+			{ index = 132, label = ('alabaster')},
+			{ index = 134, label = ('purewhite')}
+        }
+    },
+    {
+        label = "grey",
+        colors = {
+			{ index = 4, label = ('silver')},
+			{ index = 5, label = ('metallicgrey')},
+			{ index = 6, label = ('laminatedsteel')},
+			{ index = 7, label = ('darkgray')},
+			{ index = 8, label = ('rockygray')},
+			{ index = 9, label = ('graynight')},
+			{ index = 10, label = ('aluminum')},
+			{ index = 13, label = ('graymat')},
+			{ index = 14, label = ('lightgrey')},
+			{ index = 17, label = ('asphaltgray')},
+			{ index = 18, label = ('grayconcrete')},
+			{ index = 19, label = ('darksilver')},
+			{ index = 20, label = ('magnesite')},
+			{ index = 22, label = ('nickel')},
+			{ index = 23, label = ('zinc')},
+			{ index = 24, label = ('dolomite')},
+			{ index = 25, label = ('bluesilver')},
+			{ index = 26, label = ('titanium')},
+			{ index = 66, label = ('steelblue')},
+			{ index = 93, label = ('champagne')},
+			{ index = 144, label = ('grayhunter')},
+			{ index = 156, label = ('grey')}
+        }
+    },
+    {
+        label = "red",
+        colors = {
+			{ index = 27, label = ('red')},
+			{ index = 28, label = ('torino_red')},
+			{ index = 29, label = ('poppy')},
+			{ index = 30, label = ('copper_red')},
+			{ index = 31, label = ('cardinal')},
+			{ index = 32, label = ('brick')},
+			{ index = 33, label = ('garnet')},
+			{ index = 34, label = ('cabernet')},
+			{ index = 35, label = ('candy')},
+			{ index = 39, label = ('matte_red')},
+			{ index = 40, label = ('dark_red')},
+			{ index = 43, label = ('red_pulp')},
+			{ index = 44, label = ('bril_red')},
+			{ index = 46, label = ('pale_red')},
+			{ index = 143, label = ('wine_red')},
+			{ index = 150, label = ('volcano')}
+        }
+    },
+    {
+        label = "pink",
+        colors = {
+			{ index = 135, label = ('electricpink')},
+			{ index = 136, label = ('salmon')},
+			{ index = 137, label = ('sugarplum')}
+        }
+    },
+    {
+        label = "blue",
+        colors = {
+			{ index = 54, label = ('topaz')},
+			{ index = 60, label = ('light_blue')},
+			{ index = 61, label = ('galaxy_blue')},
+			{ index = 62, label = ('dark_blue')},
+			{ index = 63, label = ('azure')},
+			{ index = 64, label = ('navy_blue')},
+			{ index = 65, label = ('lapis')},
+			{ index = 67, label = ('blue_diamond')},
+			{ index = 68, label = ('surfer')},
+			{ index = 69, label = ('pastel_blue')},
+			{ index = 70, label = ('celeste_blue')},
+			{ index = 73, label = ('rally_blue')},
+			{ index = 74, label = ('blue_paradise')},
+			{ index = 75, label = ('blue_night')},
+			{ index = 77, label = ('cyan_blue')},
+			{ index = 78, label = ('cobalt')},
+			{ index = 79, label = ('electric_blue')},
+			{ index = 80, label = ('horizon_blue')},
+			{ index = 82, label = ('metallic_blue')},
+			{ index = 83, label = ('aquamarine')},
+			{ index = 84, label = ('blue_agathe')},
+			{ index = 85, label = ('zirconium')},
+			{ index = 86, label = ('spinel')},
+			{ index = 87, label = ('tourmaline')},
+			{ index = 127, label = ('paradise')},
+			{ index = 140, label = ('bubble_gum')},
+			{ index = 141, label = ('midnight_blue')},
+			{ index = 146, label = ('forbidden_blue')},
+			{ index = 157, label = ('glacier_blue')}
+        }
+    },
+    {
+        label = "yellow",
+        colors = {
+			{ index = 42, label = ('yellow')},
+			{ index = 88, label = ('wheat')},
+			{ index = 89, label = ('raceyellow')},
+			{ index = 91, label = ('paleyellow')},
+			{ index = 126, label = ('lightyellow')}
+        }
+    },
+    {
+        label = "green",
+        colors = {
+			{ index = 49, label = ('met_dark_green')},
+			{ index = 50, label = ('rally_green')},
+			{ index = 51, label = ('pine_green')},
+			{ index = 52, label = ('olive_green')},
+			{ index = 53, label = ('light_green')},
+			{ index = 55, label = ('lime_green')},
+			{ index = 56, label = ('forest_green')},
+			{ index = 57, label = ('lawn_green')},
+			{ index = 58, label = ('imperial_green')},
+			{ index = 59, label = ('green_bottle')},
+			{ index = 92, label = ('citrus_green')},
+			{ index = 125, label = ('green_anis')},
+			{ index = 128, label = ('khaki')},
+			{ index = 133, label = ('army_green')},
+			{ index = 151, label = ('dark_green')},
+			{ index = 152, label = ('hunter_green')},
+			{ index = 155, label = ('matte_foilage_green')}
+        }
+    },
+    {
+        label = "orange",
+        colors = {
+			{ index = 36, label = ('tangerine')},
+			{ index = 38, label = ('orange')},
+			{ index = 41, label = ('matteorange')},
+			{ index = 123, label = ('lightorange')},
+			{ index = 124, label = ('peach')},
+			{ index = 130, label = ('pumpkin')},
+			{ index = 138, label = ('orangelambo')}
+        }
+    },
+    {
+        label = "brown",
+        colors = {
+			{ index = 45, label = ('copper')},
+			{ index = 47, label = ('lightbrown')},
+			{ index = 48, label = ('darkbrown')},
+			{ index = 90, label = ('bronze')},
+			{ index = 94, label = ('brownmetallic')},
+			{ index = 95, label = ('Expresso')},
+			{ index = 96, label = ('chocolate')},
+			{ index = 97, label = ('terracotta')},
+			{ index = 98, label = ('marble')},
+			{ index = 99, label = ('sand')},
+			{ index = 100, label = ('sepia')},
+			{ index = 101, label = ('bison')},
+			{ index = 102, label = ('palm')},
+			{ index = 103, label = ('caramel')},
+			{ index = 104, label = ('rust')},
+			{ index = 105, label = ('chestnut')},
+			{ index = 108, label = ('brown')},
+			{ index = 109, label = ('hazelnut')},
+			{ index = 110, label = ('shell')},
+			{ index = 114, label = ('mahogany')},
+			{ index = 115, label = ('cauldron')},
+			{ index = 116, label = ('blond')},
+			{ index = 129, label = ('gravel')},
+			{ index = 153, label = ('darkearth')},
+			{ index = 154, label = ('desert')}
+        }
+    },
+    {
+        label = "purple",
+        colors = {
+			{ index = 71, label = ('indigo')},
+			{ index = 72, label = ('deeppurple')},
+			{ index = 76, label = ('darkviolet')},
+			{ index = 81, label = ('amethyst')},
+			{ index = 142, label = ('mysticalviolet')},
+			{ index = 145, label = ('purplemetallic')},
+			{ index = 148, label = ('matteviolet')},
+			{ index = 149, label = ('mattedeeppurple')}
+        }
+    },
+    {
+        label = "chrome",
+        colors = {
+			{ index = 117, label = ('brushedchrome')},
+			{ index = 118, label = ('blackchrome')},
+			{ index = 119, label = ('brushedaluminum')},
+			{ index = 120, label = ('chrome')}
+        }
+    },
+    {
+        label = "gold",
+        colors = {
+			{ index = 37, label = ('gold')},
+			{ index = 158, label = ('puregold')},
+			{ index = 159, label = ('brushedgold')},
+			{ index = 160, label = ('lightgold')}
+        }
+    },
+}
+
 
 function RefreshCustomVehicleValues(veh)
     SetVehicleModKit(veh, 0)
@@ -160,9 +388,21 @@ end
 local open = false
 local selectedMod = {}
 local selectedCustom = {}
+local selectedColor = {}
+local selectedColorType = "primary"
+local colorType = {
+    {Name = "Primary", Value = "primary"},
+    {Name = "Secondary", Value = "secondary"},
+    {Name = "Pearlescent", Value = "pearlescentColor"},
+}
+local index = {
+    color = 1
+}
 local loadedVeh = nil
 local main = RageUI.CreateMenu("DriftV", "~b~Drift customs shop")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
+local colours =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
+local coloursSub =  RageUI.CreateSubMenu(colours, "DriftV", "~b~Drift customs shop")
 local sub2 =  RageUI.CreateSubMenu(sub, "DriftV", "~b~Drift customs shop")
 main.Closed = function()
     open = false
@@ -174,6 +414,8 @@ end
 main.WidthOffset = 100.0
 sub.WidthOffset = 100.0
 sub2.WidthOffset = 100.0
+colours.WidthOffset = 100.0
+coloursSub.WidthOffset = 100.0
 
 function OpenCustomMenu(veh, name)
     if open then
@@ -198,12 +440,61 @@ function OpenCustomMenu(veh, name)
                                 selectedMod = k
                             end,
                         }, sub);
+                        RageUI.Button("Colours", nil, {RightLabel = ">"}, true, {
+                            onSelected = function()
+                                selectedMod = k
+                            end,
+                        }, colours);
+                    end
+                end)
+
+                RageUI.IsVisible(colours, function()
+                    RageUI.List('Color type', colorType, index.color, nil, {}, true, {
+                        onListChange = function(Index, Item)
+                            index.color = Index;
+                            selectedColorType = colorType[Index].Value
+                        end,
+                    })
+                    for k,v in pairs(colors) do
+                        RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
+                            onSelected = function()
+                                selectedColor = k
+                            end,
+                        }, coloursSub);
+                    end
+                end)
+
+                RageUI.IsVisible(coloursSub, function()
+                    for k,v in pairs(colors[selectedColor].colors) do
+                        RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
+                            onSelected = function()
+                                if selectedColorType == "primary" then
+                                    SetVehProps(veh, {color1 = v.index})
+                                elseif selectedColorType == "secondary" then
+                                    SetVehProps(veh, {color2 = v.index})
+                                elseif selectedColorType == "pearlescentColor" then
+                                    SetVehProps(veh, {pearlescentColor = v.index})
+                                end
+                                local props = GetVehProps(veh)
+                                p:SetCarProps(name, props)
+                            end,
+
+                            onActive = function()
+                                if selectedColorType == "primary" then
+                                    SetVehProps(veh, {color1 = v.index})
+                                elseif selectedColorType == "secondary" then
+                                    SetVehProps(veh, {color2 = v.index})
+                                elseif selectedColorType == "pearlescentColor" then
+                                    SetVehProps(veh, {pearlescentColor = v.index})
+                                end
+                            end
+                        });
                     end
                 end)
 
                 RageUI.IsVisible(sub, function()
                     for k,v in pairs(customs[selectedMod].customs) do
-                        RageUI.Button(v.label, nil, {RightLabel = "[x~b~"..v.max.."~s~]>"}, true, {
+                        RageUI.Button(v.label, nil, {RightLabel = "[x~b~"..v.max.."~s~] >"}, true, {
                             onSelected = function()
                                 selectedCustom = k
                             end,
