@@ -548,9 +548,13 @@ function OpenCustomMenu(veh, name)
         loadedVeh = veh
         local turboStatus = GetVehProps(veh).modTurbo
         loadedProps = GetVehProps(veh)
+        local vCoords = GetEntityCoords(veh)
 
         Citizen.CreateThread(function()
             while open do
+
+                DrawMarker(0, vCoords.x, vCoords.y, vCoords.z + 1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 255, 255, 255, 255, 1, 0, 2, 0, nil, nil, 0)
+
                 RageUI.IsVisible(main, function()
                     for k,v in pairs(customs) do
                         RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {

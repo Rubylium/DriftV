@@ -12,6 +12,14 @@ function SubmitRaceScore(source, race, points, vehicle)
         local added = false
         local foundIndex = false
         local personalIndex = nil
+        local infoToSendIfNewScore = {
+            name = nil,
+            points = nil,
+            oldPoints = nil,
+            place = nil,
+            race = nil,
+            vehicle = nil
+        }
 
         for k,v in pairs(races[race].scores) do
             if v.points < points then
@@ -23,7 +31,15 @@ function SubmitRaceScore(source, race, points, vehicle)
                     multiline = true,
                     args = {"Drift", "The player "..GetPlayerName(source).." just took the "..k.." place at ".. race .." !"}
                 })
-                SendDriftAttackScore(source, v.name, points, v.points, k, race, vehicle)
+                
+                infoToSendIfNewScore = {
+                    name = v.name,
+                    points = points,
+                    oldPoints = v.points,
+                    place = k,
+                    race = race,
+                    vehicle = vehicle
+                }
                 break
             end
         end
@@ -34,10 +50,15 @@ function SubmitRaceScore(source, race, points, vehicle)
         local cachedNames = {}
         for k,v in pairs(races[race].scores) do
             if cachedNames[v.name] == nil then
-                cachedNames[v.name] = true
+                cachedNames[v.name] = v.points
             else
                 table.remove(races[race].scores, k)
             end
+        end
+
+        --print(cachedNames[GetPlayerName(source)], infoToSendIfNewScore.points)
+        if cachedNames[GetPlayerName(source)] <= infoToSendIfNewScore.points then
+            SendDriftAttackScore(source, infoToSendIfNewScore.name, infoToSendIfNewScore.points, infoToSendIfNewScore.oldPoints, infoToSendIfNewScore.place, infoToSendIfNewScore.race, infoToSendIfNewScore.vehicle)
         end
 
 

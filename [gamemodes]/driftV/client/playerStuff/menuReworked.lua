@@ -77,6 +77,19 @@ local succes =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift parad
 local time =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 
+main.WidthOffset = 100.0
+information.WidthOffset = 100.0
+vehicle.WidthOffset = 100.0
+vehicleOptions.WidthOffset = 100.0
+vehicleOptionsExtra.WidthOffset = 100.0
+vehicleOptionsLivery.WidthOffset = 100.0
+maps.WidthOffset = 100.0
+camera.WidthOffset = 100.0
+instance.WidthOffset = 100.0
+succes.WidthOffset = 100.0
+time.WidthOffset = 100.0
+settings.WidthOffset = 100.0
+
 main.Closed = function()
     open = false
     RageUI.CloseAll()
