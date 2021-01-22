@@ -4,6 +4,91 @@ local mult = 0.1
 local waiting = 0
 local inRace = false
 local bonusCops = 0
+local blacklistVeh = {
+    [GetHashKey("dinghy")] = true,
+    [GetHashKey("seashadinghy2rk2")] = true,
+    [GetHashKey("dinghy3")] = true,
+    [GetHashKey("dinghy4")] = true,
+    [GetHashKey("jetmax")] = true,
+    [GetHashKey("marquis")] = true,
+    [GetHashKey("seashark")] = true,
+    [GetHashKey("seashark2")] = true,
+    [GetHashKey("seashark3")] = true,
+    [GetHashKey("speeder")] = true,
+    [GetHashKey("speeder2")] = true,
+    [GetHashKey("squalo")] = true,
+    [GetHashKey("submersible")] = true,
+    [GetHashKey("submersible2")] = true,
+    [GetHashKey("suntrap")] = true,
+    [GetHashKey("toro")] = true,
+    [GetHashKey("toro2")] = true,
+    [GetHashKey("tropic")] = true,
+    [GetHashKey("tropic2")] = true,
+    [GetHashKey("tug")] = true,
+
+    [GetHashKey("akula")] = true,
+    [GetHashKey("annihilator")] = true,
+    [GetHashKey("buzzard")] = true,
+    [GetHashKey("buzzard2")] = true,
+    [GetHashKey("cargobob")] = true,
+    [GetHashKey("cargobob2")] = true,
+    [GetHashKey("cargobob3")] = true,
+    [GetHashKey("cargobob4")] = true,
+    [GetHashKey("frogger")] = true,
+    [GetHashKey("frogger2")] = true,
+    [GetHashKey("havok")] = true,
+    [GetHashKey("hunter")] = true,
+    [GetHashKey("maverick")] = true,
+    [GetHashKey("savage")] = true,
+    [GetHashKey("seasparrow")] = true,
+    [GetHashKey("skylift")] = true,
+    [GetHashKey("supervolito")] = true,
+    [GetHashKey("supervolito2")] = true,
+    [GetHashKey("swift")] = true,
+    [GetHashKey("swift2")] = true,
+    [GetHashKey("valkyrie")] = true,
+    [GetHashKey("valkyrie2")] = true,
+    [GetHashKey("volatus")] = true,
+    [GetHashKey("alphaz1")] = true,
+    [GetHashKey("avenger")] = true,
+    [GetHashKey("avenger2")] = true,
+    [GetHashKey("besra")] = true,
+    [GetHashKey("blimp")] = true,
+    [GetHashKey("blimp2")] = true,
+    [GetHashKey("blimp3")] = true,
+    [GetHashKey("bombushka")] = true,
+    [GetHashKey("cargoplane")] = true,
+    [GetHashKey("cuban800")] = true,
+    [GetHashKey("dodo")] = true,
+    [GetHashKey("duster")] = true,
+    [GetHashKey("howard")] = true,
+    [GetHashKey("hydra")] = true,
+    [GetHashKey("jet")] = true,
+    [GetHashKey("lazer")] = true,
+    [GetHashKey("luxor")] = true,
+    [GetHashKey("luxor2")] = true,
+    [GetHashKey("mammatus")] = true,
+    [GetHashKey("microlight")] = true,
+    [GetHashKey("miljet")] = true,
+    [GetHashKey("mogul")] = true,
+    [GetHashKey("molotok")] = true,
+    [GetHashKey("nimbus")] = true,
+    [GetHashKey("nokota")] = true,
+    [GetHashKey("pyro")] = true,
+    [GetHashKey("rogue")] = true,
+    [GetHashKey("seabreeze")] = true,
+    [GetHashKey("shamal")] = true,
+    [GetHashKey("starling")] = true,
+    [GetHashKey("strikeforce")] = true,
+    [GetHashKey("stunt")] = true,
+    [GetHashKey("titan")] = true,
+    [GetHashKey("tula")] = true,
+    [GetHashKey("velum")] = true,
+    [GetHashKey("velum2")] = true,
+    [GetHashKey("vestra")] = true,
+    [GetHashKey("volatol")] = true,
+}
+    
 
 local inAerorport = false
 Citizen.CreateThread(function()
@@ -93,14 +178,18 @@ local function round2(num, numDecimalPlaces)
 end
 
 function SetMulti()
-    local multi = round2((score / 100000) / 10, 1)
-    if multi > 10.0 then
-        multi = 10.0
-    end
-    if multi < 0.1 then
-        mult = 0.1
+    if not p:GetMap() == "LS" then
+        local multi = round2((score / 100000) / 10, 1)
+        if multi > 10.0 then
+            multi = 10.0
+        end
+        if multi < 0.1 then
+            mult = 0.1
+        else
+            mult = multi
+        end
     else
-        mult = multi
+        return 0.1
     end
 end
 
@@ -147,7 +236,7 @@ Citizen.CreateThread(function()
             Wait(50)
 
             score = 0
-            while p:isInVeh() do
+            while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
                 local angle, velocity = angle(p:currentVeh())
                 local bonus = 0
                 if angle ~= 0 and p:GetMap() == "LS" then

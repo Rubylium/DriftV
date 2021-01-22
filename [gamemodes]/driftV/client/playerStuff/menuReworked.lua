@@ -106,10 +106,10 @@ function OpenMainMenu()
                             JoinGarage()
                         end,
                     });
-                    RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, true, {}, vehicle);
+                    RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
                     RageUI.Button('→    Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
                     RageUI.Button('→    My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
-                    RageUI.Button('→    Teleporations', nil, {RightLabel = ">"}, true, {}, maps);
+                    RageUI.Button('→    Teleporations', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
                     RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
                     --     onSelected = function()
@@ -118,8 +118,8 @@ function OpenMainMenu()
                     -- }, instance);
                     RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     RageUI.Button('→    Succes', "See all your succes", {RightLabel = ">"}, true, {}, succes);
-                    RageUI.Button('→    Times', "Change your time", {RightLabel = ">"}, true, {}, time);
-                    RageUI.Button("→    Toggle freecam", "", {}, true, {
+                    RageUI.Button('→    Times', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
+                    RageUI.Button("→    Toggle freecam", "", {}, not p:IsInGarage(), {
                         onSelected = function()
                             ToogleNoClip()
                         end,

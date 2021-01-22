@@ -32,32 +32,26 @@ function DisplayPlayersBlips()
 						-- 	SetMpGamerTagVisibility(gametag, 14, false)
 						-- end
 
-						if blips[v] == nil then
+						if blips[pPed] == nil then
 							local blip = AddBlipForEntity(pPed)
+							SetBlipSprite(blip, 1)
 							SetBlipScale(blip, 0.75)
 							SetBlipCategory(blip, 2)
-							blips[v] = blip
-						else
-							local blip = GetBlipFromEntity(pPed)
-							RemoveBlip(blip)
-							RemoveBlip(blips[v])
-							local blip = AddBlipForEntity(pPed)
-							SetBlipScale(blip, 0.75)
-							SetBlipCategory(blip, 2)
-							blips[v] = blip
+							SetBlipColour(blip, math.random(0,85))
+							blips[pPed] = blip
 						end
-						SetBlipNameToPlayerName(blips[v], v)
-						SetBlipSprite(blips[v], 1)
-						SetBlipRotation(blips[v], math.ceil(GetEntityHeading(pPed)))
+
+						SetBlipNameToPlayerName(blips[pPed], v)
+						SetBlipRotation(blips[pPed], math.ceil(GetEntityHeading(pPed)))
 
 
 						if IsPedInAnyVehicle(pPed, false) then
-							ShowHeadingIndicatorOnBlip(blips[v], false)
+							ShowHeadingIndicatorOnBlip(blips[pPed], false)
 							local pVeh = GetVehiclePedIsIn(pPed, false)
-							SetBlipRotation(blips[v], math.ceil(GetEntityHeading(pVeh)))
+							SetBlipRotation(blips[pPed], math.ceil(GetEntityHeading(pVeh)))
 						else
-							ShowHeadingIndicatorOnBlip(blips[v], true)
-							HideNumberOnBlip(blips[v])
+							ShowHeadingIndicatorOnBlip(blips[pPed], true)
+							HideNumberOnBlip(blips[pPed])
 						end
 					end
 
@@ -87,12 +81,26 @@ function DisplayPlayersBlips()
 
 		Citizen.CreateThread(function()
 			while not loaded do Wait(1) end
+			RequestStreamedTextureDict("markers", true)
+			while not HasStreamedTextureDictLoaded("markers") do
+				Wait(1)
+			end
 			while displayBlips do
 				for k,v in pairs(playersToShow) do
 					local pPed = GetPlayerPed(k)
 					local pCoords = GetEntityCoords(pPed)
 					local level = tostring(DecorGetInt(pPed, "LEVEL"))
-					Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+					local inPassive = false
+					if playersIdInPassive[GetPlayerServerId(k)] ~= nil then
+						inPassive = true
+					end
+					if inPassive then
+						Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+						Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.80, '~c~Passive activated', 4, 0.06, 0.06)
+						DrawMarker(9, pCoords.x, pCoords.y, pCoords.z + 1.0, 0.0, 0.0, 0.0, 0.0, 90.0, 0.0, 3.0, 3.0, 3.0, 255, 255, 255, 255, 0, 1, 2, 0, "markers", "private", false)
+					else
+						Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+					end
 				end
 				Wait(1)
 			end
