@@ -178,7 +178,7 @@ local function round2(num, numDecimalPlaces)
 end
 
 function SetMulti()
-    if not p:GetMap() == "LS" then
+    if p:GetMap() ~= "LS" then
         local multi = round2((score / 100000) / 10, 1)
         if multi > 10.0 then
             multi = 10.0
