@@ -29,18 +29,33 @@ local garageTagState = {
     "→    " .. garageTag .. "      ←",
     "→    " .. garageTag .. "       ←",
 }
+local animatedTag = "→"
+local animatedTagState = {
+    "→",
+    "→ ",
+    "→  ",
+    "→   ",
+    "→    ",
+    "→    ",
+    "→    ",
+    "→    ",
+    "→   ",
+    "→  ",
+    "→ ",
+    "→",
+}
 
 local mapsArea = {
-    {map = "LS", label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
-    {map = "LS", label = "LS: Vehicle Shop", pos = vector3(-51.129165649414, -1110.4876708984, 27.4358253479)},
-    {map = "Harugahara", label = "Addon: Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
-    {map = "Ebisu", label = "Addon: Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
-    {map = "Haruna", label = "Addon: Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
-    {map = "Ohiradai", label = "Addon: Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
-    {map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
-    {map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
-    {map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
-    {map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
+    {animated = false, tag = "", map = "LS", label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
+    {animated = true, tag = "~y~SHOP!", map = "LS", label = "LS: Vehicle Shop", pos = vector3(-51.129165649414, -1110.4876708984, 27.4358253479)},
+    {animated = false, tag = "", map = "Harugahara", label = "Addon: Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
+    {animated = true, tag = "~y~POPULAR!", map = "Ebisu", label = "Addon: Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
+    {animated = false, tag = "", map = "Haruna", label = "Addon: Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
+    {animated = false, tag = "", map = "Ohiradai", label = "Addon: Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
+    {animated = false, tag = "", map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
+    {animated = false, tag = "", map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
+    {animated = false, tag = "", map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
+    {animated = true, tag = "~y~NEW!", map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
 }
 
 local hours = {
@@ -77,6 +92,7 @@ function OpenMainMenu()
     else
         open = true
         RageUI.Visible(main, true)
+        StartLoopAnimation()
 
         Citizen.CreateThread(function()
             while open do
@@ -216,16 +232,29 @@ function OpenMainMenu()
                 RageUI.IsVisible(maps, function()
 
                     for _,v in pairs(mapsArea) do
-                        RageUI.Button(v.label, nil, {}, true, {
-                            onSelected = function()
-                                p:SetMap(v.map)
-                                open = false
-                                RageUI.CloseAll()
-                                p:Teleport(v.pos.xyz)
-                                ExtendWorldBoundaryForPlayer(-9000.0,-11000.0,30.0)
-                                ExtendWorldBoundaryForPlayer(10000.0, 12000.0, 30.0)
-                            end,
-                        });
+                        if v.animated then
+                            RageUI.Button(v.label, nil, {RightLabel = animatedTag.." "..v.tag}, true, {
+                                onSelected = function()
+                                    p:SetMap(v.map)
+                                    open = false
+                                    RageUI.CloseAll()
+                                    p:Teleport(v.pos.xyz)
+                                    ExtendWorldBoundaryForPlayer(-9000.0,-11000.0,30.0)
+                                    ExtendWorldBoundaryForPlayer(10000.0, 12000.0, 30.0)
+                                end,
+                            });
+                        else
+                            RageUI.Button(v.label, nil, {RightLabel = v.tag}, true, {
+                                onSelected = function()
+                                    p:SetMap(v.map)
+                                    open = false
+                                    RageUI.CloseAll()
+                                    p:Teleport(v.pos.xyz)
+                                    ExtendWorldBoundaryForPlayer(-9000.0,-11000.0,30.0)
+                                    ExtendWorldBoundaryForPlayer(10000.0, 12000.0, 30.0)
+                                end,
+                            });
+                        end
                     end
                 end)
 
@@ -476,12 +505,24 @@ AddEventHandler("drift:GetServerInstance", function(info)
 end)
 
 
-Citizen.CreateThread(function()
-    while true do
-        for k,v in pairs(garageTagState) do
-            garageTag = garageTagState[k]
-            Wait(50)
+function StartLoopAnimation()
+    Citizen.CreateThread(function()
+        while open do
+            for k,v in pairs(garageTagState) do
+                garageTag = garageTagState[k]
+                Wait(50)
+            end
+            Wait(1)
         end
-        Wait(1)
-    end
-end)
+    end)
+    
+    Citizen.CreateThread(function()
+        while open do
+            for k,v in pairs(animatedTagState) do
+                animatedTag = animatedTagState[k]
+                Wait(50)
+            end
+            Wait(1)
+        end
+    end)
+end
