@@ -1,5 +1,6 @@
 local displayBlips = false
 local blips = {}
+local gametags = {}
 function DisplayPlayersBlips()
 	
 	if displayBlips then
@@ -19,20 +20,17 @@ function DisplayPlayersBlips()
 					local pPed = GetPlayerPed(v)
 
 					if pPed ~= p:ped() then
-						local gametag = CreateFakeMpGamerTag(pPed, ('%s'):format(GetPlayerName(v)), false, false, '', 0)
-						SetMpGamerTagVisibility(gametag, 4, true)
-						SetMpGamerTagVisibility(gametag, 12, true)
-						SetMpGamerTagVisibility(gametag, 2, true)
-						if playersIdInPassive[GetPlayerServerId(v)] ~= nil then
-							SetMpGamerTagVisibility(gametag, 6, true)
-						else
-							SetMpGamerTagVisibility(gametag, 6, false)
-						end
-						if p:isPassive() then
-							SetMpGamerTagVisibility(gametag, 14, true)
-						else
-							SetMpGamerTagVisibility(gametag, 14, false)
-						end
+
+						-- if playersIdInPassive[GetPlayerServerId(v)] ~= nil then
+						-- 	SetMpGamerTagVisibility(gametag, 6, true)
+						-- else
+						-- 	SetMpGamerTagVisibility(gametag, 6, false)
+						-- end
+						-- if p:isPassive() then
+						-- 	SetMpGamerTagVisibility(gametag, 14, true)
+						-- else
+						-- 	SetMpGamerTagVisibility(gametag, 14, false)
+						-- end
 
 						if blips[v] == nil then
 							local blip = AddBlipForEntity(pPed)
@@ -67,6 +65,44 @@ function DisplayPlayersBlips()
 				Wait(200)
 			end
 		end)
+
+
+		
+		local playersToShow = {}
+		Citizen.CreateThread(function()
+			while not loaded do Wait(1) end
+			while displayBlips do
+				for k,v in pairs(GetActivePlayers()) do
+					if v ~= GetPlayerIndex() then
+						if GetDistanceBetweenCoords(p:pos(), GetEntityCoords(GetPlayerPed(v)), true) <= 20 then
+							playersToShow[v] = GetPlayerName(v)
+						else
+							playersToShow[v] = nil
+						end
+					end
+				end
+				Wait(500)
+			end
+		end)
+
+		Citizen.CreateThread(function()
+			while not loaded do Wait(1) end
+			while displayBlips do
+				for k,v in pairs(playersToShow) do
+					local pPed = GetPlayerPed(k)
+					local pCoords = GetEntityCoords(pPed)
+					local level = tostring(DecorGetInt(pPed, "LEVEL"))
+					Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+				end
+				Wait(1)
+			end
+		end)
+
 	end
 end
+
+
+
+
+
 DisplayPlayersBlips()
