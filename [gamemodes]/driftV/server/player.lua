@@ -1,5 +1,5 @@
 player = {}
-saison = "_seaon_1_dev4"
+saison = "_seaon_2"
 pCount = 1
 GlobalState.mode = 'open'
 
