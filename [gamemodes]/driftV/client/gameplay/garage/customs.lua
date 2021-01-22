@@ -168,6 +168,7 @@ local customs = {
 local colors = {
     {
         label = "black",
+        price = 5000,
         colors = {
 			{ index = 0, label = ('black')},
 			{ index = 1, label = ('graphite')},
@@ -183,6 +184,7 @@ local colors = {
     },
     {
         label = "white",
+        price = 5000,
         colors = {
 			{ index = 106, label = ('vanilla')},
 			{ index = 107, label = ('creme')},
@@ -198,6 +200,7 @@ local colors = {
     },
     {
         label = "grey",
+        price = 5000,
         colors = {
 			{ index = 4, label = ('silver')},
 			{ index = 5, label = ('metallicgrey')},
@@ -225,6 +228,7 @@ local colors = {
     },
     {
         label = "red",
+        price = 5000,
         colors = {
 			{ index = 27, label = ('red')},
 			{ index = 28, label = ('torino_red')},
@@ -246,6 +250,7 @@ local colors = {
     },
     {
         label = "pink",
+        price = 6000,
         colors = {
 			{ index = 135, label = ('electricpink')},
 			{ index = 136, label = ('salmon')},
@@ -254,6 +259,7 @@ local colors = {
     },
     {
         label = "blue",
+        price = 5000,
         colors = {
 			{ index = 54, label = ('topaz')},
 			{ index = 60, label = ('light_blue')},
@@ -288,6 +294,7 @@ local colors = {
     },
     {
         label = "yellow",
+        price = 6000,
         colors = {
 			{ index = 42, label = ('yellow')},
 			{ index = 88, label = ('wheat')},
@@ -298,6 +305,7 @@ local colors = {
     },
     {
         label = "green",
+        price = 5000,
         colors = {
 			{ index = 49, label = ('met_dark_green')},
 			{ index = 50, label = ('rally_green')},
@@ -320,6 +328,7 @@ local colors = {
     },
     {
         label = "orange",
+        price = 7000,
         colors = {
 			{ index = 36, label = ('tangerine')},
 			{ index = 38, label = ('orange')},
@@ -332,6 +341,7 @@ local colors = {
     },
     {
         label = "brown",
+        price = 5000,
         colors = {
 			{ index = 45, label = ('copper')},
 			{ index = 47, label = ('lightbrown')},
@@ -362,6 +372,7 @@ local colors = {
     },
     {
         label = "purple",
+        price = 7000,
         colors = {
 			{ index = 71, label = ('indigo')},
 			{ index = 72, label = ('deeppurple')},
@@ -375,6 +386,7 @@ local colors = {
     },
     {
         label = "chrome",
+        price = 15000,
         colors = {
 			{ index = 117, label = ('brushedchrome')},
 			{ index = 118, label = ('blackchrome')},
@@ -384,6 +396,7 @@ local colors = {
     },
     {
         label = "gold",
+        price = 30000,
         colors = {
 			{ index = 37, label = ('gold')},
 			{ index = 158, label = ('puregold')},
@@ -416,6 +429,7 @@ function SetVehicleCustom(veh, mod, value, refresh, name)
         RefreshCustomVehicleValues(veh)
         local props = GetVehProps(veh)
         p:SetCarProps(name, props)
+        PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
     end
 end
 
@@ -525,6 +539,7 @@ function OpenCustomMenu(veh, name)
                                 local props = GetVehProps(veh)
                                 p:SetCarProps(name, props)
                                 loadedProps = GetVehProps(veh)
+                                PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                             else    
                                 turboStatus = false
                                 ShowNotification("Not enough money")
@@ -540,6 +555,7 @@ function OpenCustomMenu(veh, name)
                                         local props = GetVehProps(veh)
                                         p:SetCarProps(name, props)
                                         loadedProps = GetVehProps(veh)
+                                        PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                                     end,
                                     onActive = function()
                                         SetVehicleExtra(veh, i, true)
@@ -552,6 +568,7 @@ function OpenCustomMenu(veh, name)
                                         local props = GetVehProps(veh)
                                         p:SetCarProps(name, props)
                                         loadedProps = GetVehProps(veh)
+                                        PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                                     end,
                                     onActive = function()
                                         SetVehicleExtra(veh, i, true)
@@ -569,6 +586,7 @@ function OpenCustomMenu(veh, name)
                             local props = GetVehProps(veh)
                             p:SetCarProps(name, props)
                             loadedProps = GetVehProps(veh)
+                            PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                         end,
                         onActive = function()
                             SetVehProps(veh, {modLivery = 0})
@@ -581,6 +599,7 @@ function OpenCustomMenu(veh, name)
                                 local props = GetVehProps(veh)
                                 p:SetCarProps(name, props)
                                 loadedProps = GetVehProps(veh)
+                                PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                             end,
                             onActive = function()
                                 SetVehProps(veh, {modLivery = i})
@@ -607,18 +626,24 @@ function OpenCustomMenu(veh, name)
 
                 RageUI.IsVisible(coloursSub, function()
                     for k,v in pairs(colors[selectedColor].colors) do
-                        RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
+                        RageUI.Button(v.label, nil, {RightLabel = "~g~"..colors[selectedColor].price.."~s~$"}, true, {
                             onSelected = function()
-                                if selectedColorType == "primary" then
-                                    SetVehProps(veh, {color1 = v.index})
-                                elseif selectedColorType == "secondary" then
-                                    SetVehProps(veh, {color2 = v.index})
-                                elseif selectedColorType == "pearlescentColor" then
-                                    SetVehProps(veh, {pearlescentColor = v.index})
+                                if p:HaveEnoughMoney(colors[selectedColor].price) then
+                                    if selectedColorType == "primary" then
+                                        SetVehProps(veh, {color1 = v.index})
+                                    elseif selectedColorType == "secondary" then
+                                        SetVehProps(veh, {color2 = v.index})
+                                    elseif selectedColorType == "pearlescentColor" then
+                                        SetVehProps(veh, {pearlescentColor = v.index})
+                                    end
+                                    local props = GetVehProps(veh)
+                                    p:SetCarProps(name, props)
+                                    p:Pay(colors[selectedColor].price)
+                                    loadedProps = GetVehProps(veh)
+                                    PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
+                                else
+                                    ShowNotification("Not enough money")
                                 end
-                                local props = GetVehProps(veh)
-                                p:SetCarProps(name, props)
-                                loadedProps = GetVehProps(veh)
                             end,
 
                             onActive = function()
@@ -675,6 +700,8 @@ function OpenCustomMenu(veh, name)
                                         SetVehicleCustom(veh, customs[selectedMod].customs[selectedCustom].mod, i, true, name)
                                         print(i, customs[selectedMod].customs[selectedCustom].installed, customs[selectedMod].customs[selectedCustom].max)
                                         loadedProps = GetVehProps(veh)
+                                    else
+                                        ShowNotification("Not enough money")
                                     end
                                 end,
 

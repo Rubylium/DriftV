@@ -25,6 +25,10 @@ local possibleVehiclePos = {
 }
 
 function JoinGarage()
+    if p:IsInGarage() then
+        LeaveGarage()
+        return
+    end
     if p:isInVeh() then
         DeleteEntity(p:currentVeh())
     end

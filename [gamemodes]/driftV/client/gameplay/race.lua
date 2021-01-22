@@ -210,10 +210,11 @@ function StartRace(data, raceKey)
     local countDown = 5
     for i = 1,5 do
         Subtitle("Drift race in ~b~"..countDown, 1000)
-        PlaySoundFrontend(-1, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET", 1)
+        PlaySoundFrontend(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 1)
         Wait(1000)
         countDown = countDown - 1
     end
+    PlaySoundFrontend(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 1)
     FreezeEntityPosition(p:currentVeh(), false)
 
     blip = AddBlipForCoord(data.start.xyz)

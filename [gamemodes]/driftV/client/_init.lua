@@ -182,7 +182,7 @@ function startCinematic()
     })
     local music = possibleMusic[math.random(1,#possibleMusic)]
     print(music)
-    TriggerEvent("InteractSound_CL:PlayOnOne", music, 0.05)
+    TriggerEvent("InteractSound_CL:PlayOnOne", music, 0.07)
 
 
     
@@ -207,4 +207,5 @@ RegisterNUICallback('joinServer', function(data)
     cam.delete("CAM_2")
     DisplayRadar(true)
     TriggerEvent("FeedM:showNotification", "Welcome back! Press F1 to use the main menu! Have fun on DriftV !", 15000, "info")
+    SetAudioFlag("LoadMPData", true)
 end)

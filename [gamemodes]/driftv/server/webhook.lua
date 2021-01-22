@@ -9,12 +9,12 @@ local driftPictures = {
     ["Hakone Nanamagari"] = "https://cdn.discordapp.com/attachments/582120765923524619/801911015226605618/Hakone-Nanamagari3.png",
 }
 
-function SendDriftAttackScore(source, oldPlayer, scores, OldScore, place, race)
+function SendDriftAttackScore(source, oldPlayer, scores, OldScore, place, race, car)
     local connect = {
         {
             ["color"] = 0x00ff44,
             ["title"] = "**Drift Attack!**",
-            ["description"] = "[**#"..place.."**] *"..race.."* New scores!\n ``"..oldPlayer.."`` got beaten by ``"..GetPlayerName(source).."`` with "..GroupDigits(math.floor(scores)).." points !\n\n```diff\n".. oldPlayer .." old score: "..GroupDigits(math.floor(OldScore)).."\n"..GetPlayerName(source).." new score: " .. GroupDigits(math.floor(scores)) .. "\n+ ".. GroupDigits(math.floor(scores - OldScore)) .."```",
+            ["description"] = "[**#"..place.."**] *"..race.."* New scores!\n ``"..oldPlayer.."`` got beaten by ``"..GetPlayerName(source).."`` with "..GroupDigits(math.floor(scores)).." points with ``".. car .."``!\n\n```diff\n".. oldPlayer .." old score: "..GroupDigits(math.floor(OldScore)).."\n"..GetPlayerName(source).." new score: " .. GroupDigits(math.floor(scores)) .. "\n+ ".. GroupDigits(math.floor(scores - OldScore)) .."```",
             ["footer"] = {
                 ["text"] = "DriftV - "..race,
             },
