@@ -406,6 +406,40 @@ local colors = {
     },
 }
 
+local allWheelsType = {
+    {
+        label = "Sport",
+        type = 0
+    },
+    {
+        label = "Muscle",
+        type = 1
+    },
+    {
+        label = "Lowrider",
+        type = 2
+    },
+    {
+        label = "SUV",
+        type = 3
+    },
+    {
+        label = "All Terrain",
+        type = 4
+    },
+    {
+        label = "Tuning",
+        type = 5
+    },
+    {
+        label = "Motorcycle",
+        type = 6
+    },
+    {
+        label = "Highend",
+        type = 7
+    },
+}
 
 
 function RefreshCustomVehicleValues(veh)
@@ -443,15 +477,20 @@ local colorType = {
     {Name = "Primary", Value = "primary"},
     {Name = "Secondary", Value = "secondary"},
     {Name = "Pearlescent", Value = "pearlescentColor"},
+    {Name = "Wheels", Value = "wheel"},
 }
 local index = {
     color = 1
 }
+local selectedWheelType = 0
+local selectedWheelLabel = ""
 local tubroPrice = 350000
 local loadedVeh = nil
 local loadedProps = {}
 local main = RageUI.CreateMenu("DriftV", "~b~Drift customs shop")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
+local wheelsType =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
+local wheelsTypeSub =  RageUI.CreateSubMenu(wheelsType, "DriftV", "~b~Drift customs shop")
 local colours =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
 local coloursSub =  RageUI.CreateSubMenu(colours, "DriftV", "~b~Drift customs shop")
 local livery =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift customs shop")
@@ -491,6 +530,8 @@ colours.WidthOffset = 100.0
 coloursSub.WidthOffset = 100.0
 livery.WidthOffset = 100.0
 extra.WidthOffset = 100.0
+wheelsType.WidthOffset = 100.0
+wheelsTypeSub.WidthOffset = 100.0
 
 function OpenCustomMenu(veh, name)
     if open then
@@ -521,9 +562,39 @@ function OpenCustomMenu(veh, name)
                             end,
                         }, sub);
                     end
+                    RageUI.Button("wheels", nil, {RightLabel = ">"}, true, {}, wheelsType);
                     RageUI.Button("Colours", nil, {RightLabel = ">"}, true, {}, colours);
                     RageUI.Button("Livery", nil, {RightLabel = ">"}, true, {}, livery);
                     RageUI.Button("Extra mods", nil, {RightLabel = ">"}, true, {}, extra);
+                end)
+
+                RageUI.IsVisible(wheelsType, function()
+                    for k,v in pairs(allWheelsType) do
+                        RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
+                            onSelected = function()
+                                SetVehicleWheelType(veh, v.type)
+                                selectedWheelType = v.type
+                                selectedWheelLabel = v.label
+                            end,
+                        }, wheelsTypeSub);
+                    end
+                end)
+
+                RageUI.IsVisible(wheelsTypeSub, function()
+                    for i = 1,GetNumVehicleMods(veh, 23) do
+                        RageUI.Button(selectedWheelLabel.." #"..i, nil, {RightLabel = ">"}, true, {
+                            onSelected = function()
+                                SetVehicleCustom(veh, 23, i, true)
+                                local props = GetVehProps(veh)
+                                p:SetCarProps(name, props)
+                                loadedProps = GetVehProps(veh)
+                                PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
+                            end,
+                            onActive = function()
+                                SetVehicleCustom(veh, 23, i, false)
+                            end,
+                        });
+                    end
                 end)
 
                 RageUI.IsVisible(extra, function()
@@ -635,6 +706,8 @@ function OpenCustomMenu(veh, name)
                                         SetVehProps(veh, {color2 = v.index})
                                     elseif selectedColorType == "pearlescentColor" then
                                         SetVehProps(veh, {pearlescentColor = v.index})
+                                    elseif selectedColorType == "wheel" then
+                                        SetVehProps(veh, {wheelColor = v.index})
                                     end
                                     local props = GetVehProps(veh)
                                     p:SetCarProps(name, props)
@@ -653,6 +726,8 @@ function OpenCustomMenu(veh, name)
                                     SetVehProps(veh, {color2 = v.index})
                                 elseif selectedColorType == "pearlescentColor" then
                                     SetVehProps(veh, {pearlescentColor = v.index})
+                                elseif selectedColorType == "wheel" then
+                                    SetVehProps(veh, {wheelColor = v.index})
                                 end
                             end
                         });

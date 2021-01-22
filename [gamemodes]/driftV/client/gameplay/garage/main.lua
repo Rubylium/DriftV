@@ -94,6 +94,7 @@ local function LoadCarsinGarage()
             SetVehProps(veh:getEntityId(), v.props)
             SetVehicleOnGroundProperly(veh:getEntityId())
             FreezeEntityPosition(veh:getEntityId(), true)
+            SetVehicleDirtLevel(veh:getEntityId(), 0.0)
             table.insert(loadedVehs, 
             {
                 pos = possibleVehiclePos[k], 
