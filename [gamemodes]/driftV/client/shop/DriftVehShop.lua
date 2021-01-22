@@ -68,6 +68,12 @@ local vehs = {
             {price = 9000000,label = "2014 Lamborghini Huracan LB",model = "lbsihu"},
         },
     },
+    {
+        label = "Toyota",
+        vehs = {
+            {price = 4500000,label = "Toyota Supra",model = "a80"},
+        },
+    },
 }
 
 local open = false
