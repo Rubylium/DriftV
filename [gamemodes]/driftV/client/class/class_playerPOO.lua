@@ -87,6 +87,9 @@ function player:removeExp(exp)
     self.exp = self.exp - exp
     local oldLevel = GetPlayerLevelFromXp(oldXp)
     local newLevel = GetPlayerLevelFromXp(self.exp)
+    if self.exp < 0 then
+        self.exp = 0
+    end
 
     DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, true)
 

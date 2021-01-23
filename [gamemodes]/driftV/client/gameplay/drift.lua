@@ -177,13 +177,17 @@ local function round2(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-function SetMulti(set)
+function ResetMulti(set)
     if set ~= nil then
         mult = 0.1
         return
     end
+end
+
+function SetMulti()
     if p:GetMap() ~= "LS" then
-        local multi = math.floor((score / 100000) / 10)
+        local multi = math.floor(score / 100000)
+        print(multi)
         if multi > 10.0 then
             multi = 10.0
         end

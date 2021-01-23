@@ -251,7 +251,7 @@ function OpenMainMenu()
                                     p:SetMap(v.map)
                                     open = false
                                     RageUI.CloseAll()
-                                    SetMulti(0.1)
+                                    ResetMulti(0.1)
                                     p:Teleport(v.pos.xyz)
                                     ExtendWorldBoundaryForPlayer(-9000.0,-11000.0,30.0)
                                     ExtendWorldBoundaryForPlayer(10000.0, 12000.0, 30.0)
@@ -261,7 +261,7 @@ function OpenMainMenu()
                             RageUI.Button(v.label, nil, {RightLabel = v.tag}, true, {
                                 onSelected = function()
                                     p:SetMap(v.map)
-                                    SetMulti(0.1)
+                                    ResetMulti(0.1)
                                     open = false
                                     RageUI.CloseAll()
                                     p:Teleport(v.pos.xyz)

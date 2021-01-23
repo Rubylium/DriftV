@@ -13,7 +13,7 @@ function InitPlayer(source)
     if data == nil then
         data = {
             license = license,
-            money = 50000,
+            money = 100000,
             driftPoint = 0,
             exp = 0,
             level = 0,
