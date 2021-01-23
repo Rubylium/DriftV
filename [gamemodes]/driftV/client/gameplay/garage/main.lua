@@ -76,14 +76,16 @@ function LeaveGarage(veh)
     p:Teleport(oldPlayerPos)
     p:SetMap("LS")
 
-    local nameToSpawn = veh.model
-    local pVeh = p:GetCars()
-    for k,v in pairs(pVeh) do
-        if nameToSpawn == v.model then
-            local veh = entity:CreateVehicle(v.model, p:pos(), p:heading())
-            SetVehProps(veh:getEntityId(), v.props)
-            lastSpawned = veh:getNetId()
-            TaskWarpPedIntoVehicle(p:ped(), veh:getEntityId(), -1)
+    if veh ~= nil then
+        local nameToSpawn = veh.model
+        local pVeh = p:GetCars()
+        for k,v in pairs(pVeh) do
+            if nameToSpawn == v.model then
+                local veh = entity:CreateVehicle(v.model, p:pos(), p:heading())
+                SetVehProps(veh:getEntityId(), v.props)
+                lastSpawned = veh:getNetId()
+                TaskWarpPedIntoVehicle(p:ped(), veh:getEntityId(), -1)
+            end
         end
     end
 end
