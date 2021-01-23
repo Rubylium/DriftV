@@ -157,20 +157,35 @@ function math.precentage(a,b)
     return (a*100)/b
 end
 
+-- function angle(veh)
+--     if not veh then return false end
+--     local vx,vy,vz = table.unpack(GetEntityVelocity(veh))
+--     local modV = math.sqrt(vx*vx + vy*vy)
+    
+    
+--     local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
+--     local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
+    
+--     if GetEntitySpeed(veh)* 3.6 < 30 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 30 km/h
+    
+--     local cosX = (sn*vx + cs*vy)/modV
+--     if cosX > 0.966 or cosX < 0 then return 0,modV end
+--     return math.deg(math.acos(cosX))*0.5, modV
+-- end
+
 function angle(veh)
-    if not veh then return false end
-    local vx,vy,vz = table.unpack(GetEntityVelocity(veh))
-    local modV = math.sqrt(vx*vx + vy*vy)
-    
-    
-    local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
-    local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
-    
-    if GetEntitySpeed(veh)* 3.6 < 30 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 30 km/h
-    
-    local cosX = (sn*vx + cs*vy)/modV
-    if cosX > 0.966 or cosX < 0 then return 0,modV end
-    return math.deg(math.acos(cosX))*0.5, modV
+	if not veh then return false end
+	local vx,vy,vz = table.unpack(GetEntityVelocity(veh))
+	local modV = math.sqrt(vx*vx + vy*vy)
+
+
+	local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
+	local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
+
+	if GetEntitySpeed(veh)* 3.6 < 30 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 25 km/h
+
+	local cosX = (sn*vx + cs*vy)/modV
+	return math.deg(math.acos(cosX))*0.5, modV
 end
 
 local function round2(num, numDecimalPlaces)
@@ -221,16 +236,30 @@ Citizen.CreateThread(function()
 
             score = 0
             while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
-                local angle, velocity = angle(p:currentVeh())
+
                 local bonus = 0
                 if angle ~= 0 and p:GetMap() == "LS" then
                     bonus = math.floor(score * GetCopLimitByScore()) / 3000
                 end
                 if bonus > 30000 then
-                    bonus = 30000
+                    bonus = 10000
                 end
 
-                local newScore = score + (math.floor(angle * velocity) * 0.1) + bonus
+                local newScore = score
+                print(angle(p:currentVeh()))
+                if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    newScore = math.floor(score + 1 + bonus)
+                elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    newScore = math.floor(score + 5 + bonus)
+                elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 30 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    newScore = math.floor(score + 20 + bonus)
+                elseif angle(p:currentVeh()) > 30 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    newScore = math.floor(score + 50 + bonus)
+                end
+
+    
+                
+
                 if p:speed() <= 4 and score ~= 0 and not inRace then
                     p:SubmitDriftScore(score * mult, mult)
                     p:GiveMoney(bonusCops)
