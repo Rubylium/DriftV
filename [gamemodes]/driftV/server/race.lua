@@ -57,7 +57,7 @@ function SubmitRaceScore(source, race, points, vehicle)
         end
 
         --print(cachedNames[GetPlayerName(source)], infoToSendIfNewScore.points)
-        if cachedNames[GetPlayerName(source)] <= infoToSendIfNewScore.points then
+        if cachedNames[GetPlayerName(source)] ~= nil and cachedNames[GetPlayerName(source)] <= infoToSendIfNewScore.points then
             SendDriftAttackScore(source, infoToSendIfNewScore.name, infoToSendIfNewScore.points, infoToSendIfNewScore.oldPoints, infoToSendIfNewScore.place, infoToSendIfNewScore.race, infoToSendIfNewScore.vehicle)
         end
 
