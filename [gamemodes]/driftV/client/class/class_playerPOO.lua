@@ -217,7 +217,7 @@ function player:currentVeh()
     return GetVehiclePedIsIn(self:ped(), false)
 end
 
-function player:SubmitDriftScore(score)
+function player:SubmitDriftScore(score, multi)
     self.sessionDriftPoint = self.sessionDriftPoint + score
     TriggerServerEvent("driftV:SubmitDriftPoint", score)
     p:addExp(math.floor(score / 10))

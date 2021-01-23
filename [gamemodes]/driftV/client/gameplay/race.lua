@@ -275,6 +275,7 @@ function StartRace(data, raceKey)
         })
 
         local wait = 0
+        p:GiveMoney(10000)
         while wait < 1000 do
             wait = wait + 1
             ShowHelpNotification("Drift point: ~b~"..math.floor(endPoints).."~s~ !", false)

@@ -232,7 +232,7 @@ Citizen.CreateThread(function()
 
                 local newScore = score + (math.floor(angle * velocity) * 0.1) + bonus
                 if p:speed() <= 4 and score ~= 0 and not inRace then
-                    p:SubmitDriftScore(score * mult)
+                    p:SubmitDriftScore(score * mult, mult)
                     p:GiveMoney(bonusCops)
                     bonusCops = 0
                     score = 0
@@ -245,7 +245,7 @@ Citizen.CreateThread(function()
                     else
                         waiting = waiting + 1
                         if waiting >= 300 and score ~= 0 and not inRace then
-                            p:SubmitDriftScore(score * mult)
+                            p:SubmitDriftScore(score * mult, mult)
                             p:GiveMoney(bonusCops)
                             bonusCops = 0
                             score = 0
