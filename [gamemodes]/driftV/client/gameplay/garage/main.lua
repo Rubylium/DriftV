@@ -88,6 +88,7 @@ function LeaveGarage(veh)
             end
         end
     end
+    SetMulti(0.1)
 end
 
 local function LoadCarsinGarage()

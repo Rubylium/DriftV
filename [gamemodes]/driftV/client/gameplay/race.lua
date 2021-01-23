@@ -137,43 +137,6 @@ Citizen.CreateThread(function()
                 if #(v.start.xyz - pCoords) <= 7.0 then
                     if racesScores[v.label] ~= nil then
 
-                        -- local scaleform = RequestScaleformMovie("MP_MM_CARD_FREEMODE")
-                        -- while not HasScaleformMovieLoaded(scaleform) do
-                        --     Citizen.Wait(0)
-                        -- end
-                    
-                        -- PushScaleformMovieFunction(scaleform, "SET_ICON")
-                        -- PushScaleformMovieFunctionParameterInt(100)
-                        -- PushScaleformMovieFunctionParameterInt(7)
-                        -- PushScaleformMovieFunctionParameterInt(66)
-                        -- EndScaleformMovieMethod()
-                    
-                        -- PushScaleformMovieFunction(scaleform, "SET_TITLE")
-                        -- PushScaleformMovieFunctionParameterString("DriftV")
-                        -- PushScaleformMovieFunctionParameterString("Race: "..v.label)
-                        -- PushScaleformMovieFunctionParameterInt(14)  -- Icon ID
-                        -- EndScaleformMovieMethod()
-
-                        -- local count = 0
-                        -- for _,j in pairs(racesScores[v.label].scores) do
-                        --     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-                        --     PushScaleformMovieFunctionParameterInt(count)
-                        --     PushScaleformMovieFunctionParameterInt(0) -- Right Side Number
-                        --     PushScaleformMovieFunctionParameterString(j.name.." - "..j.veh) -- Player Name
-                        --     PushScaleformMovieFunctionParameterInt(200) -- Color Of Item
-                        --     PushScaleformMovieFunctionParameterInt(2000)
-                        --     PushScaleformMovieFunctionParameterInt(count + 1) -- Left Side Number
-                        --     PushScaleformMovieFunctionParameterInt(math.floor(j.points)) -- Amount Of JP
-                        --     PushScaleformMovieFunctionParameterString("") -- Clan Tag , Needs 3 Characters Before To Display
-                        --     PushScaleformMovieFunctionParameterInt(1) -- 0 = display no JP icon, 1 = display JP icon, 2+ = display nothing,
-                        --     EndScaleformMovieMethod()
-                        --     count = count + 1
-                        -- end
-                    
-                        -- BeginScaleformMovieMethod(scaleform, "DISPLAY_VIEW")
-                        -- EndScaleformMovieMethod()
-                        
-
                         while #(v.start.xyz - p:pos()) <= 7.0 and not inRace do
 
 
@@ -193,6 +156,18 @@ Citizen.CreateThread(function()
                             end
 
 
+                            Wait(1)
+                        end
+                    else
+                        while #(v.start.xyz - p:pos()) <= 7.0 and not inRace do
+                            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
+                            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+                            DrawTexts(baseX - 0.148, baseY - (0.043) - 0.013, v.label, false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, tostring(0), true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+                            
+                            DrawRect(baseX, baseY, baseWidth, baseHeight, 110, 255, 168, 255)
+                            DrawTexts(baseX + 0.025, baseY - 0.013, "score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX - 0.145, baseY - 0.013, "player", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
                             Wait(1)
                         end
                     end
@@ -220,6 +195,7 @@ local timeBar = nil
 function StartRace(data, raceKey)
     inRace = true
     ResetDriftPoint()
+    SetMulti(0.1)
     SetPlayerInRace(true)
     local raceStopped = false
 

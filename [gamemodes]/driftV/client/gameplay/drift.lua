@@ -177,9 +177,13 @@ local function round2(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-function SetMulti()
+function SetMulti(set)
+    if set ~= nil then
+        mult = 0.1
+        return
+    end
     if p:GetMap() ~= "LS" then
-        local multi = round2((score / 100000) / 10, 1)
+        local multi = math.floor((score / 100000) / 10)
         if multi > 10.0 then
             multi = 10.0
         end
@@ -190,30 +194,6 @@ function SetMulti()
         end
     else
         mult = 0.1
-    end
-end
-
-local function GetMultiColor()
-    if mult > 0.0 and mult < 2.0 then
-        return {59, 255, 95, 200}
-    elseif mult > 2.0 and mult < 3.0 then
-        return  {88, 255, 59, 200}
-    elseif mult > 3.0 and mult < 4.0 then
-        return  {150, 255, 59, 200}
-    elseif mult > 4.0 and mult < 5.0 then
-        return  {245, 255, 59, 200}
-    elseif mult > 5.0 and mult < 6.0 then
-        return  {255, 213, 59, 200}
-    elseif mult > 6.0 and mult < 7.0 then
-        return  {255, 186, 59, 200}
-    elseif mult > 7.0 and mult < 8.0 then
-        return  {255, 147, 59, 200}
-    elseif mult > 8.0 and mult < 9.0 then
-        return  {255, 101, 59, 200}
-    elseif mult > 9.0 and mult < 10.0 then
-        return  {255, 59, 59, 200}
-    else
-        return  {255, 59, 59, 200}
     end
 end
 
@@ -246,9 +226,9 @@ Citizen.CreateThread(function()
                     bonus = 30000
                 end
 
-                local newScore = (score + math.floor(angle * velocity) * mult) + bonus
+                local newScore = score + (math.floor(angle * velocity) * 0.1) + bonus
                 if p:speed() <= 4 and score ~= 0 and not inRace then
-                    p:SubmitDriftScore(score)
+                    p:SubmitDriftScore(score * mult)
                     p:GiveMoney(bonusCops)
                     bonusCops = 0
                     score = 0
@@ -261,7 +241,7 @@ Citizen.CreateThread(function()
                     else
                         waiting = waiting + 1
                         if waiting >= 300 and score ~= 0 and not inRace then
-                            p:SubmitDriftScore(score)
+                            p:SubmitDriftScore(score * mult)
                             p:GiveMoney(bonusCops)
                             bonusCops = 0
                             score = 0
@@ -271,9 +251,9 @@ Citizen.CreateThread(function()
                     end
                 end
 
+                
                 if score ~= 0 then
                     SetMulti()
-
                     SendNUIMessage(
                         {
                             ShowHud = true,
