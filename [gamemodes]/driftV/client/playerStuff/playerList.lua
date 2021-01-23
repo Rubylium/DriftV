@@ -29,8 +29,8 @@ Citizen.CreateThread(function()
                 DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, tostring(#players), true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
         
                 DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 194, 13, 255)
-                DrawTexts(baseX + 0.030, baseY - 0.013, "Crew", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
-                DrawTexts(baseX - 0.138, baseY - 0.013, "level", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                DrawTexts(baseX + 0.010, baseY - 0.013, "Crew", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                DrawTexts(baseX - 0.145, baseY - 0.013, "level", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
                 for i = 1,#players do
                     DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
                     DrawTexts(baseX - 0.14, baseY + (0.032 * i) - 0.013, players[i].level, true, 0.35, {255, 255, 255, 255}, 6, 0) -- level
