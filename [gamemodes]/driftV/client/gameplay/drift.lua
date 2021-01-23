@@ -189,7 +189,7 @@ function SetMulti()
             mult = multi
         end
     else
-        return 0.1
+        mult = 0.1
     end
 end
 

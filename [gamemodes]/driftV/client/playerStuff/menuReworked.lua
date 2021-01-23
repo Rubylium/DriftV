@@ -113,7 +113,7 @@ function OpenMainMenu()
                 RageUI.IsVisible(main, function()
                     RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = "~y~NEW!"}, true, {
                         onSelected = function()
-                            p:SetMap("garage")
+                            
                             open = false
                             RageUI.CloseAll()
                             JoinGarage()

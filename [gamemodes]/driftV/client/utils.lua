@@ -171,6 +171,20 @@ function Draw3DText(x,y,z,textInput,fontId,scaleX,scaleY)
     ClearDrawOrigin()
 end
 
+function DrawTexts(x, y, text, center, scale, rgb, font, justify)
+    SetTextFont(font)
+    SetTextScale(scale, scale)
+
+    SetTextColour(rgb[1], rgb[2], rgb[3], rgb[4])
+    SetTextEntry("STRING")
+    --SetTextJustification(justify)
+    --SetTextRightJustify(justify)
+    SetTextCentre(center)
+    AddTextComponentString(text)
+    EndTextCommandDisplayText(x,y)
+end
+
+
 local entityEnumerator = {
 	__gc = function(enum)
 		if enum.destructor and enum.handle then

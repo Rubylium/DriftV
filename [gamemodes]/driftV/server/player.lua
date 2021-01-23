@@ -124,7 +124,7 @@ RegisterNetEvent("drift:RequestSync")
 AddEventHandler("drift:RequestSync", function()
     local players = {}
     for k,v in player do
-        table.insert(players, {name = GetPlayerName(k), exp = v.exp, servID = k, ping = GetPlayerPing(k)})
+        table.insert(players, {name = GetPlayerName(k), exp = v.exp, servID = k, ping = GetPlayerPing(k), crew = v.crew})
     end
 
     TriggerClientEvent('drift:SyncPlayer', source, players)

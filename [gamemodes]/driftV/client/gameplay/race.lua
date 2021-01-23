@@ -121,6 +121,10 @@ local race = {
     },
 }
 
+local baseX = 0.2 -- gauche / droite ( plus grand = droite )
+local baseY = 0.2 -- Hauteur ( Plus petit = plus haut )
+local baseWidth = 0.3 -- Longueur
+local baseHeight = 0.03 -- Epaisseur
 
 Citizen.CreateThread(function()
     while not loaded do Wait(1) end
@@ -133,48 +137,64 @@ Citizen.CreateThread(function()
                 if #(v.start.xyz - pCoords) <= 7.0 then
                     if racesScores[v.label] ~= nil then
 
-                        local scaleform = RequestScaleformMovie("MP_MM_CARD_FREEMODE")
-                        while not HasScaleformMovieLoaded(scaleform) do
-                            Citizen.Wait(0)
-                        end
+                        -- local scaleform = RequestScaleformMovie("MP_MM_CARD_FREEMODE")
+                        -- while not HasScaleformMovieLoaded(scaleform) do
+                        --     Citizen.Wait(0)
+                        -- end
                     
-                        PushScaleformMovieFunction(scaleform, "SET_ICON")
-                        PushScaleformMovieFunctionParameterInt(100)
-                        PushScaleformMovieFunctionParameterInt(7)
-                        PushScaleformMovieFunctionParameterInt(66)
-                        EndScaleformMovieMethod()
+                        -- PushScaleformMovieFunction(scaleform, "SET_ICON")
+                        -- PushScaleformMovieFunctionParameterInt(100)
+                        -- PushScaleformMovieFunctionParameterInt(7)
+                        -- PushScaleformMovieFunctionParameterInt(66)
+                        -- EndScaleformMovieMethod()
                     
-                        PushScaleformMovieFunction(scaleform, "SET_TITLE")
-                        PushScaleformMovieFunctionParameterString("DriftV")
-                        PushScaleformMovieFunctionParameterString("Race: "..v.label)
-                        PushScaleformMovieFunctionParameterInt(14)  -- Icon ID
-                        EndScaleformMovieMethod()
+                        -- PushScaleformMovieFunction(scaleform, "SET_TITLE")
+                        -- PushScaleformMovieFunctionParameterString("DriftV")
+                        -- PushScaleformMovieFunctionParameterString("Race: "..v.label)
+                        -- PushScaleformMovieFunctionParameterInt(14)  -- Icon ID
+                        -- EndScaleformMovieMethod()
 
-                        local count = 0
-                        for _,j in pairs(racesScores[v.label].scores) do
-                            PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-                            PushScaleformMovieFunctionParameterInt(count)
-                            PushScaleformMovieFunctionParameterInt(0) -- Right Side Number
-                            PushScaleformMovieFunctionParameterString(j.name.." - "..j.veh) -- Player Name
-                            PushScaleformMovieFunctionParameterInt(200) -- Color Of Item
-                            PushScaleformMovieFunctionParameterInt(2000)
-                            PushScaleformMovieFunctionParameterInt(count + 1) -- Left Side Number
-                            PushScaleformMovieFunctionParameterInt(math.floor(j.points)) -- Amount Of JP
-                            PushScaleformMovieFunctionParameterString("") -- Clan Tag , Needs 3 Characters Before To Display
-                            PushScaleformMovieFunctionParameterInt(1) -- 0 = display no JP icon, 1 = display JP icon, 2+ = display nothing,
-                            EndScaleformMovieMethod()
-                            count = count + 1
-                        end
+                        -- local count = 0
+                        -- for _,j in pairs(racesScores[v.label].scores) do
+                        --     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+                        --     PushScaleformMovieFunctionParameterInt(count)
+                        --     PushScaleformMovieFunctionParameterInt(0) -- Right Side Number
+                        --     PushScaleformMovieFunctionParameterString(j.name.." - "..j.veh) -- Player Name
+                        --     PushScaleformMovieFunctionParameterInt(200) -- Color Of Item
+                        --     PushScaleformMovieFunctionParameterInt(2000)
+                        --     PushScaleformMovieFunctionParameterInt(count + 1) -- Left Side Number
+                        --     PushScaleformMovieFunctionParameterInt(math.floor(j.points)) -- Amount Of JP
+                        --     PushScaleformMovieFunctionParameterString("") -- Clan Tag , Needs 3 Characters Before To Display
+                        --     PushScaleformMovieFunctionParameterInt(1) -- 0 = display no JP icon, 1 = display JP icon, 2+ = display nothing,
+                        --     EndScaleformMovieMethod()
+                        --     count = count + 1
+                        -- end
                     
-                        BeginScaleformMovieMethod(scaleform, "DISPLAY_VIEW")
-                        EndScaleformMovieMethod()
+                        -- BeginScaleformMovieMethod(scaleform, "DISPLAY_VIEW")
+                        -- EndScaleformMovieMethod()
                         
 
                         while #(v.start.xyz - p:pos()) <= 7.0 and not inRace do
-                            DrawScaleformMovie(scaleform, 0.62,0.35, 0.27, 0.55, 255, 255, 255, 255)
+
+
+                            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
+                            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+                            DrawTexts(baseX - 0.148, baseY - (0.043) - 0.013, v.label, false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, tostring(#racesScores[v.label].scores), true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+                    
+                            DrawRect(baseX, baseY, baseWidth, baseHeight, 110, 255, 168, 255)
+                            DrawTexts(baseX + 0.025, baseY - 0.013, "score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX - 0.145, baseY - 0.013, "player", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            for i = 1,#racesScores[v.label].scores do
+                                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                                DrawTexts(baseX - 0.14, baseY + (0.032 * i) - 0.013, "#"..i, true, 0.35, {255, 255, 255, 255}, 6, 0) -- place
+                                DrawTexts(baseX - 0.13, baseY + (0.032 * i) - 0.013, racesScores[v.label].scores[i].name .. " - " .. racesScores[v.label].scores[i].veh, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
+                                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, GroupDigits(math.floor(racesScores[v.label].scores[i].points)), false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+                            end
+
+
                             Wait(1)
                         end
-                        SetScaleformMovieAsNoLongerNeeded(scaleform)
                     end
                 end
             end
