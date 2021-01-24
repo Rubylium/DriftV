@@ -202,7 +202,6 @@ end
 function SetMulti()
     if p:GetMap() ~= "LS" then
         local multi = math.floor(score / 100000)
-        print(multi)
         if multi > 10.0 then
             multi = 10.0
         end
@@ -246,7 +245,6 @@ Citizen.CreateThread(function()
                 end
 
                 local newScore = score
-                print(angle(p:currentVeh()))
                 if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
                     newScore = math.floor(score + 1 + bonus)
                 elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then

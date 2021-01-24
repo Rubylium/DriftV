@@ -1,5 +1,5 @@
 local function GetCorrectExpForLevel(level)
-	return math.floor(10000 * (level^2) - 1)
+	return math.floor(2000 * (level^2) - 1)
 end
 
 

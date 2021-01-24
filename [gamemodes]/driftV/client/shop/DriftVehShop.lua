@@ -29,6 +29,7 @@ local vehs = {
             {price = 250000,label = "Nissan r35",model = "gtrp"},
             {price = 350000,label = "Nissan r33",model = "r33"},
             {price = 140000,label = "Nissan 350z Rocket Bunny Kit Stanced",model = "350zrb"},
+            {price = 75000,label = "Nissan 180sx",model = "180sx"},
         },
     },
     {
@@ -117,7 +118,7 @@ function OpenVehShopMenu()
 
                 RageUI.IsVisible(sub, function()
                     for k,v in pairs(vehs[selectedSub].vehs) do
-                        RageUI.Button(v.label, nil, {RightLabel = "~g~"..v.price.."~s~$"}, true, {
+                        RageUI.Button(v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
                                     RageUI.CloseAll()

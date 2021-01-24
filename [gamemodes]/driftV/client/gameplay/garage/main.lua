@@ -55,7 +55,7 @@ function JoinGarage()
     EnableInteriorProp(garageIntId, "branded_style_set")
     RefreshInterior(garageIntId)
     p:setInGarage(true)
-    p:SetMap("garage")
+    --p:SetMap("garage")
     oldPlayerPos = p:pos()
     oldPlayerHeading = p:heading()
     p:Teleport(garagePos)
@@ -74,7 +74,7 @@ function LeaveGarage(veh)
 
     TriggerEvent("InteractSound_CL:Stop")
     p:Teleport(oldPlayerPos)
-    p:SetMap("LS")
+    --p:SetMap("LS")
 
     if veh ~= nil then
         local nameToSpawn = veh.model
@@ -88,7 +88,7 @@ function LeaveGarage(veh)
             end
         end
     end
-    SetMulti(0.1)
+    ResetMulti(0.1)
 end
 
 local function LoadCarsinGarage()
