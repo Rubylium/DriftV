@@ -4,6 +4,7 @@ local race = {
     {
         label = "Ebisu Drift race",
         start =  vector4(963.13128662109, 1062.2911376953, 459.47320556641, 279.91229248047),
+        price = 10000,
         points = {
             {pos = vector4(1030.7563476562, 1117.5638427734, 458.73199462891, 65.086318969727), passed = false},
             --{pos = vector4(920.74230957031, 1125.4340820312, 460.48587036133, 298.26525878906), passed = false},
@@ -17,6 +18,7 @@ local race = {
     },
     {
         label = "Haruna Drift Race",
+        price = 30000,
         start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
         points = {
             {pos = vector4(2205.0871582031, -2020.2974853516, 577.94848632812, 165.34571838379), passed = false},
@@ -56,6 +58,7 @@ local race = {
     },
     {
         label = "Iro Drift Race",
+        price = 25000,
         start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
         points = {
             {pos = vector4(-5090.6884765625, 4394.7895507812, 749.99359130859, 276.93649291992), passed = false},
@@ -92,6 +95,7 @@ local race = {
     },
     {
         label = "Hakone Ohiradai",
+        price = 15000,
         start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
         points = {
             {pos = vector4(-4370.8544921875, -4236.6669921875, 156.77291870117, 307.23013305664), passed = false},
@@ -104,6 +108,7 @@ local race = {
     },
     {
         label = "Hakone Nanamagari",
+        price = 10000,
         start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
         points = {
             {pos = vector4(-3348.3273925781, 20.953716278076, 124.79309082031, 2.0219919681549), passed = false},
@@ -275,7 +280,7 @@ function StartRace(data, raceKey)
         })
 
         local wait = 0
-        p:GiveMoney(10000)
+        p:GiveMoney(data.price)
         while wait < 1000 do
             wait = wait + 1
             ShowHelpNotification("Drift point: ~b~"..math.floor(endPoints).."~s~ !", false)
