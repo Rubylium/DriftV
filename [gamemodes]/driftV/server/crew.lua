@@ -1,4 +1,5 @@
 crew = {}
+pCrew = {}
 
 function DoesCrewExist(name)
     if crew[name] ~= nil then
@@ -22,11 +23,11 @@ function CreateCrew(tag, name, desc)
 end
 
 function JoinCrew(source, crewName, isCrewOwner)
-    local pCrew = player[source].crew
+    local pCrewName = player[source].crew
     LeaveCrew(source)
 
     if DoesCrewExist(crewName) then
-        crew[pCrew].members[pLicense] = {points = 0}
+        crew[pCrewName].members[pLicense] = {points = 0}
         if isCrewOwner then
             player[source].crewOwner = true
         end
@@ -34,18 +35,31 @@ function JoinCrew(source, crewName, isCrewOwner)
 end
 
 function LeaveCrew(source)
-    local pCrew = player[source].crew
+    local pCrewName = player[source].crew
     local pLicense = GetLicense(source)
-    if DoesCrewExist(pCrew) then
-        crew[pCrew].members[pLicense] = nil
+    if DoesCrewExist(pCrewName) then
+        crew[pCrewName].members[pLicense] = nil
+        player[source].crew = "None"
+
+        if player[source].crewOwner then
+
+            for k,v in pairs(pCrew) do
+                if v == pCrewName then
+                    pCrew[k] = "None"
+                end
+            end
+
+            player[source].crewOwner = false
+            crew[pCrewName] = nil
+        end
     end
 end
 
 function AddPointsToCrew(source, pointsToAdd)
-    local pCrew = player[source].crew
+    local pCrewName = player[source].crew
     local pLicense = GetLicense(source)
-    if DoesCrewExist(pCrew) then
-        crew[pCrew].members[pLicense].points = crew[pCrew].members[pLicense].points + pointsToAdd
+    if DoesCrewExist(pCrewName) then
+        crew[pCrewName].members[pLicense].points = crew[pCrewName].members[pLicense].points + pointsToAdd
     end
 end
 
@@ -57,4 +71,19 @@ AddEventHandler("driftV:CreateCrew", function(tag, crew, desc)
     player[source].crew = crew
     player[source].crewOwner = true
     RefreshPlayerData(source)
+    RefreshOtherPlayerData()
+end)
+
+RegisterNetEvent("driftV:JoinCrew")
+AddEventHandler("driftV:JoinCrew", function(crew, player)
+    JoinCrew(player, crew, false)
+    RefreshPlayerData(player)
+    RefreshOtherPlayerData()
+end)
+
+RegisterNetEvent("driftV:LeaveCrew")
+AddEventHandler("driftV:LeaveCrew", function()
+    LeaveCrew(source)
+    RefreshPlayerData(source)
+    RefreshOtherPlayerData()
 end)
