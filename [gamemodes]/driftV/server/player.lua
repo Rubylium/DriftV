@@ -24,6 +24,7 @@ function InitPlayer(source)
             crewOwner = false,
         }
         player[source] = data
+        pCrew[source] = "None"
         SavePlayer(source)
         debugPrint("Player created into database")
     else
@@ -34,7 +35,16 @@ function InitPlayer(source)
             data.crew = "None"
             data.crewOwner = false
         end
+        
+        
+
+        if crew[data.crew] == nil then
+            data.crew = "None"
+        end
+
+        pCrew[source] = data.crew
         player[source] = data
+
         debugPrint("Loaded player for database ("..data.money .. " " .. data.driftPoint ..")")
     end
 
@@ -48,7 +58,7 @@ function RefreshPlayerData(source)
 end
 
 function RefreshOtherPlayerData()
-    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew)
+    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew, pCrew)
 end
 
 function SavePlayer(source)
@@ -86,6 +96,7 @@ AddEventHandler('playerDropped', function (reason)
     if player[source] ~= nil then
         SavePlayer(source)
         player[source] = nil
+        pCrew[source] = nil
     end
 end)
 
