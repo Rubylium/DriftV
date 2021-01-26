@@ -47,6 +47,10 @@ function RefreshPlayerData(source)
     TriggerClientEvent("driftV:RefreshData", source, player[source])
 end
 
+function RefreshOtherPlayerData()
+    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew)
+end
+
 function SavePlayer(source)
     local db = rockdb:new()
     local license = GetLicense(source)
@@ -91,6 +95,7 @@ AddEventHandler("driftV:SubmitDriftPoint", function(point)
     player[source].driftPoint = player[source].driftPoint + point
     player[source].money = math.floor(player[source].money + point / 200)
     TriggerClientEvent("FeedM:showNotification", source, "+ ~g~"..tostring(math.floor(point / 200)).."~s~$", 2000, "success")
+    AddPointsToCrew(source, point)
 
     RefreshPlayerData(source)
     player[source].needSave = true
