@@ -1,6 +1,8 @@
 loaded = false
 local first = true
 local waitingSpawn = true
+PlayersCrew = {}
+
 Citizen.CreateThread(function()
     TriggerServerEvent("driftV:InitPlayer")
     TriggerServerEvent("drift:GetRaceData")
@@ -22,6 +24,11 @@ AddEventHandler("driftV:RefreshData", function(data)
     p:InitSucces(data.succes)
     p:setExp(data.exp)
     p:setCrew(data.crew)
+end)
+
+RegisterNetEvent("driftV:RefreshOtherPlayerData")
+AddEventHandler("driftV:RefreshOtherPlayerData", function(pCrews)
+    PlayersCrew = pCrews
 end)
 
 local possibleCam = {
