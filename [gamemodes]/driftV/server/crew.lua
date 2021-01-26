@@ -1,4 +1,4 @@
-local crew = {}
+crew = {}
 
 function DoesCrewExist(name)
     if crew[name] ~= nil then
@@ -48,3 +48,13 @@ function AddPointsToCrew(source, pointsToAdd)
         crew[pCrew].members[pLicense].points = crew[pCrew].members[pLicense].points + pointsToAdd
     end
 end
+
+
+RegisterNetEvent("driftV:CreateCrew")
+AddEventHandler("driftV:CreateCrew", function(tag, crew, desc)
+    CreateCrew(tag, crew, desc)
+    JoinCrew(source, crew, true)
+    player[source].crew = crew
+    player[source].crewOwner = true
+    RefreshPlayerData(source)
+end)
