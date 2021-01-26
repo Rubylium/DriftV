@@ -525,6 +525,9 @@ function StartLoopAnimation()
         while open do
             for k,v in pairs(garageTagState) do
                 garageTag = garageTagState[k]
+                if not open then
+                    break
+                end
                 Wait(50)
             end
             Wait(1)
@@ -535,6 +538,9 @@ function StartLoopAnimation()
         while open do
             for k,v in pairs(animatedTagState) do
                 animatedTag = animatedTagState[k]
+                if not open then
+                    break
+                end
                 Wait(50)
             end
             Wait(1)
