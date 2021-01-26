@@ -9,6 +9,32 @@ local driftPictures = {
     ["Hakone Nanamagari"] = "https://cdn.discordapp.com/attachments/582120765923524619/801911015226605618/Hakone-Nanamagari3.png",
 }
 
+
+local webhooks = {
+    ["general_fr"] = "https://discordapp.com/api/webhooks/803641935901229066/Xtb1JEzDZ7EYMG8q1fGMFgpZHNKWRGXCnWCbhoVhS7m5RBjF7HbUyt2nkSH7muuLqRPn",
+    ["general_en"] = "https://discordapp.com/api/webhooks/803642071403331584/Hn3oC7wjtBGwUt_nBN32HjTzX-aMdhXGua3O9F-APVsOxsPswKTXZBzN7v1tIUVq7Ozp",
+}
+
+function SendTextToWebhook(webhook, color, title, text)
+    if webhooks[webhook] == nil then
+        debugPrint("Error! the webhook " ..tostring(webhook).." do not exist/is not registered!")
+        return
+    end
+    
+    local content = {
+        {
+            ["color"] = color,
+            ["title"] = title,
+            ["description"] = text,
+            ["footer"] = {
+                ["text"] = "DriftV",
+            },
+        }
+    }
+
+    PerformHttpRequest(webhooks[webhook], function(err, text, headers) end, 'POST', json.encode({embeds = content, avatar_url = driftAttackAvatar}), { ['Content-Type'] = 'application/json' })
+end
+
 function SendDriftAttackScore(source, oldPlayer, scores, OldScore, place, race, car)
     local connect = {
         {
