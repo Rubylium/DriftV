@@ -121,7 +121,7 @@ function OpenMainMenu()
                     });
                     RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
                     RageUI.Button('→    Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
-                    RageUI.Button('→    My information/stats"', nil, {RightLabel = ">"}, true, {}, information);
+                    RageUI.Button('→    My information/stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('→    Teleports', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
                     RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
