@@ -245,14 +245,19 @@ Citizen.CreateThread(function()
                 end
 
                 local newScore = score
-                if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                    newScore = math.floor(score + 1 + bonus)
-                elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                    newScore = math.floor(score + 5 + bonus)
-                elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 30 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                    newScore = math.floor(score + 20 + bonus)
-                elseif angle(p:currentVeh()) > 30 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                    newScore = math.floor(score + 50 + bonus)
+
+                if p:speed() > 39 then
+                    if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                        newScore = math.floor(score + 1 + bonus)
+                    elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                        newScore = math.floor(score + (3 * (p:speed() / 10))  + bonus)
+                    elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= 55 then
+                        newScore = math.floor(score + (10 * (p:speed() / 10))  + bonus)
+                    elseif angle(p:currentVeh()) > 40 and angle(p:currentVeh()) <= 50 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= 55 then
+                        newScore = math.floor(score + (30 * (p:speed() / 10))  + bonus)
+                    elseif angle(p:currentVeh()) >= 10 then
+                        newScore = score + 1
+                    end
                 end
 
     

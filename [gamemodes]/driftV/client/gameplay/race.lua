@@ -5,6 +5,7 @@ local race = {
         label = "Ebisu Drift race",
         start =  vector4(963.13128662109, 1062.2911376953, 459.47320556641, 279.91229248047),
         price = 10000,
+        pointPerSec = 750,
         points = {
             {pos = vector4(1030.7563476562, 1117.5638427734, 458.73199462891, 65.086318969727), passed = false},
             --{pos = vector4(920.74230957031, 1125.4340820312, 460.48587036133, 298.26525878906), passed = false},
@@ -18,7 +19,8 @@ local race = {
     },
     {
         label = "Haruna Drift Race",
-        price = 30000,
+        price = 15000,
+        pointPerSec = 3000,
         start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
         points = {
             {pos = vector4(2205.0871582031, -2020.2974853516, 577.94848632812, 165.34571838379), passed = false},
@@ -59,6 +61,7 @@ local race = {
     {
         label = "Iro Drift Race",
         price = 25000,
+        pointPerSec = 150,
         start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
         points = {
             {pos = vector4(-5090.6884765625, 4394.7895507812, 749.99359130859, 276.93649291992), passed = false},
@@ -96,6 +99,7 @@ local race = {
     {
         label = "Hakone Ohiradai",
         price = 15000,
+        pointPerSec = 1500,
         start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
         points = {
             {pos = vector4(-4370.8544921875, -4236.6669921875, 156.77291870117, 307.23013305664), passed = false},
@@ -109,6 +113,7 @@ local race = {
     {
         label = "Hakone Nanamagari",
         price = 10000,
+        pointPerSec = 1500,
         start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
         points = {
             {pos = vector4(-3348.3273925781, 20.953716278076, 124.79309082031, 2.0219919681549), passed = false},
@@ -151,13 +156,18 @@ Citizen.CreateThread(function()
                             DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, tostring(#racesScores[v.label].scores), true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
                     
                             DrawRect(baseX, baseY, baseWidth, baseHeight, 110, 255, 168, 255)
-                            DrawTexts(baseX + 0.025, baseY - 0.013, "score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                
                             DrawTexts(baseX - 0.145, baseY - 0.013, "player", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX + 0.005, baseY - 0.013, "score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+                            DrawTexts(baseX + 0.085, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
                             for i = 1,#racesScores[v.label].scores do
                                 DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
                                 DrawTexts(baseX - 0.14, baseY + (0.032 * i) - 0.013, "#"..i, true, 0.35, {255, 255, 255, 255}, 6, 0) -- place
                                 DrawTexts(baseX - 0.13, baseY + (0.032 * i) - 0.013, racesScores[v.label].scores[i].name .. " - " .. racesScores[v.label].scores[i].veh, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
-                                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, GroupDigits(math.floor(racesScores[v.label].scores[i].points)), false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+                                DrawTexts(baseX + 0.005, baseY + (0.032 * i) - 0.013, GroupDigits(math.floor(racesScores[v.label].scores[i].points)), false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+                                DrawTexts(baseX + 0.085, baseY + (0.032 * i) - 0.013, racesScores[v.label].scores[i].time.."s", false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+
                             end
 
 
@@ -207,6 +217,7 @@ function StartRace(data, raceKey)
     SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
     SetEntityHeading(p:currentVeh(), data.start.w)
     FreezeEntityPosition(p:currentVeh(), true)
+    TogglePasive(true)
 
     local countDown = 5
     for i = 1,5 do
@@ -215,6 +226,7 @@ function StartRace(data, raceKey)
         Wait(1000)
         countDown = countDown - 1
     end
+    local startTime = GetGameTimer()
     PlaySoundFrontend(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 1)
     FreezeEntityPosition(p:currentVeh(), false)
 
@@ -266,32 +278,97 @@ function StartRace(data, raceKey)
 
 
     if not raceStopped then
-        p:addExp(math.floor(endPoints / 130))
+        
+
+        local endTime = GetGameTimer()
+        local raceTime = endTime - startTime
+        local raceSecond = math.floor(raceTime / 1000)
+
+        local driftScore = endPoints
+        endPoints = (endPoints - raceSecond * data.pointPerSec)
+
+        if endPoints < 0 then
+            endPoints = 0
+        end
+
 
         local pVeh = p:currentVeh()
         local model = GetEntityModel(pVeh)
 
-        TriggerServerEvent("drift:EndRace", data.label, endPoints, GetDisplayNameFromVehicleModel(model))
+        TriggerServerEvent("drift:EndRace", data.label, endPoints, GetDisplayNameFromVehicleModel(model), raceSecond)
 
+        SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
+        SetEntityHeading(p:currentVeh(), data.start.w)
+
+        local displayResult = true
+        AnimpostfxPlay("MP_Celeb_Win", -1, true)
+
+        local baseX = 0.5 -- gauche / droite ( plus grand = droite )
+        local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+        local baseWidth = 0.3 -- Longueur
+        local baseHeight = 0.03 -- Epaisseur
+
+        while displayResult do
+        
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX - 0.148, baseY - (0.043) - 0.013, "FINAL SCORE", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "#1", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 110, 255, 168, 255)
+            DrawTexts(baseX - 0.145, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.025, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawRect(baseX, baseY + (0.032), baseWidth, baseHeight, 0, 0, 0, 210)
+    
+            DrawTexts(baseX - 0.145, baseY + (0.032) - 0.013, GroupDigits(driftScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
+            DrawTexts(baseX - 0.060, baseY + (0.032) - 0.013, raceSecond.."s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
+            DrawTexts(baseX + 0.025, baseY + (0.032) - 0.013, GroupDigits(endPoints), false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+    
+            DrawRect(baseX, baseY + 0.058 + 0.035, baseWidth, baseHeight - 0.025, 110, 255, 168, 200) -- Liseret
+            DrawRect(baseX, baseY + 0.043 + 0.035, baseWidth, baseHeight, 0, 0, 0, 200) -- Bannière
+    
+            DrawTexts(baseX, baseY + (0.065), "Final score is your drift score minus time used", true, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+
+            ShowHelpNotification("Press ~INPUT_CELLPHONE_CANCEL~ to close")
+            DisableAllControlActions(0)
+            if IsDisabledControlJustPressed(0, 177) then
+                displayResult = false
+            end
+    
+            if IsDisabledControlJustPressed(0, 176) then
+                displayResult = false
+            end
+    
+            if IsDisabledControlJustPressed(0, 179) then
+                displayResult = false
+            end
+            Wait(1)
+        end
+
+        AnimpostfxStopAll()
+        p:addExp(math.floor(endPoints / 130))
         p:SetSucces(data.label)
         SendNUIMessage( {
             ShowSucces = true,
             label = "Race: "..data.label,
         })
 
-        local wait = 0
         p:GiveMoney(data.price)
-        while wait < 1000 do
-            wait = wait + 1
-            ShowHelpNotification("Drift point: ~b~"..math.floor(endPoints).."~s~ !", false)
-            Wait(1)
-        end
         SendNUIMessage( {
             HideSucces = true,
         })
     else
         ShowNotification("Race cancelled ! You need to go faster !")
     end
+
+    Citizen.CreateThread(function()
+        Wait(3000)
+        if not inRace then
+            TogglePasive(false)
+        end
+    end)
+    TogglePasive(false)
     inRace = false
 end
 
@@ -300,3 +377,64 @@ RegisterNetEvent("drift:RefreshRacesScores")
 AddEventHandler("drift:RefreshRacesScores", function(scores)
     racesScores = scores
 end)
+
+
+
+-- Citizen.CreateThread(function()
+--     local displayResult = true
+
+
+--     local baseX = 0.5 -- gauche / droite ( plus grand = droite )
+--     local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+--     local baseWidth = 0.3 -- Longueur
+--     local baseHeight = 0.03 -- Epaisseur
+
+--     AnimpostfxPlay("MP_race_crash", -1, true)
+
+--     local score = 85041
+--     local sec = 54
+--     local endPoints = (score - sec * 350)
+
+    
+
+--     while displayResult do
+        
+--         DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
+--         DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+--         DrawTexts(baseX - 0.148, baseY - (0.043) - 0.013, "FINAL SCORE", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "#1", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+
+--         DrawRect(baseX, baseY, baseWidth, baseHeight, 110, 255, 168, 255)
+--         DrawTexts(baseX - 0.145, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX - 0.060, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX + 0.025, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawRect(baseX, baseY + (0.032), baseWidth, baseHeight, 0, 0, 0, 210)
+
+--         DrawTexts(baseX - 0.145, baseY + (0.032) - 0.013, GroupDigits(score), false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
+--         DrawTexts(baseX - 0.060, baseY + (0.032) - 0.013, sec.."s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- name + veh
+--         DrawTexts(baseX + 0.025, baseY + (0.032) - 0.013, GroupDigits(endPoints), false, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+
+--         DrawRect(baseX, baseY + 0.058 + 0.035, baseWidth, baseHeight - 0.025, 110, 255, 168, 200) -- Liseret
+--         DrawRect(baseX, baseY + 0.043 + 0.035, baseWidth, baseHeight, 0, 0, 0, 200) -- Bannière
+
+--         DrawTexts(baseX, baseY + (0.065), "Final score is your drift score minus time used", true, 0.35, {255, 255, 255, 255}, 6, 1) -- score
+        
+--         ShowHelpNotification("Press ~INPUT_CELLPHONE_CANCEL~ to close")
+
+--         DisableAllControlActions(0)
+--         if IsDisabledControlJustPressed(0, 177) then
+--             displayResult = false
+--         end
+
+--         if IsDisabledControlJustPressed(0, 176) then
+--             displayResult = false
+--         end
+
+--         if IsDisabledControlJustPressed(0, 179) then
+--             displayResult = false
+--         end
+--         Wait(1)
+--     end
+--     AnimpostfxStopAll()
+    
+-- end)

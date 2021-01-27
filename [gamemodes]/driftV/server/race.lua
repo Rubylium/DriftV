@@ -1,13 +1,13 @@
 local races = {}
 
-function SubmitRaceScore(source, race, points, vehicle)
+function SubmitRaceScore(source, race, points, vehicle, time)
     if races[race] == nil then
         races[race] = {}
         races[race].scores = {}
     end
 
     if #races[race].scores == 0 then
-        table.insert(races[race].scores, {name = GetPlayerName(source), points = points, veh = vehicle})
+        table.insert(races[race].scores, {name = GetPlayerName(source), points = points, veh = vehicle, time = time})
     else    
         local added = false
         local foundIndex = false
@@ -18,13 +18,14 @@ function SubmitRaceScore(source, race, points, vehicle)
             oldPoints = nil,
             place = nil,
             race = nil,
-            vehicle = nil
+            vehicle = nil,
+            time = nil
         }
 
         for k,v in pairs(races[race].scores) do
             if v.points < points then
                 added = true
-                table.insert(races[race].scores, k, {name = GetPlayerName(source), points = points, veh = vehicle})
+                table.insert(races[race].scores, k, {name = GetPlayerName(source), points = points, veh = vehicle, time = time})
 
                 TriggerClientEvent('chat:addMessage', -1, {
                     color = {252, 186, 3},
@@ -38,13 +39,14 @@ function SubmitRaceScore(source, race, points, vehicle)
                     oldPoints = v.points,
                     place = k,
                     race = race,
-                    vehicle = vehicle
+                    vehicle = vehicle,
+                    time = time
                 }
                 break
             end
         end
         if not added then
-            table.insert(races[race].scores, {name = GetPlayerName(source), points = points, veh = vehicle})
+            table.insert(races[race].scores, {name = GetPlayerName(source), points = points, veh = vehicle, time = time})
         end
 
         local cachedNames = {}
@@ -90,13 +92,13 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("drift:EndRace")
-AddEventHandler("drift:EndRace", function(race, points, vehicle)
-    SubmitRaceScore(source, race, points, vehicle)
+AddEventHandler("drift:EndRace", function(race, points, vehicle, time)
+    SubmitRaceScore(source, race, points, vehicle, time)
 
     TriggerClientEvent('chat:addMessage', -1, {
         color = {3, 223, 252},
         multiline = true,
-        args = {"Drift", "The player "..GetPlayerName(source).." finished the race "..race.." with "..points.." points in a "..vehicle.." !"}
+        args = {"Drift", "The player "..GetPlayerName(source).." finished the race "..race.." with "..GroupDigits(points).." points in a "..vehicle.." !"}
     })
 end)
 

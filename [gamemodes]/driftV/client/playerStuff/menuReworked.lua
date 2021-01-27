@@ -9,7 +9,7 @@ local activeCamName
 local cachedEntity = {}
 local playersInPassiveVeh = {}
 local playerInstances = {}
-local garageTag = "Personnal garage"
+local garageTag = "Personal garage"
 local garageTagState = {
     "→    " .. garageTag .. "       ←",
     "→    " .. garageTag .. "      ←",
@@ -120,7 +120,7 @@ function OpenMainMenu()
                         end,
                     });
                     RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
-                    RageUI.Button('→    Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
+                    RageUI.Button('→    Vehicle options', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
                     RageUI.Button('→    My information/stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('→    Teleports', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
                     RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
@@ -131,7 +131,7 @@ function OpenMainMenu()
                     -- }, instance);
                     RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     RageUI.Button('→    Achievements', "See all your success", {RightLabel = ">"}, true, {}, succes);
-                    RageUI.Button('→    Times', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
+                    RageUI.Button('→    Time Of Day', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
                     RageUI.Button("→    Toggle freecam", "", {}, not p:IsInGarage(), {
                         onSelected = function()
                             ToogleNoClip()
@@ -435,7 +435,7 @@ Citizen.CreateThread(function()
                     --SetEntityAlpha(pPed, 200, 200)
                     SetEntityNoCollisionEntity(p:ped(), pPed, false)
 
-                    if IsPedInAnyVehicle(pPed, false) then
+                    if IsPedInAnyVehicle(pPed, false) and GetVehiclePedIsIn(pPed, false) ~= p:currentVeh() then
                         local veh = GetVehiclePedIsIn(pPed, false)
                         SetEntityNoCollisionEntity(p:ped(), veh, false)
 
@@ -546,4 +546,10 @@ function StartLoopAnimation()
             Wait(1)
         end
     end)
+end
+
+function TogglePasive(status)
+    passive = status
+    p:setPassive(passive)
+    TriggerServerEvent("dirft:SetInPassive", passive)
 end
