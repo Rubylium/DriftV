@@ -121,8 +121,8 @@ function OpenMainMenu()
                     });
                     RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
                     RageUI.Button('→    Vehicle option', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
-                    RageUI.Button('→    My informations / stats', nil, {RightLabel = ">"}, true, {}, information);
-                    RageUI.Button('→    Teleporations', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
+                    RageUI.Button('→    My information/stats"', nil, {RightLabel = ">"}, true, {}, information);
+                    RageUI.Button('→    Teleports', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
                     RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
                     --     onSelected = function()
@@ -130,7 +130,7 @@ function OpenMainMenu()
                     --     end,
                     -- }, instance);
                     RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    RageUI.Button('→    Succes', "See all your succes", {RightLabel = ">"}, true, {}, succes);
+                    RageUI.Button('→    Achievements', "See all your success", {RightLabel = ">"}, true, {}, succes);
                     RageUI.Button('→    Times', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
                     RageUI.Button("→    Toggle freecam", "", {}, not p:IsInGarage(), {
                         onSelected = function()
@@ -172,12 +172,12 @@ function OpenMainMenu()
                     --         RandomUpgrade(p:currentVeh())
                     --     end,
                     -- });
-                    RageUI.Button("Repair", "Not avalaible at night", {}, true, {
+                    RageUI.Button("Repair", "Not available at night", {}, true, {
                         onSelected = function()
                             if p:getTime() ~= "night" then
                                 SetVehicleFixed(p:currentVeh())
                             else
-                                ShowNotification("Sorry, repairs are not avalaible at night. Go to a repair station !")
+                                ShowNotification("Sorry, repairs are Not available at night. Go to a repair station !")
                             end
                         end,
                     });
@@ -196,7 +196,7 @@ function OpenMainMenu()
                             end
                         end,
                     });
-                    RageUI.Button("Auto Repair", "Not avalaible at night", {}, true, {
+                    RageUI.Button("Auto Repair", "Not available at night", {}, true, {
                         onSelected = function()
                             autoRepair = not autoRepair
                             if autoRepair then
