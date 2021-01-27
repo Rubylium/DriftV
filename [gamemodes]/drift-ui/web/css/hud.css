@@ -1,0 +1,14 @@
+body, html {
+  height: 100%;
+  background-color: black;
+}
+
+.background {
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  background-image: url(../images/background.jpg);
+  filter: blur(15px);
+}
