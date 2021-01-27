@@ -1,79 +1,48 @@
 local vehs = {
     {
-        label = "Honda",
+        label = "Tier 1",
         vehs = {
-            {price = 50000,label = "Honda Accord 86",model = "accord86"},
-            {price = 120000,label = "Honda Civic EK9 Rocket Bunny",model = "civicek9rb"},
-            {price = 750000,label = "1992 Honda NSX-R Rocket Bunny",model = "nsxtypr"}
-
-        },
+            {maker = "Honda", price = 50000, label = "Accord 86", model = "accord86"},
+            {maker = "BMW", price = 65000,label = "e46",model = "bmwe"},
+            {maker = "Lexus", price = 70000,label = "RC350 Rocket Bunny",model = "RC350"},
+        }
     },
     {
-        label = "BMW",
+        label = "Tier 2",
         vehs = {
-            {price = 65000,label = "BMW e46",model = "bmwe"},
-            {price = 90000,label = "1992 BMW M3 E36 Pandem Rocket Bunny",model = "e36prb"},
-        },
+            {maker = "Honda", price = 85000, label = "Civic EK9 Rocket Bunny",model = "civicek9rb"},
+            {maker = "BMW", price = 90000,label = "1992 M3 E36 Pandem Rocket Bunny",model = "e36prb"},
+            {maker = "Mazda", price = 75000,label = "rx7 Fc3s",model = "fc3s"},
+            {maker = "Nissan", price = 75000,label = "180sx",model = "180sx"}, -- icon
+        }
     },
     {
-        label = "Mazda",
+        label = "Tier 3",
         vehs = {
-            {price = 75000,label = "Mazda rx7 Fc3s",model = "fc3s"},
-            {price = 140000,label = "Mazda rx7",model = "FD"},
-        },
+            {maker = "Mazda", price = 115000, label = "rx7",model = "FD"}, -- icon
+            {maker = "Nissan", price = 120000,label = "s15 Rocket Bunny",model = "s15rb"},
+            {maker = "Nissan", price = 140000,label = "350z Rocket Bunny Kit Stanced",model = "350zrb"},
+            {maker = "Subaru", price = 190000,label = "BRZ Rocket Bunny",model = "brz"},
+        }
     },
     {
-        label = "Nissan",
+        label = "Tier 4",
         vehs = {
-            {price = 120000,label = "Nissan s15 RB",model = "s15rb"},
-            {price = 250000,label = "Nissan r35",model = "gtrp"},
-            {price = 350000,label = "Nissan r33",model = "r33"},
-            {price = 140000,label = "Nissan 350z Rocket Bunny Kit Stanced",model = "350zrb"},
-            {price = 75000,label = "Nissan 180sx",model = "180sx"},
-        },
+            {maker = "Nissan", price = 250000,label = "GTR35",model = "gtrp"},
+            {maker = "Nissan", price = 350000,label = "GTR33",model = "r33"},
+            {maker = "Mitsubishi", price = 230000,label = "Lancer Evo VI",model = "cp9a"},
+            {maker = "Ford", price = 450000,label = "2015 Mustang GT",model = "MGT"},
+        }
     },
     {
-        label = "Mitsubishi",
+        label = "Tier 5",
         vehs = {
-            {price = 230000,label = "Mitsubishi Lancer Evo VI",model = "cp9a"},
-        },
-    },
-    {
-        label = "Ford",
-        vehs = {
-            {price = 450000,label = "2015 Ford Mustang GT",model = "MGT"},
-        },
-    },
-    {
-        label = "Acura",
-        vehs = {
-            {price = 550000,label = "Acura NSX LB",model = "filthynsx"},
-        },
-    },
-    {
-        label = "Subaru",
-        vehs = {
-            {price = 190000,label = "Subaru BRZ Rocket Bunny",model = "brz"},
-        },
-    },
-    {
-        label = "Lexus",
-        vehs = {
-            {price = 70000,label = "Lexus RC350 Rocket Bunny",model = "RC350"},
-        },
-    },
-    {
-        label = "Lamborghini",
-        vehs = {
-            {price = 6000000,label = "Lamborghini Gallardo Superleggera LB ",model = "gallardosuperlb"},
-            {price = 9000000,label = "2014 Lamborghini Huracan LB",model = "lbsihu"},
-        },
-    },
-    {
-        label = "Toyota",
-        vehs = {
-            {price = 4500000,label = "Toyota Supra",model = "a80"},
-        },
+            {maker = "Honda", price = 750000,label = "1992 NSX-R Rocket Bunny",model = "nsxtypr"},
+            {maker = "Acura", price = 550000,label = "NSX LB",model = "filthynsx"},
+            {maker = "Lamborghini", price = 6000000,label = "Gallardo Superleggera LB ",model = "gallardosuperlb"},
+            {maker = "Lamborghini", price = 9000000,label = "2014 Huracan LB",model = "lbsihu"},
+            {maker = "Toyota", price = 4500000,label = "Supra mk4",model = "a80"},
+        }
     },
 }
 
@@ -118,13 +87,13 @@ function OpenVehShopMenu()
 
                 RageUI.IsVisible(sub, function()
                     for k,v in pairs(vehs[selectedSub].vehs) do
-                        RageUI.Button(v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
+                        RageUI.Button(v.maker.." "..v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
                                     RageUI.CloseAll()
                                     DeleteEntity(previewVeh.entity)
                                     open = false
-                                    TriggerServerEvent("drift:BuyVehicle", v.price, v.label, v.model)
+                                    TriggerServerEvent("drift:BuyVehicle", v.price, v.maker.." "..v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
                                 else
                                     ShowNotification("Not enough money")
