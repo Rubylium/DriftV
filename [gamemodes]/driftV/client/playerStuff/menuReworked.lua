@@ -9,6 +9,8 @@ local activeCamName
 local cachedEntity = {}
 local playersInPassiveVeh = {}
 local playerInstances = {}
+local selectedCrewMember = {}
+local selectedCrewKey = 0
 local garageTag = "Personal garage"
 local garageTagState = {
     "→    " .. garageTag .. "       ←",
@@ -74,7 +76,9 @@ local maps =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradis
 local camera =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local instance =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local succes =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
-local time =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+-- local time =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+local crew =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
+local crewSub =  RageUI.CreateSubMenu(crew, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 
 main.WidthOffset = 100.0
@@ -87,8 +91,10 @@ maps.WidthOffset = 100.0
 camera.WidthOffset = 100.0
 instance.WidthOffset = 100.0
 succes.WidthOffset = 100.0
-time.WidthOffset = 100.0
+-- time.WidthOffset = 100.0
 settings.WidthOffset = 100.0
+crew.WidthOffset = 100.0
+crewSub.WidthOffset = 100.0
 
 main.Closed = function()
     open = false
@@ -111,7 +117,7 @@ function OpenMainMenu()
             while open do
 
                 RageUI.IsVisible(main, function()
-                    RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = "~y~NEW!"}, true, {
+                    RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = ""}, true, {
                         onSelected = function()
                             
                             open = false
@@ -124,19 +130,76 @@ function OpenMainMenu()
                     RageUI.Button('→    My information/stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('→    Teleports', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
                     RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
-                    -- RageUI.Button('Server instance', "Someone is getting on your nerves or there are just too many players on a circuit? Change instance!", {}, true, {
-                    --     onSelected = function()
-                    --         TriggerServerEvent("drift:GetServerInstance")
-                    --     end,
-                    -- }, instance);
                     RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
                     RageUI.Button('→    Achievements', "See all your success", {RightLabel = ">"}, true, {}, succes);
-                    RageUI.Button('→    Time Of Day', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
+                    -- RageUI.Button('→    Time Of Day', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
+                    RageUI.Button('→    Crew', "Change your time", {RightLabel = animatedTag.."  ~y~NEW!"}, true, {}, crew);
                     RageUI.Button("→    Toggle freecam", "", {}, not p:IsInGarage(), {
                         onSelected = function()
                             ToogleNoClip()
                         end,
                     });
+                end)
+
+                RageUI.IsVisible(crew, function()
+                    if p:getCrew() == "None" then
+                        RageUI.Button("Create", "Do you want to be famous? Make yourself known as a leader? Create your own crew now!", {}, true, {
+                            onSelected = function()
+                                local name = KeyboardImput("Crew full name", 20)
+                                if name ~= nil then
+                                    local tag = KeyboardImput("Crew tag (4 char max)", 4)
+                                    if tag ~= nil then
+                                        TriggerServerEvent("driftV:CreateCrew", tag, name)
+                                    end
+                                end
+                            end,
+                        });
+                    else
+                        RageUI.Separator(p:getCrew())
+                        RageUI.Button("Crew Points: ~g~".. GroupDigits(Crew[p:getCrew()].totalPoints), nil, {}, true, {});
+                        RageUI.Button("Members: ~g~"..Crew[p:getCrew()].memberCount.. "~s~/10", nil, {}, true, {});
+                        RageUI.Button("Win / Loose: ~g~"..Crew[p:getCrew()].win .."~s~/~r~"..Crew[p:getCrew()].loose, nil, {}, true, {});
+                        RageUI.Button("Leave", "Your crew doesn't interest you anymore? You prefer to leave it? Click here and your wish will be granted.", {}, true, {
+                            onSelected = function()
+                                TriggerServerEvent("driftV:LeaveCrew")
+                                RageUI.GoBack()
+                            end,
+                        });
+                        RageUI.Button("Invite (Leader only)", "Allows you to invite the player closest to you in your crew!", {}, p:isPlayerCrewOwner(), {
+                            onSelected = function()
+                                local player, dst = GetClosestPlayer()
+                                
+                            end,
+                            onActive = function()
+                                DisplayClosetPlayer()
+                            end
+                        });
+                        RageUI.Separator("↓ Crew Members ↓")
+                        if Crew[p:getCrew()] ~= nil then
+                            for k,v in pairs(Crew[p:getCrew()].members) do
+                                RageUI.Button(v.name, "", {RightLabel = "~g~"..GroupDigits(v.points).." Crew Points"}, true, {
+                                    onSelected = function()
+                                        selectedCrewMember = Crew[p:getCrew()].members[k]
+                                        selectedCrewKey = k
+                                    end,
+                                }, crewSub);
+                            end
+                        end
+                    end
+                end)
+
+                RageUI.IsVisible(crewSub, function()
+                    RageUI.Separator("Name: "..selectedCrewMember.name)
+                    RageUI.Separator("↓ Stats ↓")
+                    RageUI.Button("Crew Points: ~g~"..GroupDigits(selectedCrewMember.points), nil, {}, true, {});
+                    RageUI.Separator("↓ Management ↓")
+                    RageUI.Button("Kick", nil, {}, p:isPlayerCrewOwner(), {
+                        onSelected = function()
+                            TriggerServerEvent("driftV:KickFromCrew", selectedCrewKey)
+                            RageUI.GoBack()
+                        end,
+                    });
+
                 end)
                 
 
@@ -207,30 +270,8 @@ function OpenMainMenu()
                         end,
                     });
 
-                    -- Submenu
-                    -- RageUI.Button('Vehicle Extra', nil, {RightLabel = ">"}, true, {}, vehicleOptionsExtra);
-                    -- RageUI.Button('Vehicle Liverys', nil, {RightLabel = ">"}, true, {}, vehicleOptionsLivery);
                 end)
 
-                -- RageUI.IsVisible(vehicleOptionsExtra, function()
-                --     for i = 1,9 do
-                --         if DoesExtraExist(p:currentVeh(), i) then
-                --             if IsVehicleExtraTurnedOn(p:currentVeh(), i) then
-                --                 RageUI.Button('Turn Extra #'..i..' - ~r~off', nil, {}, true, {
-                --                     onSelected = function()
-                --                         SetVehicleExtra(p:currentVeh(), i, true)
-                --                     end,
-                --                 }); 
-                --             else
-                --                 RageUI.Button('Turn Extra #'..i..' ~g~on', nil, {}, true, {
-                --                     onSelected = function()
-                --                         SetVehicleExtra(p:currentVeh(), i, false)
-                --                     end,
-                --                 }); 
-                --             end
-                --         end
-                --     end
-                -- end)
 
                 RageUI.IsVisible(vehicleOptionsLivery, function()
                     for i = 1, GetVehicleLiveryCount(p:currentVeh()) do
@@ -443,13 +484,6 @@ Citizen.CreateThread(function()
                         SetEntityCollision(veh, false, true)
                         SetEntityAlpha(veh, 200, 200)
 
-                        if GetEntitySpeed(veh) <= 0 then
-                            local vPos = GetEntityCoords(veh)
-                            local get, z = GetGroundZFor_3dCoord(GetEntityCoords(veh), 1)
-                            if z then
-                                SetEntityCoordsNoOffset(veh, vPos.x, vPos.y, z, 0.0, 0.0, 0.0)
-                            end
-                        end
                         cachedEntity[veh] = veh
                     end
 
