@@ -25,6 +25,7 @@ AddEventHandler("driftV:RefreshData", function(data)
     p:InitSucces(data.succes)
     p:setExp(data.exp)
     p:setCrew(data.crew)
+    p:setCrewOwner(data.crewOwner)
 end)
 
 RegisterNetEvent("driftV:RefreshOtherPlayerData")
