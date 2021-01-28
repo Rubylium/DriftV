@@ -59,6 +59,7 @@ end
 
 function RefreshPlayerData(source)
     TriggerClientEvent("driftV:RefreshData", source, player[source])
+    RefreshOtherPlayerData()
 end
 
 function RefreshOtherPlayerData()
