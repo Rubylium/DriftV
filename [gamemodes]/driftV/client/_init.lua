@@ -191,7 +191,6 @@ function startCinematic()
         -- music = possibleMusic[math.random(1,#possibleMusic)]
     })
     local music = possibleMusic[math.random(1,#possibleMusic)]
-    print(music)
     TriggerEvent("InteractSound_CL:PlayOnOne", music, 0.07)
 
 

@@ -140,6 +140,12 @@ AddEventHandler("driftV:KickFromCrew", function(target)
     KickPlayerFromCrew(source, player[source].crew, target)
 end)
 
+RegisterNetEvent("driftV:StartMatchmaking")
+AddEventHandler("driftV:StartMatchmaking", function()
+    AddCrewToMachmaking(player[source].crew)
+    AddCrewMemberToMatchmaking(player[source].crew, source)
+end)
+
 Citizen.CreateThread(function()
     local db = rockdb:new()
     crew = db:GetString("CREW_DEV_2")

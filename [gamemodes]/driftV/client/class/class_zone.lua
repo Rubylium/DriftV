@@ -53,7 +53,7 @@ Citizen.CreateThread(function()
         for k,v in pairs(zone.zones) do
             local dst = GetDistanceBetweenCoords(p:pos(), v.pos, true)
 
-            if dst <= 20.0 then
+            if dst <= 20.0 and not p:GetCrewWarStatus() then
                 pNear = true
                 if v.haveMarker then
 

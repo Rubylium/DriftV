@@ -145,14 +145,14 @@ Citizen.CreateThread(function()
     while not loaded do Wait(1) end
 
     while true do
-        if not inRace then
+        if not inRace and not p:GetCrewWarStatus() then
             local pPed = p:ped()
             local pCoords = p:pos()
             for k,v in pairs(race) do
                 if #(v.start.xyz - pCoords) <= 7.0 then
                     if racesScores[v.label] ~= nil then
 
-                        while #(v.start.xyz - p:pos()) <= 7.0 and not inRace do
+                        while #(v.start.xyz - p:pos()) <= 7.0 and not inRace and not p:GetCrewWarStatus() do
 
 
                             DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
@@ -179,7 +179,7 @@ Citizen.CreateThread(function()
                             Wait(1)
                         end
                     else
-                        while #(v.start.xyz - p:pos()) <= 7.0 and not inRace do
+                        while #(v.start.xyz - p:pos()) <= 7.0 and not inRace and not player:GetCrewWarStatus() do
                             DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 110, 255, 168, 255) -- Liseret
                             DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
                             DrawTexts(baseX - 0.148, baseY - (0.043) - 0.013, v.label, false, 0.35, {0, 0, 0, 255}, 2, 0) -- title

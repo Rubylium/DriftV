@@ -89,8 +89,14 @@ end
 local alpha = 0
 local subAlpha = 0
 local display = false
-function DisplayLittleSucces(title)
-    p:SetSucces(title)
+function DisplayLittleSucces(title, save, time)
+    display = true
+    if save == nil then
+        p:SetSucces(title)
+    end
+    if time == nil then
+        time = 500
+    end
     local baseX = 0.5 -- gauche / droite ( plus grand = droite )
     local baseY = 1.00 -- Hauteur ( Plus petit = plus haut )
     local baseWidth = 0.0 -- Longueur
@@ -115,7 +121,7 @@ function DisplayLittleSucces(title)
             end
             Wait(0)
         end
-        Wait(500)
+        Wait(time)
         for i = 0,255 do
             alpha = alpha - 3
             if alpha <= 0 then
@@ -169,7 +175,6 @@ Citizen.CreateThread(function()
     while true do
         if not display then
             if LittleSucces[1] ~= nil then
-                display = true
                 DisplayLittleSucces(LittleSucces[1].text)
                 table.remove(LittleSucces, 1)
                 Wait(1000)

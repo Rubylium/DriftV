@@ -42,5 +42,5 @@ client_scripts {
 
 server_scripts {
     "server/class/*.lua",
-    "server/*.lua"
+    "server/**/*.lua"
 }

@@ -12,6 +12,7 @@ player = {
     succes = {},
     crew = "None",
     crewOwner = false,
+    inCrewWar = false,
 }
 
 p = nil ---@type player
@@ -30,7 +31,16 @@ function player:new()
     obj.level = 0
     obj.crew = "None"
     obj.crewOwner = false
+    obj.inCrewWar = false
     p = obj
+end
+
+function player:GetCrewWarStatus()
+    return self.inCrewWar
+end
+
+function player:setCrewWarStatus(status)
+    self.inCrewWar = status
 end
 
 function player:setCrew(crew)

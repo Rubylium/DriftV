@@ -159,6 +159,12 @@ function OpenMainMenu()
                         RageUI.Button("Crew Points: ~g~".. GroupDigits(Crew[p:getCrew()].totalPoints), nil, {}, true, {});
                         RageUI.Button("Members: ~g~"..Crew[p:getCrew()].memberCount.. "~s~/10", nil, {}, true, {});
                         RageUI.Button("Win / Loose: ~g~"..Crew[p:getCrew()].win .."~s~/~r~"..Crew[p:getCrew()].loose, nil, {}, true, {});
+                        RageUI.Button("Start drift war", "", {}, true, {
+                            onSelected = function()
+                                TriggerServerEvent("driftV:StartMatchmaking")
+                                ShowNotification("Matchmaking started !")
+                            end,
+                        });
                         RageUI.Button("Leave", "Your crew doesn't interest you anymore? You prefer to leave it? Click here and your wish will be granted.", {}, true, {
                             onSelected = function()
                                 TriggerServerEvent("driftV:LeaveCrew")
@@ -436,6 +442,9 @@ function OpenMainMenu()
 end
 
 Keys.Register('F1', 'F1', 'Open main menu', function()
+    if p:GetCrewWarStatus() then
+        return
+    end
     OpenMainMenu()
 end)
 
@@ -503,7 +512,6 @@ Citizen.CreateThread(function()
         for k, _ in pairs(playersIdInPassive) do
             local pPed = GetPlayerPed(GetPlayerFromServerId(k))
             if pPed ~= p:ped() then
-                print(pPed)
                 if IsPedInAnyVehicle(pPed, false) then
                     local veh = GetVehiclePedIsIn(pPed, false)
                     SetEntityNoCollisionEntity(p:ped(), veh, false)
