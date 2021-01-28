@@ -4,6 +4,8 @@ local mult = 0.1
 local waiting = 0
 local inRace = false
 local bonusCops = 0
+local holding = 0
+local baseSpeedLimit = 39
 local blacklistVeh = {
     [GetHashKey("dinghy")] = true,
     [GetHashKey("seashadinghy2rk2")] = true,
@@ -88,7 +90,24 @@ local blacklistVeh = {
     [GetHashKey("vestra")] = true,
     [GetHashKey("volatol")] = true,
 }
+local littleSucces = {
+    speed = {
+        cooldown = false,
+        label = "high speed drift"
+    },
+    angleGood = {
+        cooldown = false,
+        label = "Good Angle"
+    },
+    angleInsane = {
+        cooldown = false,
+        label = "Insane Angle"
+    },
+}
     
+function ChangeSpeedLimit(limit)
+    baseSpeedLimit = limit
+end
 
 local inAerorport = false
 Citizen.CreateThread(function()
@@ -182,7 +201,7 @@ function angle(veh)
 	local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
 	local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
 
-	if GetEntitySpeed(veh)* 3.6 < 30 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 25 km/h
+	if GetEntitySpeed(veh)* 3.6 < baseSpeedLimit or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 25 km/h
 
 	local cosX = (sn*vx + cs*vy)/modV
 	return math.deg(math.acos(cosX))*0.5, modV
@@ -196,22 +215,6 @@ function ResetMulti(set)
     if set ~= nil then
         mult = 0.1
         return
-    end
-end
-
-function SetMulti()
-    if p:GetMap() ~= "LS" then
-        local multi = math.floor(score / 100000)
-        if multi > 10.0 then
-            multi = 10.0
-        end
-        if multi < 0.1 then
-            mult = 0.1
-        else
-            mult = multi
-        end
-    else
-        mult = 0.1
     end
 end
 
@@ -246,18 +249,66 @@ Citizen.CreateThread(function()
 
                 local newScore = score
 
-                if p:speed() > 39 then
-                    if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        newScore = math.floor(score + 1 + bonus)
-                    elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        newScore = math.floor(score + (3 * (p:speed() / 10))  + bonus)
-                    elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= 55 then
-                        newScore = math.floor(score + (10 * (p:speed() / 10))  + bonus)
-                    elseif angle(p:currentVeh()) > 40 and angle(p:currentVeh()) <= 50 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= 55 then
-                        newScore = math.floor(score + (30 * (p:speed() / 10))  + bonus)
-                    elseif angle(p:currentVeh()) >= 10 then
-                        newScore = score + 1
+                if p:speed() > baseSpeedLimit then
+
+                    if angle(p:currentVeh()) < 10 then
+                        holding = 0
+                        mult = 1.0
+                    else
+                        holding = holding + 1
+                        mult = 1.0
+                        for i = 1, holding do
+                            mult = mult + 0.003
+                        end
+                        if mult > 10.0 then
+                            mult = 10.0
+                        end
                     end
+
+                    if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                        newScore = math.floor(score  + (1 * mult) + bonus)
+                    elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                        newScore = math.floor(score + ((3 * mult) * (p:speed() / 10))  + bonus)
+                    elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
+                        newScore = math.floor(score + ((5 * mult) * (p:speed() / 10))  + bonus)
+
+                        if not littleSucces.angleGood.cooldown then
+                            littleSucces.angleGood.cooldown = true
+                            AddLittleSucces(littleSucces.angleGood.label)
+                            Citizen.CreateThread(function()
+                                Wait(20000)
+                                littleSucces.angleGood.cooldown = false
+                            end)
+                        end
+                    elseif angle(p:currentVeh()) > 40 and angle(p:currentVeh()) <= 50 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
+                        newScore = math.floor(score + ((15 * mult) * (p:speed() / 10))  + bonus)
+                        
+                        if not littleSucces.angleInsane.cooldown then
+                            littleSucces.angleInsane.cooldown = true
+                            AddLittleSucces(littleSucces.angleInsane.label)
+                            Citizen.CreateThread(function()
+                                Wait(20000)
+                                littleSucces.angleInsane.cooldown = false
+                            end)
+                        end
+                    elseif angle(p:currentVeh()) >= 10 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                        newScore = score + (1 * mult)
+                    end
+
+                    if p:speed() > 120 then
+                        if not littleSucces.speed.cooldown then
+                            littleSucces.speed.cooldown = true
+                            AddLittleSucces(littleSucces.speed.label)
+                            Citizen.CreateThread(function()
+                                Wait(15000)
+                                littleSucces.speed.cooldown = false
+                            end)
+                        end
+                    end
+
+                else
+                    holding = 0
+                    mult = 1.0
                 end
 
     
@@ -289,12 +340,12 @@ Citizen.CreateThread(function()
 
                 
                 if score ~= 0 then
-                    SetMulti()
+                    --SetMulti()
                     SendNUIMessage(
                         {
                             ShowHud = true,
                             driftPoints = math.floor(score),
-                            driftDisplayMulti = "x"..tostring(mult),
+                            driftDisplayMulti = "x"..round2(mult, 1),
                         }
                     )
                 end
