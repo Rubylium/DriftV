@@ -34,7 +34,11 @@ Citizen.CreateThread(function()
                 for i = 1,#players do
                     DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
                     DrawTexts(baseX - 0.14, baseY + (0.032 * i) - 0.013, players[i].level, true, 0.35, {255, 255, 255, 255}, 6, 0) -- level
-                    DrawTexts(baseX - 0.13, baseY + (0.032 * i) - 0.013, players[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                    if PlayersCrew[players[i].servID] == "None" then
+                        DrawTexts(baseX - 0.13, baseY + (0.032 * i) - 0.013, players[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                    else
+                        DrawTexts(baseX - 0.13, baseY + (0.032 * i) - 0.013, "~c~[".. Crew[PlayersCrew[players[i].servID]].tag .."] ~s~" ..players[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                    end
                     DrawTexts(baseX + 0.01, baseY + (0.032 * i) - 0.013, players[i].crew, false, 0.35, {255, 255, 255, 255}, 6, 1) -- crew
                 end
 
