@@ -442,6 +442,14 @@ Citizen.CreateThread(function()
                         --SetEntityNoCollisionEntity(p:currentVeh(), veh, false)
                         SetEntityCollision(veh, false, true)
                         SetEntityAlpha(veh, 200, 200)
+
+                        if GetEntitySpeed(veh) <= 0 then
+                            local vPos = GetEntityCoords(veh)
+                            local get, z = GetGroundZFor_3dCoord(GetEntityCoords(veh), 1)
+                            if z then
+                                SetEntityCoordsNoOffset(veh, vPos.x, vPos.y, z, 0.0, 0.0, 0.0)
+                            end
+                        end
                         cachedEntity[veh] = veh
                     end
 
