@@ -6,6 +6,7 @@ local race = {
         start =  vector4(963.13128662109, 1062.2911376953, 459.47320556641, 279.91229248047),
         price = 10000,
         pointPerSec = 750,
+        speedLimit = 49,
         points = {
             {pos = vector4(1030.7563476562, 1117.5638427734, 458.73199462891, 65.086318969727), passed = false},
             --{pos = vector4(920.74230957031, 1125.4340820312, 460.48587036133, 298.26525878906), passed = false},
@@ -21,6 +22,7 @@ local race = {
         label = "Haruna Drift Race",
         price = 15000,
         pointPerSec = 3000,
+        speedLimit = 55,
         start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
         points = {
             {pos = vector4(2205.0871582031, -2020.2974853516, 577.94848632812, 165.34571838379), passed = false},
@@ -61,7 +63,8 @@ local race = {
     {
         label = "Iro Drift Race",
         price = 25000,
-        pointPerSec = 150,
+        pointPerSec = 250,
+        speedLimit = 25,
         start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
         points = {
             {pos = vector4(-5090.6884765625, 4394.7895507812, 749.99359130859, 276.93649291992), passed = false},
@@ -100,6 +103,7 @@ local race = {
         label = "Hakone Ohiradai",
         price = 15000,
         pointPerSec = 1500,
+        speedLimit = 49,
         start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
         points = {
             {pos = vector4(-4370.8544921875, -4236.6669921875, 156.77291870117, 307.23013305664), passed = false},
@@ -113,7 +117,8 @@ local race = {
     {
         label = "Hakone Nanamagari",
         price = 10000,
-        pointPerSec = 1500,
+        pointPerSec = 750,
+        speedLimit = 30,
         start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
         points = {
             {pos = vector4(-3348.3273925781, 20.953716278076, 124.79309082031, 2.0219919681549), passed = false},
@@ -210,22 +215,65 @@ local timeBar = nil
 function StartRace(data, raceKey)
     inRace = true
     ResetDriftPoint()
-    SetMulti(0.1)
     SetPlayerInRace(true)
     local raceStopped = false
 
     SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
     SetEntityHeading(p:currentVeh(), data.start.w)
     FreezeEntityPosition(p:currentVeh(), true)
+    ChangeSpeedLimit(data.speedLimit)
     TogglePasive(true)
 
-    local countDown = 5
-    for i = 1,5 do
+    cam.create("CAM_1")
+    cam.create("CAM_2")
+
+
+    local countDown = 3
+
+    local posToGo = {
+       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 0.0, 8.0)}, -- up
+       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 8.0, 0.0)}, -- front
+       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -8.0, 5.0)}, -- back
+    }
+
+    for i = 1,3 do
         Subtitle("Drift race in ~b~"..countDown, 1000)
         PlaySoundFrontend(-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 1)
+
+        local rPos = vector3(0.0, 0.0, 0.0)
+        if i ~= 3 then
+            rPos = vector3(posToGo[i].pos.x + math.random(-1,1), posToGo[i].pos.y + math.random(-1,1), posToGo[i].pos.z + math.random(1,2))
+        else
+            rPos = vector3(posToGo[i].pos.x, posToGo[i].pos.y, posToGo[i].pos.z - 2)
+        end
+
+        cam.setPos("CAM_1", posToGo[i].pos)
+        cam.setFov("CAM_1", 60.0)
+        cam.lookAtCoords("CAM_1", p:pos())
+        cam.setActive("CAM_1")
+        cam.render("CAM_1", true, false, 0)
+
+        cam.setPos("CAM_2", rPos)
+        cam.setFov("CAM_2", 45.0)
+        cam.lookAtCoords("CAM_2", p:pos())
+        
+
+        cam.setActive("CAM_2")
+        cam.switchToCam("CAM_2", "CAM_1", 1500)
+
         Wait(1000)
         countDown = countDown - 1
     end
+
+    Citizen.CreateThread(function()
+        SetGameplayCamRelativeHeading(0.0)
+        cam.render("CAM_2", false, true, 1000)
+        Wait(1000)
+        cam.delete("CAM_1")
+        cam.delete("CAM_2")
+    end)
+
+
     local startTime = GetGameTimer()
     PlaySoundFrontend(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset", 1)
     FreezeEntityPosition(p:currentVeh(), false)
@@ -261,13 +309,23 @@ function StartRace(data, raceKey)
                 raceStopped = true
             end
 
+            ShowHelpNotification("Press ~INPUT_CELLPHONE_CANCEL~ to cancel the drift race")
+            if IsControlJustReleased(0, 177) then
+                raceStopped = true
+
+                SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
+                SetEntityHeading(p:currentVeh(), data.start.w)
+            end
+
             time:SetTextTimerBar(tostring(math.floor((timer - GetGameTimer()) / 1000)))
             distance:SetTextTimerBar(tostring(dst).."m")
 
             timeBar:Draw()
             Wait(1)
         end
-        PlaySoundFrontend(-1, "RACE_PLACED", "HUD_AWARDS")
+        if not raceStopped then
+            PlaySoundFrontend(-1, "RACE_PLACED", "HUD_AWARDS")
+        end
 
     end
     PlaySoundFrontend(-1, "ScreenFlash", "WastedSounds")
@@ -362,6 +420,7 @@ function StartRace(data, raceKey)
         ShowNotification("Race cancelled ! You need to go faster !")
     end
 
+    ChangeSpeedLimit(39)
     Citizen.CreateThread(function()
         Wait(3000)
         if not inRace then
