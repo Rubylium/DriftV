@@ -507,3 +507,24 @@ function DisplayClosetPlayer()
 		DrawMarker(20, cCoords.x, cCoords.y, cCoords.z+1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.3, 0.3, 0, 255, 0, 170, 0, 1, 2, 0, nil, nil, 0)
 	end
 end
+
+function KeyboardImput(text, max)
+    local amount = nil
+    if max == nil then
+        max = 255
+    end
+    AddTextEntry("CUSTOM_AMOUNT", text)
+    DisplayOnscreenKeyboard(1, "CUSTOM_AMOUNT", '', "", '', '', '', max)
+
+    while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+        Citizen.Wait(0)
+    end
+
+    if UpdateOnscreenKeyboard() ~= 2 then
+        amount = GetOnscreenKeyboardResult()
+        Citizen.Wait(1)
+    else
+        Citizen.Wait(1)
+    end
+    return amount
+end
