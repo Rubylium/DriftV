@@ -30,10 +30,10 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     local function RefreshWarsData()
         for k,v in pairs(crew1.members) do
-            TriggerClientEvent("crew:CrewWarRefreshData", v, wars[warId])
+            TriggerClientEvent("crew:CrewWarRefreshData", v.id, wars[warId])
         end
         for k,v in pairs(crew2.members) do
-            TriggerClientEvent("crew:CrewWarRefreshData", v, wars[warId])
+            TriggerClientEvent("crew:CrewWarRefreshData", v.id, wars[warId])
         end
     end
 
@@ -41,11 +41,11 @@ function StartWarsBetweenCrew(crew1, crew2)
     debugPrint("Starting crew war. Sending players to crew war lobby")
     for k,v in pairs(crew1.members) do
         SetPlayerInstance(v, wars[warId].instanceID)
-        TriggerClientEvent("crew:CrewWarAboutToStart", v, crew2.name, warId)
+        TriggerClientEvent("crew:CrewWarAboutToStart", v.id, crew2.name, warId)
     end
     for k,v in pairs(crew2.members) do
         SetPlayerInstance(v, wars[warId].instanceID)
-        TriggerClientEvent("crew:CrewWarAboutToStart", v, crew1.name, warId)
+        TriggerClientEvent("crew:CrewWarAboutToStart", v.id, crew1.name, warId)
     end
     Wait(10*1000)
     RefreshWarsData()
@@ -53,11 +53,11 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     for k,v in pairs(crew1.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarStartMapVote", v)
+        TriggerClientEvent("crew:CrewWarStartMapVote", v.id)
     end
     for k,v in pairs(crew2.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarStartMapVote", v)
+        TriggerClientEvent("crew:CrewWarStartMapVote", v.id)
     end
 
     Wait(30*1000) -- Map Load
@@ -77,10 +77,10 @@ function StartWarsBetweenCrew(crew1, crew2)
     debugPrint("Map: "..map.." with "..mostVote.." vote")
 
     for k,v in pairs(crew1.members) do
-        TriggerClientEvent("crew:CrewWarLoadMap", v, map)
+        TriggerClientEvent("crew:CrewWarLoadMap", v.id, map)
     end
     for k,v in pairs(crew2.members) do
-        TriggerClientEvent("crew:CrewWarLoadMap", v, map)
+        TriggerClientEvent("crew:CrewWarLoadMap", v.id, map)
     end
 
     Wait(30*1000)
@@ -88,18 +88,18 @@ function StartWarsBetweenCrew(crew1, crew2)
     debugPrint("Choose car (30s)")
 
     for k,v in pairs(crew1.members) do
-        TriggerClientEvent("crew:CrewWarLoadVeh", v)
+        TriggerClientEvent("crew:CrewWarLoadVeh", v.id)
     end
     for k,v in pairs(crew2.members) do
-        TriggerClientEvent("crew:CrewWarLoadVeh", v)
+        TriggerClientEvent("crew:CrewWarLoadVeh", v.id)
     end
     Wait(15*1000)
     debugPrint("Starting crew war race !!")
     for k,v in pairs(crew1.members) do
-        TriggerClientEvent("crew:CrewWarStartRace", v)
+        TriggerClientEvent("crew:CrewWarStartRace", v.id)
     end
     for k,v in pairs(crew2.members) do
-        TriggerClientEvent("crew:CrewWarStartRace", v)
+        TriggerClientEvent("crew:CrewWarStartRace", v.id)
     end
 
 
@@ -122,10 +122,10 @@ function StartWarsBetweenCrew(crew1, crew2)
     -- Teleport everyone back to lobby
     RefreshWarsData()
     for k,v in pairs(crew1.members) do
-        TriggerClientEvent("crew:CrewWarEndLobby", v)
+        TriggerClientEvent("crew:CrewWarEndLobby", v.id)
     end
     for k,v in pairs(crew2.members) do
-        TriggerClientEvent("crew:CrewWarEndLobby", v)
+        TriggerClientEvent("crew:CrewWarEndLobby", v.id)
     end
 
 
@@ -133,11 +133,11 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     for k,v in pairs(crew1.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarEnd", v)
+        TriggerClientEvent("crew:CrewWarEnd", v.id)
     end
     for k,v in pairs(crew2.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarEnd", v)
+        TriggerClientEvent("crew:CrewWarEnd", v.id)
     end
 
 
@@ -164,7 +164,31 @@ function AddCrewMemberToMatchmaking(crewName, source)
         AddCrewToMachmaking() 
     end
 
-    table.insert(matchmaking[crewName].members, source)
+    local found = false
+    local key = 0
+    for k,v in pairs(matchmaking[crewName].members) do
+        if v.id == source then
+            found = true
+            key = k
+        end
+    end
+    if not found then
+        table.insert(matchmaking[crewName].members, {id = source, name = GetPlayerName(source), exp = player[source].exp})
+        for k,v in pairs(matchmaking[crewName].members) do
+            TriggerClientEvent("crew:CrewWarRefreshCrewData", v.id, matchmaking[crewName].members, true)
+        end
+    else
+        matchmaking[crewName].members[key] = nil
+        TriggerClientEvent("crew:CrewWarRefreshCrewData", source, matchmaking[crewName].members, false)
+        if #matchmaking[crewName].members == 0 then
+            matchmaking[crewName] = nil
+        else
+            for k,v in pairs(matchmaking[crewName].members) do
+                TriggerClientEvent("crew:CrewWarRefreshCrewData", v.id, matchmaking[crewName].members, true)
+            end
+        end
+
+    end
 end
 
 function FindRandomMatch()
@@ -207,6 +231,13 @@ function FindRandomMatch()
                 count = count + 1
             end
             Wait(1)
+        end
+
+        for k,v in pairs(matchmaking[random1].members) do
+            TriggerClientEvent("crew:CrewWarRefreshCrewData", v.id, matchmaking[random1].members, false)
+        end
+        for k,v in pairs(matchmaking[random2].members) do
+            TriggerClientEvent("crew:CrewWarRefreshCrewData", v.id, matchmaking[random2].members, false)
         end
 
         print(random1, random2)
