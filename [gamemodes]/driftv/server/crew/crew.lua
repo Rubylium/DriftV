@@ -1,5 +1,9 @@
 crew = {}
 pCrew = {}
+KingDriftCrew = {
+    name = "Nothing",
+    elo = 1000,
+}
 
 function DoesCrewExist(name)
     if crew[name] ~= nil then
@@ -18,10 +22,22 @@ function CreateCrew(tag, name, desc)
         crew[name].totalPoints = 0
         crew[name].win = 0
         crew[name].loose = 0
+        crew[name].elo = 1000
         crew[name].members = {}
         return true
     else
         return false
+    end
+end
+
+function RefresKingDriftCrew()
+    for k,v in pairs(crew) do
+        print(v.elo, KingDriftCrew.elo, v.elo > KingDriftCrew.elo)
+        if v.elo > KingDriftCrew.elo then
+            KingDriftCrew.elo = v.elo
+            KingDriftCrew.name = v.name
+            debugPrint("New drift king crew: "..v.name.." with ".. v.elo .." elo")
+        end
     end
 end
 
@@ -148,17 +164,17 @@ end)
 
 Citizen.CreateThread(function()
     local db = rockdb:new()
-    crew = db:GetString("CREW_DEV_2")
+    crew = db:GetString("CREW_DEV_3")
     if crew == nil then
         crew = {}
     else
         crew = json.decode(crew)
     end
 
-    print(json.encode(crew))
+    RefresKingDriftCrew()
     debugPrint("Loaded all crews ")
     while true do
-        db:SaveString("CREW_DEV_2", json.encode(crew))
+        db:SaveString("CREW_DEV_3", json.encode(crew))
 
         debugPrint("Crews saved")
         Wait(30*1000)

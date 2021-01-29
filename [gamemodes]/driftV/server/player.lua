@@ -63,7 +63,7 @@ function RefreshPlayerData(source)
 end
 
 function RefreshOtherPlayerData()
-    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew, pCrew)
+    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew, pCrew, KingDriftCrew)
 end
 
 function SavePlayer(source)

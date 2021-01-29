@@ -149,19 +149,24 @@ function StartWarsBetweenCrew(crew1, crew2)
 
 
     if wars[warId].scores[crew1.name] > wars[warId].scores[crew2.name] then
+        crew[crew1.name].elo, crew[crew2.name].elo = CrewEloNewRating(crew[crew1.name].elo, crew[crew2.name].elo, 1, 0)
         crew[crew1.name].win = crew[crew1.name].win + 1
         crew[crew2.name].loose = crew[crew2.name].loose + 1
         TriggerClientEvent("FeedM:showNotification", -1, "Crew ~b~".. crew1.name .."~s~ has just won a crew war against crew ~b~".. crew2.name .." ~s~with ~o~".. GroupDigits(wars[warId].scores[crew1.name]) .." points !", 10000, "info")
 
         SendTextToWebhook("crew_war", 0x5cffe1, "CREW WARS RESULT", "Crew ``".. crew1.name .."`` has just won a crew war against crew ``".. crew2.name .."`` with ".. GroupDigits(wars[warId].scores[crew1.name]) .." points vs "..GroupDigits(wars[warId].scores[crew2.name]) .." points !\n``(+ ".. GroupDigits(wars[warId].scores[crew1.name] - wars[warId].scores[crew2.name]) .." )``")
     else
+        crew[crew2.name].elo, crew[crew1.name].elo = CrewEloNewRating(crew[crew2.name].elo, crew[crew1.name].elo, 1, 0)
         crew[crew2.name].win = crew[crew2.name].win + 1
         crew[crew1.name].loose = crew[crew1.name].loose + 1
         TriggerClientEvent("FeedM:showNotification", -1, "Crew ~b~".. crew2.name .."~s~ has just won a crew war against crew ~b~".. crew1.name .." ~s~with ~o~".. GroupDigits(wars[warId].scores[crew2.name]) .." points !", 10000, "info")
 
         SendTextToWebhook("crew_war", 0x5cffe1, "CREW WARS RESULT", "Crew ``".. crew2.name .."`` has just won a crew war against crew ``".. crew1.name .."`` with ".. GroupDigits(wars[warId].scores[crew2.name]) .." points vs "..GroupDigits(wars[warId].scores[crew1.name]) .." points !\n``(+ ".. GroupDigits(wars[warId].scores[crew2.name] - wars[warId].scores[crew1.name]) .." )``")
-
+        
     end
+
+    RefresKingDriftCrew()
+    RefreshOtherPlayerData()
 end
 
 function AddCrewToMachmaking(crewName)

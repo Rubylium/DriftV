@@ -91,6 +91,8 @@ function DisplayPlayersBlips()
 					local pCoords = GetEntityCoords(pPed)
 					local level = tostring(DecorGetInt(pPed, "LEVEL"))
 					local crew
+					local crewName = PlayersCrew[GetPlayerServerId(k)] 
+					
 					if PlayersCrew[GetPlayerServerId(k)] == nil then
 						crew = "None"
 					else
@@ -109,19 +111,21 @@ function DisplayPlayersBlips()
 					if playersIdInPassive[GetPlayerServerId(k)] ~= nil then
 						inPassive = true
 					end
+					if KingDriftCrew.name == crewName then
+						DrawMarker(43, pCoords.x, pCoords.y, pCoords.z + 1.30, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.0, 0.3, 255, 255, 255, 255, false, true, 2, false, "markers", "crown", false)
+					end
 					if inPassive then
 						if crew ~= "None" then
-							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - ~c~[%s]~s~ %s\n'):format(level, crew, v, "Test title ~r~red"), 4, 0.08, 0.08)
+							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - ~c~[%s]~s~ %s\n'):format(level, crew, v), 4, 0.08, 0.08)
 						else
-							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v), 4, 0.08, 0.08)
 						end
 						Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.80, '~c~Passive activated', 4, 0.06, 0.06)
-						DrawMarker(9, pCoords.x, pCoords.y, pCoords.z + 1.0, 0.0, 0.0, 0.0, 0.0, 90.0, 0.0, 3.0, 3.0, 3.0, 255, 255, 255, 255, 0, 1, 2, 0, "markers", "private", false)
 					else
 						if crew ~= "None" then
-							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - ~c~[%s]~s~ %s\n'):format(level, crew, v, "Test title ~r~red"), 4, 0.08, 0.08)
+							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - ~c~[%s]~s~ %s\n'):format(level, crew, v), 4, 0.08, 0.08)
 						else
-							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v, "Test title ~r~red"), 4, 0.08, 0.08)
+							Draw3DText(pCoords.x, pCoords.y, pCoords.z - 0.7, ('Lv.%s - %s\n'):format(level, v), 4, 0.08, 0.08)
 						end
 					end
 				end
