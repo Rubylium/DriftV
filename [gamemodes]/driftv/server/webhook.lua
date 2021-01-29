@@ -13,6 +13,7 @@ local driftPictures = {
 local webhooks = {
     ["general_fr"] = "https://discordapp.com/api/webhooks/803641935901229066/Xtb1JEzDZ7EYMG8q1fGMFgpZHNKWRGXCnWCbhoVhS7m5RBjF7HbUyt2nkSH7muuLqRPn",
     ["general_en"] = "https://discordapp.com/api/webhooks/803642071403331584/Hn3oC7wjtBGwUt_nBN32HjTzX-aMdhXGua3O9F-APVsOxsPswKTXZBzN7v1tIUVq7Ozp",
+    ["crew_war"] = "https://discord.com/api/webhooks/804658742947741737/AuLPKE49tk_6YjEn-OZq48oxfRAYPdXtmdM5TCnHD9SrS-Sawdj3B16f0TcUggwiB_M1",
 }
 
 function SendTextToWebhook(webhook, color, title, text)

@@ -48,6 +48,7 @@ local crewWarMaps = {
 
 local warInfo = {}
 local lobby = vector3(1107.04, -3157.399, -37.51859)
+local warEndLobby = vector3(229.73329162598, -885.22637939453, 30.949995040894)
 local lobbyIpl = "bkr_biker_interior_placement_interior_0_biker_dlc_int_01_milo"
 local fightAgainst = ""
 local warID = 0
@@ -61,6 +62,8 @@ local inMapLoad = false
 local inVehLoad = false
 local veh = RageUI.CreateMenu("DriftV", "Welcome to the drift paradise")
 veh.Closable = false
+local displayScoreBoard = false
+local displayTempScoreboard = false
 
 -- Step 1
 function JoinCrewWarLobby()
@@ -81,12 +84,13 @@ function StartMapVote()
     RageUI.Visible(maps, true)
     while inMapVote do
         RageUI.IsVisible(maps, function()
-            RageUI.Separator("Choose the war map!")
+            RageUI.Separator("Vote for the war map!")
             for k,v in pairs(crewWarMaps) do
                 if not voted then
                     RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
                         onSelected = function()
                             TriggerServerEvent("crew:CrewWarsVoteForMap", v.label, warID)
+                            ShowNotification("You voted for ~o~"..v.label)
                             voted = true
                             v.voted = true
                         end,
@@ -107,6 +111,8 @@ end
 
 -- Step 3
 function StartMapLoad(name)
+    DoScreenFadeOut(1000)
+    while not IsScreenFadedOut() do Wait(1) end
     TriggerEvent("InteractSound_CL:Stop")
     TriggerEvent("InteractSound_CL:PlayOnOne", loadingMusic[math.random(1,#loadingMusic)], 0.07)
     local map
@@ -172,6 +178,7 @@ function StartVehLoad()
     RageUI.Visible(veh, true)
     while inVehLoad do
         RageUI.IsVisible(veh, function()
+            RageUI.Separator("Choose your vehicle")
             for _,v in pairs(p:GetCars()) do
                 RageUI.Button(v.label, nil, {}, true, {
                     onSelected = function()
@@ -293,14 +300,6 @@ function StartCrewWarRace(data)
                 raceStopped = true
             end
 
-            ShowHelpNotification("Press ~INPUT_CELLPHONE_CANCEL~ to cancel the drift race")
-            if IsControlJustReleased(0, 177) then
-                raceStopped = true
-
-                SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
-                SetEntityHeading(p:currentVeh(), data.start.w)
-            end
-
             time:SetTextTimerBar(tostring(math.floor((timer - GetGameTimer()) / 1000)))
             distance:SetTextTimerBar(tostring(dst).."m")
 
@@ -316,6 +315,10 @@ function StartCrewWarRace(data)
     RemoveBlip(blip)
 
     local endPoints = GetCurrentDriftPoint()
+    if raceStopped then
+        endPoints = 0
+    end
+    
     local endTime = GetGameTimer()
     local raceTime = endTime - startTime
     local raceSecond = math.floor(raceTime / 1000)
@@ -327,9 +330,70 @@ function StartCrewWarRace(data)
         endPoints = 0
     end
 
-    TriggerServerEvent("crew:CrewCarsAddScore", warID, p:getCrew(), endPoints)
+    TriggerServerEvent("crew:CrewCarsAddScore", warID, p:getCrew(), endPoints, driftScore, raceSecond)
     DeleteEntity(p:currentVeh())
+    displayTempScoreboard = true
+
     TeleportPlayer(lobby)
+    AnimpostfxPlay("MP_Celeb_Win", -1, true)
+    Citizen.CreateThread(function()
+        while displayTempScoreboard do
+            local baseX = 0.3 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, p:getCrew() .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.indiScores[p:getCrew()]) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(v.driftScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, v.time, false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+                DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, GroupDigits(v.finalScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
+
+                i = i + 1
+            end
+    
+            local baseX = 0.7 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+    
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, fightAgainst .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.indiScores[fightAgainst]) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(v.driftScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, v.time, false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+                DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, GroupDigits(v.finalScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
+
+                i = i + 1
+            end
+            Wait(0)
+        end
+        AnimpostfxStopAll()
+    end)
 
 
     SetPlayerInRace(false)
@@ -338,17 +402,95 @@ end
 
 -- Step 6
 function DisplayCrewWarScoreboard()
-    TeleportPlayer(lobby)
+    TeleportPlayer(warEndLobby)
+
+    AnimpostfxPlay("MP_Celeb_Win", -1, true)
+
+    Citizen.CreateThread(function()
+        while displayScoreBoard do
 
 
-    print(json.encode(warInfo.scores))
+            local baseX = 0.3 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, p:getCrew() .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.indiScores[p:getCrew()]) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(v.driftScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, v.time, false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+                DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, GroupDigits(v.finalScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
+
+                i = i + 1
+            end
+    
+            local baseX = 0.7 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+    
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, fightAgainst .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.indiScores[fightAgainst]) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(v.driftScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, v.time, false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+                DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, GroupDigits(v.finalScore), false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
+
+                i = i + 1
+            end
+
+
+            ShowHelpNotification("Press ~INPUT_CELLPHONE_CANCEL~ to close result")
+            DisableAllControlActions(0)
+            if IsDisabledControlJustPressed(0, 177) then
+                displayScoreBoard = false
+            end
+    
+            if IsDisabledControlJustPressed(0, 176) then
+                displayScoreBoard = false
+            end
+    
+            if IsDisabledControlJustPressed(0, 179) then
+                displayScoreBoard = false
+            end
+            Wait(0)
+        end
+        AnimpostfxStopAll()
+    end)
+
+
+
 end
 
 
 -- Step 1
 RegisterNetEvent("crew:CrewWarAboutToStart")
 AddEventHandler("crew:CrewWarAboutToStart", function(crew2, warid)
-    DisplayLittleSucces("crew war against "..crew2, false, 3000)
+    DisplayLittleSucces("crew war against ~b~"..crew2, false, 6000)
     fightAgainst = crew2
     warID = warid
     p:setCrewWarStatus(true)
@@ -372,7 +514,7 @@ end)
 -- Step 3
 RegisterNetEvent("crew:CrewWarLoadMap")
 AddEventHandler("crew:CrewWarLoadMap", function(map)
-    DisplayLittleSucces(map, false, 10000)
+    DisplayLittleSucces(map, false, 25*1000)
     inMapVote = false
     inMapLoad = true
     TriggerEvent("InteractSound_CL:Stop")
@@ -383,7 +525,7 @@ end)
 -- Step 4
 RegisterNetEvent("crew:CrewWarLoadVeh")
 AddEventHandler("crew:CrewWarLoadVeh", function()
-    DisplayLittleSucces("Choose your vehicle", false, 5000)
+    DisplayLittleSucces("Choose your vehicle", false, 15*1000)
     inMapLoad = false
     inVehLoad = true
     StartVehLoad()
@@ -401,6 +543,8 @@ end)
 -- Step 6
 RegisterNetEvent("crew:CrewWarEndLobby")
 AddEventHandler("crew:CrewWarEndLobby", function()
+    displayScoreBoard = true
+    displayTempScoreboard = false
     DisplayCrewWarScoreboard()
 
     p:setCrewWarStatus(false)
@@ -410,51 +554,88 @@ end)
 RegisterNetEvent("crew:CrewWarRefreshData")
 AddEventHandler("crew:CrewWarRefreshData", function(data)
     warInfo = data
+    warInfo.myCrewScoreCount = 0
+    for k,v in pairs(warInfo.indiScores[p:getCrew()]) do
+        warInfo.myCrewScoreCount = warInfo.myCrewScoreCount + 1
+    end
+
+    warInfo.otherCrewScoreCount = 0
+    for k,v in pairs(warInfo.indiScores[fightAgainst]) do
+        warInfo.otherCrewScoreCount = warInfo.otherCrewScoreCount + 1
+    end
 end)
 
 
--- local baseX = 0.9 -- gauche / droite ( plus grand = droite )
--- local baseY = 0.2 -- Hauteur ( Plus petit = plus haut )
--- local baseWidth = 0.15 -- Longueur
--- local baseHeight = 0.03 -- Epaisseur
+
 
 -- local exempleTable = {
 --     {
 --         name = "Toahsaka",
---         level = 15,
---         crew = "Speed Hunters"
+--         score = 78678,
 --     },
 --     {
 --         name = "Rubylium",
---         level = 54,
---         crew = "Speed Hunters"
+--         score = 7867,
 --     },
 --     {
 --         name = "NightSharekou",
---         level = 150,
---         crew = "Speed Hunters"
+--         score = 157867860,
 --     },
 --     {
 --         name = "NightSharekou",
---         level = 76,
---         crew = "Speed Hunters"
+--         score = 7863,
 --     },
 -- }
 
 -- Citizen.CreateThread(function()
+--     AnimpostfxPlay("MP_Celeb_Win", -1, true)
 --     while true do
+
+--         local baseX = 0.3 -- gauche / droite ( plus grand = droite )
+--         local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+--         local baseWidth = 0.3 -- Longueur
+--         local baseHeight = 0.03 -- Epaisseur
 --         DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
 --         DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
---         DrawTexts(baseX - 0.068, baseY - (0.043) - 0.013, "crew war matchmaking", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
---         --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, tostring(#exempleTable), true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+--         DrawTexts(baseX, baseY - (0.043) - 0.013, "CATALACLUS" .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
 
 --         DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
---         DrawTexts(baseX - 0.058, baseY - 0.013, "player", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
 --         for i = 1,#exempleTable do
 --             DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
---             DrawTexts(baseX - 0.067, baseY + (0.032 * i) - 0.013, exempleTable[i].level, true, 0.35, {255, 255, 255, 255}, 6, 0) -- level
---             DrawTexts(baseX - 0.058, baseY + (0.032 * i) - 0.013, exempleTable[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+--             DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, exempleTable[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+--             DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(exempleTable[i].score), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+--             DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, "124s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+--             DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, "124s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
+--         end
+
+--         local baseX = 0.7 -- gauche / droite ( plus grand = droite )
+--         local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+--         local baseWidth = 0.3 -- Longueur
+--         local baseHeight = 0.03 -- Epaisseur
+
+--         DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+--         DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+--         DrawTexts(baseX, baseY - (0.043) - 0.013, "SUPER SUN" .. " CREW", true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         --DrawTexts(baseX + 0.135, baseY - (0.043) - 0.013, "Total: ", true, 0.35, {0, 0, 0, 255}, 6, 0) -- title
+
+--         DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+--         DrawTexts(baseX - 0.140, baseY - 0.013, "crew members", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX - 0.060, baseY - 0.013, "drift score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX + 0.020, baseY - 0.013, "time", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         DrawTexts(baseX + 0.080, baseY - 0.013, "final score", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+--         for i = 1,#exempleTable do
+--             DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+--             DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, exempleTable[i].name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+--             DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GroupDigits(exempleTable[i].score), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+--             DrawTexts(baseX + 0.020, baseY + (0.032 * i) - 0.013, "124s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- time
+--             DrawTexts(baseX + 0.080, baseY + (0.032 * i) - 0.013, "124s", false, 0.35, {255, 255, 255, 255}, 6, 0) -- final score
 --         end
 --         Wait(0)
 --     end
+--     AnimpostfxStopAll()
 -- end)

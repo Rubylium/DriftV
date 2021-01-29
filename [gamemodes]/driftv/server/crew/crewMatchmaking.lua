@@ -20,6 +20,14 @@ function StartWarsBetweenCrew(crew1, crew2)
         instanceID = math.random(1,1000),
         needDone = 0,
         done = 0,
+        refresh = function()
+            for k,v in pairs(wars[warId].crew1.members) do
+                TriggerClientEvent("crew:CrewWarRefreshData", v.id, wars[warId])
+            end
+            for k,v in pairs(wars[warId].crew2.members) do
+                TriggerClientEvent("crew:CrewWarRefreshData", v.id, wars[warId])
+            end
+        end,
     }
     for k,v in pairs(crew1.members) do
         wars[warId].needDone = wars[warId].needDone + 1
@@ -118,6 +126,7 @@ function StartWarsBetweenCrew(crew1, crew2)
         Wait(1000)
     end
 
+    Wait(5000)
 
     -- Teleport everyone back to lobby
     RefreshWarsData()
@@ -133,20 +142,25 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     for k,v in pairs(crew1.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarEnd", v.id)
     end
     for k,v in pairs(crew2.members) do
         SetPlayerInstance(v, 1)
-        TriggerClientEvent("crew:CrewWarEnd", v.id)
     end
 
 
     if wars[warId].scores[crew1.name] > wars[warId].scores[crew2.name] then
         crew[crew1.name].win = crew[crew1.name].win + 1
         crew[crew2.name].loose = crew[crew2.name].loose + 1
+        TriggerClientEvent("FeedM:showNotification", -1, "Crew ~b~".. crew1.name .."~s~ has just won a crew war against crew ~b~".. crew2.name .." ~s~with ~o~".. GroupDigits(wars[warId].scores[crew1.name]) .." points !", 10000, "info")
+
+        SendTextToWebhook("crew_war", 0x5cffe1, "CREW WARS RESULT", "Crew ``".. crew1.name .."`` has just won a crew war against crew ``".. crew2.name .."`` with ".. GroupDigits(wars[warId].scores[crew1.name]) .." points vs "..GroupDigits(wars[warId].scores[crew2.name]) .." points !\n``(+ ".. GroupDigits(wars[warId].scores[crew1.name] - wars[warId].scores[crew2.name]) .." )``")
     else
         crew[crew2.name].win = crew[crew2.name].win + 1
         crew[crew1.name].loose = crew[crew1.name].loose + 1
+        TriggerClientEvent("FeedM:showNotification", -1, "Crew ~b~".. crew2.name .."~s~ has just won a crew war against crew ~b~".. crew1.name .." ~s~with ~o~".. GroupDigits(wars[warId].scores[crew2.name]) .." points !", 10000, "info")
+
+        SendTextToWebhook("crew_war", 0x5cffe1, "CREW WARS RESULT", "Crew ``".. crew2.name .."`` has just won a crew war against crew ``".. crew1.name .."`` with ".. GroupDigits(wars[warId].scores[crew2.name]) .." points vs "..GroupDigits(wars[warId].scores[crew1.name]) .." points !\n``(+ ".. GroupDigits(wars[warId].scores[crew2.name] - wars[warId].scores[crew1.name]) .." )``")
+
     end
 end
 
@@ -269,9 +283,10 @@ AddEventHandler("crew:CrewWarsVoteForMap", function(map, warID)
 end)
 
 RegisterNetEvent("crew:CrewCarsAddScore")
-AddEventHandler("crew:CrewCarsAddScore", function(warID, crew, score)
+AddEventHandler("crew:CrewCarsAddScore", function(warID, crew, score, driftScore, raceSecond)
     wars[warID].scores[crew] = wars[warID].scores[crew] + score
-    wars[warID].indiScores[crew][source] = score
+    wars[warID].indiScores[crew][source] = {name = GetPlayerName(source), finalScore = score, driftScore = driftScore, time = raceSecond}
     wars[warID].waitingFirstPlayerFinish = false
     wars[warID].done = wars[warID].done + 1
+    wars[warID].refresh()
 end)
