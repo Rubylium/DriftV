@@ -81,6 +81,29 @@ end
 
 -- Step 2
 function StartMapVote()
+
+    local timer = 30
+    local timeBar = NativeUI.TimerBarPool()
+    local time = NativeUI.CreateTimerBar("Map vote:")
+    time:SetTextTimerBar(timer.."s")
+    timeBar:Add(time)
+
+
+    Citizen.CreateThread(function()
+        while inMapVote do
+            timer = timer - 1
+            time:SetTextTimerBar(timer.."s")
+            Wait(1000)
+        end
+    end)
+
+    Citizen.CreateThread(function()
+        while inMapVote do
+            timeBar:Draw()
+            Wait(1)
+        end
+    end)
+
     RageUI.Visible(maps, true)
     while inMapVote do
         RageUI.IsVisible(maps, function()
@@ -126,6 +149,28 @@ function StartMapLoad(name)
 
     FreezeEntityPosition(p:ped(), true)
     SetEntityCoordsNoOffset(p:ped(), map.start.xyz, 0.0, 0.0, 0.0)
+
+    local timer = 30
+    local timeBar = NativeUI.TimerBarPool()
+    local time = NativeUI.CreateTimerBar("Loading map:")
+    time:SetTextTimerBar(timer.."s")
+    timeBar:Add(time)
+
+
+    Citizen.CreateThread(function()
+        while inMapLoad do
+            timer = timer - 1
+            time:SetTextTimerBar(timer.."s")
+            Wait(1000)
+        end
+    end)
+
+    Citizen.CreateThread(function()
+        while inMapLoad do
+            timeBar:Draw()
+            Wait(1)
+        end
+    end)
 
     Citizen.CreateThread(function()
         while inMapLoad do
@@ -221,6 +266,29 @@ end
 
 -- Step 4
 function StartVehLoad()
+
+    local timer = 15
+    local timeBar = NativeUI.TimerBarPool()
+    local time = NativeUI.CreateTimerBar("Choose your vehicle:")
+    time:SetTextTimerBar(timer.."s")
+    timeBar:Add(time)
+
+
+    Citizen.CreateThread(function()
+        while inVehLoad do
+            timer = timer - 1
+            time:SetTextTimerBar(timer.."s")
+            Wait(1000)
+        end
+    end)
+
+    Citizen.CreateThread(function()
+        while inVehLoad do
+            timeBar:Draw()
+            Wait(1)
+        end
+    end)
+
     RageUI.Visible(veh, true)
     while inVehLoad do
         RageUI.IsVisible(veh, function()
@@ -594,6 +662,32 @@ AddEventHandler("crew:CrewWarEndLobby", function()
     DisplayCrewWarScoreboard()
 
     p:setCrewWarStatus(false)
+end)
+
+-- Extra step
+RegisterNetEvent("crew:CrewWar60s")
+AddEventHandler("crew:CrewWar60s", function()
+    local timer = 60
+    local timeBar = NativeUI.TimerBarPool()
+    local time = NativeUI.CreateTimerBar("Finish before timer:")
+    time:SetTextTimerBar(timer.."s")
+    timeBar:Add(time)
+
+
+    Citizen.CreateThread(function()
+        while timer >= 0 and p:GetCrewWarStatus() do
+            timer = timer - 1
+            time:SetTextTimerBar(timer.."s")
+            Wait(1000)
+        end
+    end)  
+
+    Citizen.CreateThread(function()
+        while timer >= 0 and p:GetCrewWarStatus() do
+            timeBar:Draw()
+            Wait(1)
+        end
+    end)
 end)
 
 

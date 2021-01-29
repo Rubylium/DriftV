@@ -93,7 +93,7 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     Wait(30*1000)
     RefreshWarsData()
-    debugPrint("Choose car (30s)")
+    debugPrint("Choose car (15s)")
 
     for k,v in pairs(crew1.members) do
         TriggerClientEvent("crew:CrewWarLoadVeh", v.id)
@@ -124,6 +124,13 @@ function StartWarsBetweenCrew(crew1, crew2)
         print(timer, GetGameTimer(), wars[warId].done, wars[warId].needDone)
         RefreshWarsData()
         Wait(1000)
+    end
+
+    for k,v in pairs(crew1.members) do
+        TriggerClientEvent("crew:CrewWar60s", v.id)
+    end
+    for k,v in pairs(crew2.members) do
+        TriggerClientEvent("crew:CrewWar60s", v.id)
     end
 
     Wait(5000)
@@ -291,7 +298,9 @@ RegisterNetEvent("crew:CrewCarsAddScore")
 AddEventHandler("crew:CrewCarsAddScore", function(warID, crew, score, driftScore, raceSecond)
     wars[warID].scores[crew] = wars[warID].scores[crew] + score
     wars[warID].indiScores[crew][source] = {name = GetPlayerName(source), finalScore = score, driftScore = driftScore, time = raceSecond}
-    wars[warID].waitingFirstPlayerFinish = false
+    if score ~= 0 then
+        wars[warID].waitingFirstPlayerFinish = false
+    end
     wars[warID].done = wars[warID].done + 1
     wars[warID].refresh()
 end)
