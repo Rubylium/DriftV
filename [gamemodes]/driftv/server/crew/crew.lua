@@ -79,6 +79,7 @@ function LeaveCrew(source)
     if DoesCrewExist(pCrewName) then
         crew[pCrewName].members[pLicense] = nil
         player[source].crew = "None"
+        pCrew[source] = "None"
 
         if player[source].crewOwner then
 
@@ -90,12 +91,12 @@ function LeaveCrew(source)
 
             player[source].crewOwner = false
             crew[pCrewName] = nil
-            RefreshPlayerData(source)
-            SavePlayer(source)
             debugPrint("Crew "..pCrewName.." got deleted")
         else
             RefreshCrewMemberCount(pCrewName)
         end
+        RefreshPlayerData(source)
+        SavePlayer(source)
     end
 end
 

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <CHandlingDataMgr>
-
   <HandlingData>
-<Item type="CHandlingData">
-      <handlingName>r33</handlingName>
-      <fMass value="1800.000000" />
-      <fInitialDragCoeff value="8.000000" />
+    <Item type="CHandlingData">
+      <handlingName>SKYLINE</handlingName>
+      <fMass value="1550.000000" />
+      <fInitialDragCoeff value="4.950000" />
       <fPercentSubmerged value="85.000000" />
-      <vecCentreOfMassOffset x="0.000000" y="0.000000" z="0.000000" />
-      <vecInertiaMultiplier x="1.000000" y="1.600000" z="1.600000" />
+      <vecCentreOfMassOffset x="0.000000" y="-0.100000" z="0.000000" />
+      <vecInertiaMultiplier x="1.000000" y="1.000000" z="1.300000" />
       <fDriveBiasFront value="0.000000"/>
       <nInitialDriveGears value="6"/>
       <fInitialDriveForce value="1.900000"/>
@@ -48,17 +47,17 @@
       <fOilVolume value="5.000000" />
 
       <fSeatOffsetDistX value="0.050000" />
-      <fSeatOffsetDistY value="0.000000" />
-      <fSeatOffsetDistZ value="0.100000" />
-      <nMonetaryValue value="35000" />
+      <fSeatOffsetDistY value="-0.200000" />
+      <fSeatOffsetDistZ value="0.000000" />
+      <nMonetaryValue value="100000" />
       <strModelFlags>440010</strModelFlags>
-      <strHandlingFlags>0</strHandlingFlags>
+      <strHandlingFlags>1</strHandlingFlags>
       <strDamageFlags>0</strDamageFlags>
       <AIHandling>SPORTS_CAR</AIHandling>
       <SubHandlingData>
         <Item type="CCarHandlingData">
           <fBackEndPopUpCarImpulseMult value="0.100000" />
-          <fBackEndPopUpBuildingImpulseMult value="0.030000" />
+          <fBackEndPopUpBuildingImpulseMult value="0.050000" />
           <fBackEndPopUpMaxDeltaSpeed value="0.600000" />
         </Item>
         <Item type="NULL" />
@@ -66,5 +65,4 @@
       </SubHandlingData>
     </Item>
   </HandlingData>
-
 </CHandlingDataMgr>

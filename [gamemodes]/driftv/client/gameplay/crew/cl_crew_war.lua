@@ -669,7 +669,7 @@ RegisterNetEvent("crew:CrewWar60s")
 AddEventHandler("crew:CrewWar60s", function()
     local timer = 60
     local timeBar = NativeUI.TimerBarPool()
-    local time = NativeUI.CreateTimerBar("Waiting other players:")
+    local time = NativeUI.CreateTimerBar("Race ending in:")
     time:SetTextTimerBar(timer.."s")
     timeBar:Add(time)
 
@@ -708,7 +708,6 @@ AddEventHandler("crew:CrewWarNoMapSelected", function()
     inMapVote = false
     displayScoreBoard = false
     displayTempScoreboard = false
-    TeleportPlayer(warEndLobby)
     ShowNotification("You got kicked out of the crew war. Too many player.")
 
     p:setCrewWarStatus(false)

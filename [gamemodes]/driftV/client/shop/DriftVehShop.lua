@@ -29,7 +29,7 @@ local vehs = {
         label = "Tier 4",
         vehs = {
             {maker = "Nissan", price = 250000,label = "GTR35",model = "gtrp"},
-            {maker = "Nissan", price = 350000,label = "GTR33",model = "r33"},
+            {maker = "Nissan", price = 350000,label = "Skyline GT-R34 (BNR34) 2002",model = "skyline"},
             {maker = "Mitsubishi", price = 230000,label = "Lancer Evo VI",model = "cp9a"},
             {maker = "Ford", price = 450000,label = "2015 Mustang GT",model = "MGT"},
         }

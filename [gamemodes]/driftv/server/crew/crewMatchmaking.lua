@@ -31,13 +31,16 @@ function StartWarsBetweenCrew(crew1, crew2)
         end,
     }
 
+    print(#crew1.members, #crew2.members)
+    print(#crew1.members - #crew2.members )
+    print(#crew2.members - #crew1.members )
     if #crew1.members > #crew2.members then -- Equality system
         local diff = #crew1.members - #crew2.members 
         for i = 1,diff do
             TriggerClientEvent("crew:CrewWarNoMapSelected", crew1.members[#crew1.members])
             crew1.members[#crew1.members] = nil
         end
-    elseif #crew2.members > #crew2.members then
+    elseif #crew2.members > #crew1.members then
         local diff = #crew2.members - #crew1.members 
         for i = 1,diff do
             TriggerClientEvent("crew:CrewWarNoMapSelected", crew2.members[#crew2.members])

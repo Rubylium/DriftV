@@ -239,14 +239,6 @@ Citizen.CreateThread(function()
             score = 0
             while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
 
-                local bonus = 0
-                if angle ~= 0 and p:GetMap() == "LS" then
-                    bonus = math.floor(score * GetCopLimitByScore()) / 3000
-                end
-                if bonus > 30000 then
-                    bonus = 10000
-                end
-
                 local newScore = score
 
                 if p:speed() > baseSpeedLimit then
@@ -266,11 +258,13 @@ Citizen.CreateThread(function()
                     end
 
                     if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        newScore = math.floor(score  + (1 * mult) + bonus)
+                        newScore = math.floor(score  + (1 * mult))
                     elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        newScore = math.floor(score + ((3 * mult) * (p:speed() / 10))  + bonus)
+                        local toAdd = (3 * mult) * (p:speed() / 10)
+                        newScore = math.floor(score + toAdd)
                     elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
-                        newScore = math.floor(score + ((5 * mult) * (p:speed() / 10))  + bonus)
+                        local toAdd = (5 * mult) * (p:speed() / 10)
+                        newScore = math.floor(score + toAdd)
 
                         if not littleSucces.angleGood.cooldown then
                             littleSucces.angleGood.cooldown = true
@@ -281,7 +275,8 @@ Citizen.CreateThread(function()
                             end)
                         end
                     elseif angle(p:currentVeh()) > 40 and angle(p:currentVeh()) <= 50 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
-                        newScore = math.floor(score + ((15 * mult) * (p:speed() / 10))  + bonus)
+                        local toAdd = (15 * mult) * (p:speed() / 10)
+                        newScore = math.floor(score + toAdd)
                         
                         if not littleSucces.angleInsane.cooldown then
                             littleSucces.angleInsane.cooldown = true
@@ -292,7 +287,7 @@ Citizen.CreateThread(function()
                             end)
                         end
                     elseif angle(p:currentVeh()) >= 10 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        newScore = score + (1 * mult)
+                        newScore = math.floor(score + (1 * mult))
                     end
 
                     if p:speed() > 120 then
