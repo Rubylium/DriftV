@@ -31,6 +31,11 @@ function CreateCrew(tag, name, desc)
 end
 
 function RefresKingDriftCrew()
+    KingDriftCrew = {
+        name = "Nothing",
+        elo = 1000,
+    }
+
     for k,v in pairs(crew) do
         print(v.elo, KingDriftCrew.elo, v.elo > KingDriftCrew.elo)
         if v.elo > KingDriftCrew.elo then
@@ -164,7 +169,7 @@ end)
 
 Citizen.CreateThread(function()
     local db = rockdb:new()
-    crew = db:GetString("CREW_DEV_3")
+    crew = db:GetString("CREW_DEV_4")
     if crew == nil then
         crew = {}
     else
@@ -174,7 +179,7 @@ Citizen.CreateThread(function()
     RefresKingDriftCrew()
     debugPrint("Loaded all crews ")
     while true do
-        db:SaveString("CREW_DEV_3", json.encode(crew))
+        db:SaveString("CREW_DEV_4", json.encode(crew))
 
         debugPrint("Crews saved")
         Wait(30*1000)

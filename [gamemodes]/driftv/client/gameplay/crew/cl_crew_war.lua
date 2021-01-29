@@ -127,6 +127,52 @@ function StartMapLoad(name)
     FreezeEntityPosition(p:ped(), true)
     SetEntityCoordsNoOffset(p:ped(), map.start.xyz, 0.0, 0.0, 0.0)
 
+    Citizen.CreateThread(function()
+        while inMapLoad do
+            local baseX = 0.3 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, warInfo.crew1.name, true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "name", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "level", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.crew1.members) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GetPlayerLevelFromXp(v.exp), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                i = i + 1
+            end
+    
+            local baseX = 0.7 -- gauche / droite ( plus grand = droite )
+            local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
+            local baseWidth = 0.3 -- Longueur
+            local baseHeight = 0.03 -- Epaisseur
+    
+            DrawRect(baseX, baseY - 0.058, baseWidth, baseHeight - 0.02, 255, 103, 92, 255) -- Liseret
+            DrawRect(baseX, baseY - 0.043, baseWidth, baseHeight, 255, 255, 255, 255) -- Bannière
+            DrawTexts(baseX, baseY - (0.043) - 0.013, warInfo.crew2.name, true, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+    
+            DrawRect(baseX, baseY, baseWidth, baseHeight, 255, 103, 92, 255)
+            DrawTexts(baseX - 0.140, baseY - 0.013, "name", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+            DrawTexts(baseX - 0.060, baseY - 0.013, "level", false, 0.35, {0, 0, 0, 255}, 2, 0) -- title
+
+            local i = 1
+            for k,v in pairs(warInfo.crew2.members) do
+                DrawRect(baseX, baseY + (0.032 * i), baseWidth, baseHeight, 0, 0, 0, 210)
+                DrawTexts(baseX - 0.140, baseY + (0.032 * i) - 0.013, v.name, false, 0.35, {255, 255, 255, 255}, 6, 0) -- name
+                DrawTexts(baseX - 0.060, baseY + (0.032 * i) - 0.013, GetPlayerLevelFromXp(v.exp), false, 0.35, {255, 255, 255, 255}, 6, 0) -- drift score
+                i = i + 1
+            end
+            Wait(1)
+        end
+    end)
+
 
     -- Cam animation
 
