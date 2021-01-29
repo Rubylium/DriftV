@@ -141,11 +141,18 @@ AddEventHandler("driftV:CreateCrew", function(tag, crew)
 end)
 
 RegisterNetEvent("driftV:JoinCrew")
-AddEventHandler("driftV:JoinCrew", function(crew, player)
-    JoinCrew(player, crew, false)
-    RefreshPlayerData(player)
+AddEventHandler("driftV:JoinCrew", function(crew, id)
+    JoinCrew(id, crew, false)
+    player[id].crew = crew
+    player[id].crewOwner = false
+    RefreshPlayerData(id)
     RefreshOtherPlayerData()
-    SavePlayer(player)
+    SavePlayer(id)
+end)
+
+RegisterNetEvent("driftV:InvitePlayer")
+AddEventHandler("driftV:InvitePlayer", function(crew, id)
+    TriggerClientEvent("driftV:GetInvitedToCrew", id, crew, source)
 end)
 
 RegisterNetEvent("driftV:LeaveCrew")

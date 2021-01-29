@@ -300,7 +300,7 @@ function StartRace(data, raceKey)
         local timer = GetGameTimer() + 20000
         checkpoints:SetTextTimerBar(k.."/"..#data.points)
         local dst = #(v.pos.xyz - p:pos())
-        while dst > 10.0 and not raceStopped do
+        while dst > 10.0 and not raceStopped and not p:GetCrewWarStatus() do
             dst = math.floor(#(v.pos.xyz - p:pos()))
             DrawMarker(5, v.pos.xyz, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0, 5.0, 5.0, 235, 229, 52, 170, 0, 1, 2, 0, nil, nil, 0)
             DrawMarker(0, v.pos.x, v.pos.y, v.pos.z + 1.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 30.0, 66, 245, 111, 170, 0, 1, 2, 0, nil, nil, 0)
@@ -335,7 +335,7 @@ function StartRace(data, raceKey)
     SetPlayerInRace(false)
 
 
-    if not raceStopped then
+    if not raceStopped and not p:GetCrewWarStatus() then
         
 
         local endTime = GetGameTimer()

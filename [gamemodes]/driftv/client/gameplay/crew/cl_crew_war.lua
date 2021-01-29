@@ -334,11 +334,10 @@ function StartCrewWarRace(data)
 
 
     local countDown = 3
-
     local posToGo = {
-       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 0.0, 8.0)}, -- up
-       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, 8.0, 0.0)}, -- front
-       {pos = GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -8.0, 5.0)}, -- back
+       {pos = GetOffsetFromEntityInWorldCoords(p:currentVeh(), 0.0, 0.0, 8.0)}, -- up
+       {pos = GetOffsetFromEntityInWorldCoords(p:currentVeh(), 0.0, 8.0, 0.0)}, -- front
+       {pos = GetOffsetFromEntityInWorldCoords(p:currentVeh(), 0.0, -8.0, 5.0)}, -- back
     }
 
     for i = 1,3 do
@@ -604,6 +603,7 @@ end
 -- Step 1
 RegisterNetEvent("crew:CrewWarAboutToStart")
 AddEventHandler("crew:CrewWarAboutToStart", function(crew2, warid)
+    LeaveGarage(false, false)
     DisplayLittleSucces("crew war against ~b~"..crew2, false, 6000)
     fightAgainst = crew2
     warID = warid
@@ -669,7 +669,7 @@ RegisterNetEvent("crew:CrewWar60s")
 AddEventHandler("crew:CrewWar60s", function()
     local timer = 60
     local timeBar = NativeUI.TimerBarPool()
-    local time = NativeUI.CreateTimerBar("Finish before timer:")
+    local time = NativeUI.CreateTimerBar("Waiting other players:")
     time:SetTextTimerBar(timer.."s")
     timeBar:Add(time)
 
@@ -690,6 +690,29 @@ AddEventHandler("crew:CrewWar60s", function()
     end)
 end)
 
+-- Missing map
+RegisterNetEvent("crew:CrewWarNoMapSelected")
+AddEventHandler("crew:CrewWarNoMapSelected", function()
+    inMapVote = false
+    displayScoreBoard = false
+    displayTempScoreboard = false
+    TeleportPlayer(warEndLobby)
+    ShowNotification("No map selected. War cancelled")
+
+    p:setCrewWarStatus(false)
+end)
+
+-- Kicked, too many player
+RegisterNetEvent("crew:CrewWarNoMapSelected")
+AddEventHandler("crew:CrewWarNoMapSelected", function()
+    inMapVote = false
+    displayScoreBoard = false
+    displayTempScoreboard = false
+    TeleportPlayer(warEndLobby)
+    ShowNotification("You got kicked out of the crew war. Too many player.")
+
+    p:setCrewWarStatus(false)
+end)
 
 RegisterNetEvent("crew:CrewWarRefreshData")
 AddEventHandler("crew:CrewWarRefreshData", function(data)

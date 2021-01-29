@@ -63,7 +63,7 @@ function JoinGarage()
     TriggerEvent("InteractSound_CL:PlayOnOne", "garage", 0.05)
 end
 
-function LeaveGarage(veh)
+function LeaveGarage(veh, tp)
     TriggerServerEvent("drift:ChangeServerInstance", 1) 
     p:setInGarage(false)
     
@@ -73,10 +73,12 @@ function LeaveGarage(veh)
     loadedVehs = {}
 
     TriggerEvent("InteractSound_CL:Stop")
-    p:Teleport(oldPlayerPos)
+    if tp ~= false then
+        p:Teleport(oldPlayerPos)
+    end
     --p:SetMap("LS")
 
-    if veh ~= nil then
+    if veh ~= nil and veh ~= false then
         local nameToSpawn = veh.model
         local pVeh = p:GetCars()
         for k,v in pairs(pVeh) do

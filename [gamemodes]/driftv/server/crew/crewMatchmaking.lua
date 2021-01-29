@@ -2,6 +2,7 @@ local matchmaking = {}
 local wars = {}
 
 function StartWarsBetweenCrew(crew1, crew2)
+    Citizen.CreateThread(function()
     local warId = uuid()
     wars[warId] = {
         crew1 = crew1,
@@ -29,6 +30,21 @@ function StartWarsBetweenCrew(crew1, crew2)
             end
         end,
     }
+
+    if #crew1.members > #crew2.members then -- Equality system
+        local diff = #crew1.members - #crew2.members 
+        for i = 1,diff do
+            TriggerClientEvent("crew:CrewWarNoMapSelected", crew1.members[#crew1.members])
+            crew1.members[#crew1.members] = nil
+        end
+    elseif #crew2.members > #crew2.members then
+        local diff = #crew2.members - #crew1.members 
+        for i = 1,diff do
+            TriggerClientEvent("crew:CrewWarNoMapSelected", crew2.members[#crew2.members])
+            crew2.members[#crew2.members] = nil
+        end
+    end
+
     for k,v in pairs(crew1.members) do
         wars[warId].needDone = wars[warId].needDone + 1
     end
@@ -60,11 +76,11 @@ function StartWarsBetweenCrew(crew1, crew2)
     debugPrint("Starting map vote (30s)")
 
     for k,v in pairs(crew1.members) do
-        SetPlayerInstance(v, 1)
+        SetPlayerInstance(v, wars[warId].instanceID)
         TriggerClientEvent("crew:CrewWarStartMapVote", v.id)
     end
     for k,v in pairs(crew2.members) do
-        SetPlayerInstance(v, 1)
+        SetPlayerInstance(v, wars[warId].instanceID)
         TriggerClientEvent("crew:CrewWarStartMapVote", v.id)
     end
 
@@ -80,6 +96,16 @@ function StartWarsBetweenCrew(crew1, crew2)
             mostVote = v
             map = k
         end
+    end
+
+    if map == nil or map == "" then
+        for k,v in pairs(crew1.members) do
+            TriggerClientEvent("crew:CrewWarNoMapSelected", v.id)
+        end
+        for k,v in pairs(crew2.members) do
+            TriggerClientEvent("crew:CrewWarNoMapSelected", v.id)
+        end
+        return
     end
 
     debugPrint("Map: "..map.." with "..mostVote.." vote")
@@ -116,6 +142,13 @@ function StartWarsBetweenCrew(crew1, crew2)
         Wait(1000)
     end
 
+    for k,v in pairs(crew1.members) do
+        TriggerClientEvent("crew:CrewWar60s", v.id)
+    end
+    for k,v in pairs(crew2.members) do
+        TriggerClientEvent("crew:CrewWar60s", v.id)
+    end
+
     -- Notification, 60s to finish
     debugPrint("Waiting everyone to finish")
     local timer = GetGameTimer() + 60 * 1000 
@@ -126,12 +159,7 @@ function StartWarsBetweenCrew(crew1, crew2)
         Wait(1000)
     end
 
-    for k,v in pairs(crew1.members) do
-        TriggerClientEvent("crew:CrewWar60s", v.id)
-    end
-    for k,v in pairs(crew2.members) do
-        TriggerClientEvent("crew:CrewWar60s", v.id)
-    end
+
 
     Wait(5000)
 
@@ -174,6 +202,7 @@ function StartWarsBetweenCrew(crew1, crew2)
 
     RefresKingDriftCrew()
     RefreshOtherPlayerData()
+    end)
 end
 
 function AddCrewToMachmaking(crewName)
@@ -182,6 +211,8 @@ function AddCrewToMachmaking(crewName)
             name = crewName,
             members = {}
         }
+        TriggerClientEvent("FeedM:showNotification", -1, "Crew ~b~".. crewName .."~s~ joined crew war matchmaking", 10000, "info")
+
     end
 end
 
@@ -281,7 +312,7 @@ Citizen.CreateThread(function()
     Wait(5000)
     while true do
         FindRandomMatch()
-        Wait(2*1000)
+        Wait(20*1000)
     end
 end)
 
