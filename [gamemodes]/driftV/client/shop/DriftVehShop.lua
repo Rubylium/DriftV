@@ -28,6 +28,7 @@ local vehs = {
             {maker = "Nissan", price = 120000,label = "s15 Rocket Bunny",model = "s15rb"},
             {maker = "Nissan", price = 140000,label = "350z Rocket Bunny Kit Stanced",model = "350zrb"},
             {maker = "Subaru", price = 190000,label = "BRZ Rocket Bunny",model = "brz"},
+            {maker = "Subaru", price = 120000,label = "Impreza WRX STI 2004",model = "subwrx"},
         }
     },
     {
