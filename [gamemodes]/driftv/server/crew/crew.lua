@@ -74,7 +74,6 @@ function RefreshCrewRanking()
     end
 
     CrewRanking = ranking
-    print(json.encode(CrewRanking))
 end
 
 function RefreshCrewMemberCount(crewName)
