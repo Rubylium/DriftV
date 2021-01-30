@@ -27,8 +27,8 @@ function InitPlayer(source)
         pCrew[source] = "None"
         SavePlayer(source)
 
-        SendTextToWebhook("general_fr", 0x34eb37, "**Nouveau joueur!**", "Le joueur ``".. GetPlayerName(source) .. "`` a rejoint le serveur pour la première fois ! Envie de lui dire bonjour ? Connectes-toi au serveur dès maintenant !")
-        SendTextToWebhook("general_en", 0x34eb37, "**New player!**", "The player ``".. GetPlayerName(source) .. "`` joined the server for the first time! Want to say hello to him? Connect to the server now!")
+        --SendTextToWebhook("general_fr", 0x34eb37, "**Nouveau joueur!**", "Le joueur ``".. GetPlayerName(source) .. "`` a rejoint le serveur pour la première fois ! Envie de lui dire bonjour ? Connectes-toi au serveur dès maintenant !")
+        --SendTextToWebhook("general_en", 0x34eb37, "**New player!**", "The player ``".. GetPlayerName(source) .. "`` joined the server for the first time! Want to say hello to him? Connect to the server now!")
 
         debugPrint("Player created into database")
     else
@@ -63,7 +63,7 @@ function RefreshPlayerData(source)
 end
 
 function RefreshOtherPlayerData()
-    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew, pCrew, KingDriftCrew)
+    TriggerClientEvent("driftV:RefreshOtherPlayerData", -1, crew, pCrew, KingDriftCrew, CrewRanking)
 end
 
 function SavePlayer(source)

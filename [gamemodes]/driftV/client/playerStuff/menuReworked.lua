@@ -81,6 +81,7 @@ local succes =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift parad
 -- local time =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local crew =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 local crewSub =  RageUI.CreateSubMenu(crew, "DriftV", "Welcome to the drift paradise")
+local crewRankings =  RageUI.CreateSubMenu(crew, "DriftV", "Welcome to the drift paradise")
 local settings =  RageUI.CreateSubMenu(main, "DriftV", "Welcome to the drift paradise")
 
 main.WidthOffset = 100.0
@@ -97,6 +98,7 @@ succes.WidthOffset = 100.0
 settings.WidthOffset = 100.0
 crew.WidthOffset = 100.0
 crewSub.WidthOffset = 100.0
+crewRankings.WidthOffset = 100.0
 
 main.Closed = function()
     open = false
@@ -144,6 +146,7 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(crew, function()
+                    RageUI.Button("Crew Ranking", nil, {}, true, {}, crewRankings);
                     if p:getCrew() == "None" then
                         RageUI.Button("Create", "Do you want to be famous? Make yourself known as a leader? Create your own crew now!", {}, true, {
                             onSelected = function()
@@ -208,6 +211,12 @@ function OpenMainMenu()
                         end,
                     });
 
+                end)
+
+                RageUI.IsVisible(crewRankings, function()
+                    for k,v in pairs(CrewRanking) do
+                        RageUI.Button("[#~b~"..k.."~s~] - "..v.name.." ~g~"..v.members.."~s~/10 | ~b~"..v.elo, "Crew points: "..v.points.." -  Win/Loose: "..v.win.."/"..v.loose, {}, true, {});
+                    end
                 end)
                 
 

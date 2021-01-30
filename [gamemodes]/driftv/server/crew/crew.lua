@@ -4,6 +4,7 @@ KingDriftCrew = {
     name = "Nothing",
     elo = 1000,
 }
+CrewRanking = {}
 
 function DoesCrewExist(name)
     if crew[name] ~= nil then
@@ -24,6 +25,7 @@ function CreateCrew(tag, name, desc)
         crew[name].loose = 0
         crew[name].elo = 1000
         crew[name].members = {}
+        crew[name].rank = 500
         return true
     else
         return false
@@ -44,6 +46,35 @@ function RefresKingDriftCrew()
             debugPrint("New drift king crew: "..v.name.." with ".. v.elo .." elo")
         end
     end
+end
+
+
+function RefreshCrewRanking()
+    local ranking = {}
+
+    
+    for k,v in pairs(crew) do
+        if ranking[1] == nil then
+            table.insert(ranking, {name = v.name, elo = v.elo, win = v.win, loose = v.loose, points = v.totalPoints, members = v.memberCount})
+        else
+            local count = 1
+            local added = false
+            for i,j in pairs(ranking) do
+                if v.elo > j.elo then
+                    added = true
+                    table.insert(ranking, count, {name = v.name, elo = v.elo, win = v.win, loose = v.loose, points = v.totalPoints, members = v.memberCount})
+                    break
+                end
+                count = count + 1
+            end
+            if not added then
+                table.insert(ranking, #ranking + 1, {name = v.name, elo = v.elo, win = v.win, loose = v.loose, points = v.totalPoints, members = v.memberCount})
+            end
+        end   
+    end
+
+    CrewRanking = ranking
+    print(json.encode(CrewRanking))
 end
 
 function RefreshCrewMemberCount(crewName)
@@ -192,6 +223,10 @@ Citizen.CreateThread(function()
         db:SaveString("CREW_DEV_4", json.encode(crew))
 
         debugPrint("Crews saved")
+
+
+        RefreshCrewRanking()
+        debugPrint("Crew ranking refresh ...")
         Wait(30*1000)
     end
 end)

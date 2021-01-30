@@ -7,6 +7,7 @@ KingDriftCrew = {
     name = "Nothing",
     elo = 5,
 }
+CrewRanking = {}
 
 Citizen.CreateThread(function()
     TriggerServerEvent("driftV:InitPlayer")
@@ -33,10 +34,11 @@ AddEventHandler("driftV:RefreshData", function(data)
 end)
 
 RegisterNetEvent("driftV:RefreshOtherPlayerData")
-AddEventHandler("driftV:RefreshOtherPlayerData", function(crew, pCrews, king)
+AddEventHandler("driftV:RefreshOtherPlayerData", function(crew, pCrews, king, ranking)
     PlayersCrew = pCrews
     Crew = crew
     KingDriftCrew = king
+    CrewRanking = ranking
 end)
 
 local possibleCam = {
