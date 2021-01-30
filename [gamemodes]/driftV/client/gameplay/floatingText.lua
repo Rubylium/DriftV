@@ -1,13 +1,22 @@
 local texts = {
     {
         label = "Spawn welcome",
-        pos = vector3(225.16973876953, -886.28472900391, 29.687795639038),
+        pos = vector3(225.16973876953, -886.28472900391, 30.687795639038),
         displayDst = 10.0,
         text = {
-            "Welcome to the DriftV server!",
+            "Welcome to the ~y~Drift~r~V~s~ server!",
             "",
-            "Use ~b~F1~s~ to play around on the server!",
-            "Don't forget to buy your first vehicle at the vehicle shop!",
+            "Use F1 to open the server menu!",
+            "You can earn money by drifting or completing drift trials!",
+            "Go to Vehicle shop to buy new cars!",
+            "Drift trials score is a combination of your drift score and time!",
+            "To see and customize all the cars you own, go to Personal garage!",
+            "Bored of drifting alone? Create or join a crew and take part",
+            "in crew wars! Crew with highest rank gets a crown above their names!",
+            "",
+            "We are working hard on adding even more hiqh quality features!",
+            "Don't forget to join our Discord community at discord.gg/Z486cyeM78 ",
+            "Enjoy the server!",
         }
     },
     {
@@ -15,11 +24,11 @@ local texts = {
         pos = vector3(225.87615966797, -891.63562011719, 30.692003250122),
         displayDst = 10.0,
         text = {
-            "DriftV server ~r~rules~s~!",
+            "~y~Drift~r~V~s~ Server rules!",
             "",
-            "No form of racism is allowed",
-            "The 'troll' is not allowed.",
-            "You must respect others",
+            "No form of racism is allowed.",
+            "Trolling is not allowed.",
+            "You must respect others.",
             "Any form of cheating is not allowed.",
             "",
             "Having fun is a priority!",
