@@ -58,6 +58,8 @@ local mapsArea = {
     {animated = false, tag = "", map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
     {animated = false, tag = "", map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
     {animated = true, tag = "~y~NEW!", map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
+    {animated = true, tag = "~y~NEW!", map = "Katsuoji", label = "Addon: Route 4 Katsuoji Minoo", pos = vector3(6383.56, 3657.9, 255.96)},
+    {animated = true, tag = "~y~NEW!", map = "Tsukurimono", label = "Addon: Tsukurimono Touge", pos = vector3(-1077.5308837891, 2408.6586914062, 728.42279052734)},
 }
 
 local hours = {
@@ -126,14 +128,14 @@ function OpenMainMenu()
                         end,
                     });
                     RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
-                    RageUI.Button('→    Vehicle options', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
+                    RageUI.Button('→    Vehicle options', "Available only inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
                     RageUI.Button('→    My information/stats', nil, {RightLabel = ">"}, true, {}, information);
                     RageUI.Button('→    Teleports', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, maps);
-                    RageUI.Button('→    Camera', "Unlocked when inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
+                    RageUI.Button('→    Camera', "Available only inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, camera);
                     RageUI.Button('→    Settings', nil, {RightLabel = ">"}, true, {}, settings);
-                    RageUI.Button('→    Achievements', "See all your success", {RightLabel = ">"}, true, {}, succes);
+                    RageUI.Button('→    Achievements', "Your completed achievements", {RightLabel = ">"}, true, {}, succes);
                     -- RageUI.Button('→    Time Of Day', "Change your time", {RightLabel = ">"}, not p:IsInGarage(), {}, time);
-                    RageUI.Button('→    Crew', "Change your time", {RightLabel = animatedTag.."  ~y~NEW!"}, true, {}, crew);
+                    RageUI.Button('→    Manage your crew', "Change your time", {RightLabel = animatedTag.."  ~y~NEW!"}, true, {}, crew);
                     RageUI.Button("→    Toggle freecam", "", {}, not p:IsInGarage(), {
                         onSelected = function()
                             ToogleNoClip()

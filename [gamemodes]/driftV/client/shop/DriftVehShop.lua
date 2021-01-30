@@ -5,15 +5,20 @@ local vehs = {
             {maker = "Honda", price = 50000, label = "Accord 86", model = "accord86"},
             {maker = "BMW", price = 65000,label = "e46",model = "bmwe"},
             {maker = "Lexus", price = 70000,label = "RC350 Rocket Bunny",model = "RC350"},
+            {maker = "Chevrolet", price = 49500,label = "1970 Chevelle SS",model = "chevelle1970"},
+            {maker = "Zirconium", price = 49500,label = "Stratum",model = "stratum"},
         }
     },
     {
         label = "Tier 2",
         vehs = {
+            {maker = "Honda", price = 85000, label = "2015 Civic Type R",model = "FK2"},
             {maker = "Honda", price = 85000, label = "Civic EK9 Rocket Bunny",model = "civicek9rb"},
             {maker = "BMW", price = 90000,label = "1992 M3 E36 Pandem Rocket Bunny",model = "e36prb"},
             {maker = "Mazda", price = 75000,label = "rx7 Fc3s",model = "fc3s"},
             {maker = "Nissan", price = 75000,label = "180sx",model = "180sx"}, -- icon
+            {maker = "Karin", price = 88000,label = "Sultan",model = "sultan"}, -- icon
+            {maker = "Maibatsu", price = 88000,label = "Penumbra",model = "penumbra"}, -- icon
         }
     },
     {
@@ -39,9 +44,9 @@ local vehs = {
         vehs = {
             {maker = "Honda", price = 750000,label = "1992 NSX-R Rocket Bunny",model = "nsxtypr"},
             {maker = "Acura", price = 550000,label = "NSX LB",model = "filthynsx"},
-            {maker = "Lamborghini", price = 6000000,label = "Gallardo Superleggera LB ",model = "gallardosuperlb"},
-            {maker = "Lamborghini", price = 9000000,label = "2014 Huracan LB",model = "lbsihu"},
-            {maker = "Toyota", price = 4500000,label = "Supra mk4",model = "a80"},
+            {maker = "Lamborghini", price = 1200000,label = "Gallardo Superleggera LB ",model = "gallardosuperlb"},
+            {maker = "Lamborghini", price = 1400000,label = "2014 Huracan LB",model = "lbsihu"},
+            {maker = "Toyota", price = 950000,label = "Supra mk4",model = "a80"},
         }
     },
 }

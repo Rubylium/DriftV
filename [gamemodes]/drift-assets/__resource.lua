@@ -9,6 +9,7 @@ data_file 'DLC_ITYP_REQUEST' 'stream/haruna/haruna.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/hakonen/hakonen.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/iroh/iroh.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/hunterpark/hunterpark.ytyp'
+data_file 'DLC_ITYP_REQUEST' 'stream/Tsukurimono/tsk.ytyp'
 
 data_file 'DLC_ITYP_REQUEST' 'stream/ohiradai/ohiradai.ytyp'
 file 'meta/ohiradai/gtxd.meta'
@@ -17,6 +18,14 @@ data_file 'GTXD_PARENTING_DATA' 'meta/ohiradai/gtxd.meta'
 data_file 'DLC_ITYP_REQUEST' 'stream/wzaos/wzaos.ytyp'
 file 'meta/wzaos/gtxd.meta'
 data_file 'GTXD_PARENTING_DATA' 'meta/wzaos/gtxd.meta' 
+
+data_file 'DLC_ITYP_REQUEST' 'stream/route4/minoo.ytyp'
+file 'meta/route4/gtxd.meta'
+data_file 'GTXD_PARENTING_DATA' 'meta/route4/gtxd.meta' 
+
+data_file 'DLC_ITYP_REQUEST' 'stream/KushDrift/minoo.ytyp'
+file 'meta/KushDrift/gtxd.meta'
+data_file 'GTXD_PARENTING_DATA' 'meta/KushDrift/gtxd.meta' 
 
 
 files {
