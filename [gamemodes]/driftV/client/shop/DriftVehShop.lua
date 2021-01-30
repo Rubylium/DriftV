@@ -7,6 +7,7 @@ local vehs = {
             {maker = "Lexus", price = 70000,label = "RC350 Rocket Bunny",model = "RC350"},
             {maker = "Chevrolet", price = 49500,label = "1970 Chevelle SS",model = "chevelle1970"},
             {maker = "Zirconium", price = 49500,label = "Stratum",model = "stratum"},
+            {maker = "Toyota", price = 75000,label = "1985 Toyota Sprinter Trueno GT Apex",model = "AE86"},
         }
     },
     {
@@ -17,8 +18,9 @@ local vehs = {
             {maker = "BMW", price = 90000,label = "1992 M3 E36 Pandem Rocket Bunny",model = "e36prb"},
             {maker = "Mazda", price = 75000,label = "rx7 Fc3s",model = "fc3s"},
             {maker = "Nissan", price = 75000,label = "180sx",model = "180sx"}, -- icon
-            {maker = "Karin", price = 88000,label = "Sultan",model = "sultan"}, -- icon
             {maker = "Maibatsu", price = 88000,label = "Penumbra",model = "penumbra"}, -- icon
+            {maker = "Karin", price = 88000,label = "Sultan",model = "sultan"}, -- icon
+           
         }
     },
     {
