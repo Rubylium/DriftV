@@ -20,7 +20,8 @@ local vehs = {
             {maker = "Nissan", price = 75000,label = "180sx",model = "180sx"}, -- icon
             {maker = "Maibatsu", price = 88000,label = "Penumbra",model = "penumbra"}, -- icon
             {maker = "Karin", price = 88000,label = "Sultan",model = "sultan"}, -- icon
-           
+            {maker = "Toyota", price = 95000,label = "Chaser JZX100",model = "jzx100"}, -- icon
+            {maker = "Nissan", price = 95000,label = "1989-1992 Silvia S13",model = "nis13"}, -- icon
         }
     },
     {

@@ -658,18 +658,18 @@ function OpenCustomMenu(veh, name)
                 RageUI.IsVisible(livery, function()
                     RageUI.Button("Livery #0", nil, {}, true, {
                         onSelected = function()
-                            SetVehProps(veh, {modLivery = 0})
+                            SetVehProps(veh, {modLivery = 60})
                             local props = GetVehProps(veh)
                             p:SetCarProps(name, props)
                             loadedProps = GetVehProps(veh)
                             PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
                         end,
                         onActive = function()
-                            SetVehProps(veh, {modLivery = 0})
+                            SetVehProps(veh, {modLivery = 60})
                         end
                     });
-                    for i = 1, GetVehicleLiveryCount(veh) do
-                        RageUI.Button("Livery #"..i, nil, {}, true, {
+                    for i = 0, 20 do
+                        RageUI.Button("Livery #"..i + 1, "Some livery can not exist on vehicle", {}, true, {
                             onSelected = function()
                                 SetVehProps(veh, {modLivery = i})
                                 local props = GetVehProps(veh)

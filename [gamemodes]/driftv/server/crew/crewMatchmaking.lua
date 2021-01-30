@@ -256,7 +256,6 @@ function FindRandomMatch()
     for k,v in pairs(matchmaking) do
         possibleMathCount = possibleMathCount + 1
     end
-    print(possibleMathCount)
 
 
     if possibleMathCount > 1 then
