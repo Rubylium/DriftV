@@ -4,7 +4,7 @@ Succes = {
         label = "Session: You have exceeded 100k drift points! Bravo !",
         xpReward = 130*500,
         funcToCheck = function()
-            return CheckDriftPoints(100000)
+            return CheckDriftPoints(30000)
         end,
     },
     {
@@ -12,7 +12,7 @@ Succes = {
         label = "Session: You have exceeded 200k drift points! Bravo !",
         xpReward = 140*500,
         funcToCheck = function()
-            return CheckDriftPoints(200000)
+            return CheckDriftPoints(45000)
         end,
     },
     {
@@ -20,7 +20,7 @@ Succes = {
         label = "Session: You have exceeded 500k drift points! Bravo !",
         xpReward = 150*500,
         funcToCheck = function()
-            return CheckDriftPoints(500000)
+            return CheckDriftPoints(65000)
         end,
     },
     {
@@ -28,7 +28,7 @@ Succes = {
         label = "Session: You have exceeded 1m drift points! Bravo !",
         xpReward = 160*500,
         funcToCheck = function()
-            return CheckDriftPoints(1000000)
+            return CheckDriftPoints(75000)
         end,
     },
     {
@@ -36,7 +36,7 @@ Succes = {
         label = "Session: You have exceeded 2m drift points! Bravo !",
         xpReward = 170*500,
         funcToCheck = function()
-            return CheckDriftPoints(2000000)
+            return CheckDriftPoints(100000)
         end,
     },
     {
@@ -44,7 +44,7 @@ Succes = {
         label = "Session: You have exceeded 6m drift points! Bravo !",
         xpReward = 180*500,
         funcToCheck = function()
-            return CheckDriftPoints(3000000)
+            return CheckDriftPoints(150000)
         end,
     },
 }

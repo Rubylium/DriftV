@@ -1,6 +1,10 @@
 function RecruiteNearestPlayer()
     local player, dst = GetClosestPlayer()
-    TriggerServerEvent("driftV:InvitePlayer", p:getCrew(), GetPlayerServerId(player)) 
+    if PlayersCrew[GetPlayerServerId(player)] == "None" then
+        TriggerServerEvent("driftV:InvitePlayer", p:getCrew(), GetPlayerServerId(player)) 
+    else
+        ShowNotification("Already in a crew")
+    end
 end
 
 RegisterNetEvent("driftV:GetInvitedToCrew")

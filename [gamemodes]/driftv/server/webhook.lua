@@ -7,6 +7,8 @@ local driftPictures = {
     ["Iro Drift Race"] = "https://cdn.discordapp.com/attachments/582120765923524619/801910684346482789/Screenshot_d1nz_jesse_sost_irohazaka_11-8-120-12-34-14-1024x576.png",
     ["Hakone Ohiradai"] = "https://cdn.discordapp.com/attachments/582120765923524619/801910885501239336/maxresdefault.png",
     ["Hakone Nanamagari"] = "https://cdn.discordapp.com/attachments/582120765923524619/801911015226605618/Hakone-Nanamagari3.png",
+    ["Route 4 Katsuoji Minoo"] = "https://cdn.discordapp.com/attachments/582120765923524619/805078455099326506/unknown.png",
+    ["Tsukurimono Touge"] = "https://cdn.discordapp.com/attachments/582120765923524619/805078623769722880/unknown.png",
 }
 
 

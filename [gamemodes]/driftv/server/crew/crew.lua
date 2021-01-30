@@ -64,12 +64,14 @@ function JoinCrew(source, crewName, isCrewOwner)
     LeaveCrew(source)
 
     if DoesCrewExist(crewName) then
-        crew[crewName].members[pLicense] = {points = 0, name = GetPlayerName(source)}
-        if isCrewOwner then
-            player[source].crewOwner = true
+        if crew[crewName].memberCount < 10 then
+            crew[crewName].members[pLicense] = {points = 0, name = GetPlayerName(source)}
+            if isCrewOwner then
+                player[source].crewOwner = true
+            end
+            pCrew[source] = crewName
+            RefreshCrewMemberCount(crewName)
         end
-        pCrew[source] = crewName
-        RefreshCrewMemberCount(crewName)
     end
 end
 

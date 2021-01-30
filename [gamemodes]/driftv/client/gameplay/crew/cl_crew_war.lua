@@ -305,6 +305,12 @@ function JoinCrewWarLobby()
     end
 
     RequestIpl(lobbyIpl)
+    SetInteriorEntitySetColor(246273, "walls_01", 2)
+    EnableInteriorProp(246273, "walls_01")
+    EnableInteriorProp(246273, "furnishings_01")
+    EnableInteriorProp(246273, "decorative_01")
+    EnableInteriorProp(246273, "mural_01")
+    RefreshInterior(246273)
     TriggerEvent("InteractSound_CL:PlayOnOne", startingMusic[math.random(1,#startingMusic)], 0.07)
     p:Teleport(lobby)
     TogglePasive(true)
