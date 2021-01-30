@@ -30,7 +30,7 @@ function SendTextToWebhook(webhook, color, title, text)
             ["title"] = title,
             ["description"] = text,
             ["footer"] = {
-                ["text"] = "DriftV",
+                ["text"] = "DriftV - Competitive FiveM drift server",
             },
         }
     }

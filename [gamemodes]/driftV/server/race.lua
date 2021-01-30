@@ -1,3 +1,4 @@
+local race_saison = "1"
 local races = {}
 
 function SubmitRaceScore(source, race, points, vehicle, time)
@@ -75,14 +76,14 @@ function SubmitRaceScore(source, race, points, vehicle, time)
 
     TriggerClientEvent("drift:RefreshRacesScores", -1, races)
     local db = rockdb:new()
-    db:SaveTable("races_"..saison, races)
+    db:SaveTable("races_"..race_saison, races)
     debugPrint("Race saved")
 end
 
 Citizen.CreateThread(function()
     local db = rockdb:new()
 
-    races = db:GetTable("races_"..saison)
+    races = db:GetTable("races_"..race_saison)
     if races == nil then
         print("Created races data from scratch")
         races = {}
