@@ -12,6 +12,7 @@ cam = {
             RenderScriptCams(0, 0, 0, 0, 1)
             SetCamActive(cam.cams[name], false)
             DestroyCam(cam.cams[name], false)
+            ClearFocus()
             cam.cams[name] = nil
         else
             print("^2WARNING: ^7La cam "..name.." n'éxiste pas !")
@@ -28,6 +29,7 @@ cam = {
 
     setPos = function(name, pos)
         if cam.cams[name] ~= nil then
+            SetFocusPosAndVel(pos.xyz, 0.0, 0.0, 0.0)
             SetCamCoord(cam.cams[name], pos.xyz)
         else
             print("^2WARNING: ^7La cam "..name.." n'éxiste pas !")

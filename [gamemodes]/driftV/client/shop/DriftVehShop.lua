@@ -63,6 +63,7 @@ local previewVeh = {
 }
 local previewCoords = vector4(-44.621406555176, -1096.7896728516, 26.422359466553, 118.64887237549)
 local vehShopCoords = vector3(-43.162559509277, -1100.0212402344, 26.422359466553)
+local camPos = vector3(-45.922637939453, -1102.5314941406, 27.422361373901)
 local main = RageUI.CreateMenu("DriftV", "~b~Drift vehicles shop")
 local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift vehicles shop")
 main.Closed = function()
@@ -70,6 +71,8 @@ main.Closed = function()
     RageUI.CloseAll()
     RageUI.Visible(main, false)
     DeleteEntity(previewVeh.entity)
+    cam.render("SHOP", false, false, 0)
+    cam.delete("SHOP")
 end
 main.WidthOffset = 100.0
 sub.WidthOffset = 100.0
@@ -81,6 +84,12 @@ function OpenVehShopMenu()
     else
         open = true
         RageUI.Visible(main, true)
+        cam.create("SHOP")
+        cam.setPos("SHOP", camPos)
+        cam.setFov("SHOP", 40.0)
+        cam.lookAtCoords("SHOP", previewCoords.xyz)
+        cam.setActive("SHOP", true)
+        cam.render("SHOP", true, false, 0)
 
         Citizen.CreateThread(function()
             while open do

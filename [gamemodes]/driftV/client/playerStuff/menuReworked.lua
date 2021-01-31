@@ -226,6 +226,13 @@ function OpenMainMenu()
                 end)
 
                 RageUI.IsVisible(vehicle, function()
+                    RageUI.Button("Vehicle shop", nil, {}, true, {
+                        onSelected = function()
+                            open = false
+                            RageUI.CloseAll()
+                            OpenVehShopMenu()
+                        end,
+                    });
                     for _,v in pairs(p:GetCars()) do
                         RageUI.Button(v.label, nil, {}, true, {
                             onSelected = function()
