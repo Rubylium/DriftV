@@ -7,6 +7,15 @@ function GetLicense(id)
     end
 end
 
+function GetDiscord(id)
+    local identifiers = GetPlayerIdentifiers(id)
+    for _, v in pairs(identifiers) do
+        if string.find(v, "discord") then
+            return v
+        end
+    end
+end
+
 function debugPrint(text)
     print("^3DriftV: ^7"..text)
 end
