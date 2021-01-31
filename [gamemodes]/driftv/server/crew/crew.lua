@@ -209,7 +209,7 @@ end)
 
 Citizen.CreateThread(function()
     local db = rockdb:new()
-    crew = db:GetString("CREW_DEV_4")
+    crew = db:GetString("CREW")
     if crew == nil then
         crew = {}
     else
@@ -219,7 +219,7 @@ Citizen.CreateThread(function()
     RefresKingDriftCrew()
     debugPrint("Loaded all crews ")
     while true do
-        db:SaveString("CREW_DEV_4", json.encode(crew))
+        db:SaveString("CREW", json.encode(crew))
 
         debugPrint("Crews saved")
 

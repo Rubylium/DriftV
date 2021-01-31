@@ -190,7 +190,7 @@ local race = {
     {
         label = "Tsukurimono Touge",
         price = 25000,
-        pointPerSec = 350,
+        pointPerSec = 1000,
         speedLimit = 30,
         start =  vector4(-1098.2868652344, 2427.6655273438, 727.99432373047, 46.58423614502),
         points = {

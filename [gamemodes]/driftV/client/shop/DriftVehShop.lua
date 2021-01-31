@@ -99,7 +99,7 @@ function OpenVehShopMenu()
                         RageUI.Button(v.maker.." "..v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
-                                    RageUI.CloseAll()
+                                    RageUI.Visible(main, false)
                                     DeleteEntity(previewVeh.entity)
                                     open = false
                                     TriggerServerEvent("drift:BuyVehicle", v.price, v.maker.." "..v.label, v.model)
