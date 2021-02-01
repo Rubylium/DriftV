@@ -254,6 +254,14 @@ end
 function FindRandomMatch()
     local possibleMathCount = 0
     for k,v in pairs(matchmaking) do
+        for j,i in pairs(v.members) do
+            if GetPlayerPing(i.id) == 0 then
+                AddCrewMemberToMatchmaking(k, i.id)
+            end
+        end
+    end
+
+    for k,v in pairs(matchmaking) do
         possibleMathCount = possibleMathCount + 1
     end
 
