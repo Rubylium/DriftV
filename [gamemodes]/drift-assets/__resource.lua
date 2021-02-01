@@ -10,6 +10,7 @@ data_file 'DLC_ITYP_REQUEST' 'stream/hakonen/hakonen.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/iroh/iroh.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/hunterpark/hunterpark.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'stream/Tsukurimono/tsk.ytyp'
+data_file 'DLC_ITYP_REQUEST' 'stream/maxdrift/Maxdrift.ytyp'
 
 data_file 'DLC_ITYP_REQUEST' 'stream/ohiradai/ohiradai.ytyp'
 file 'meta/ohiradai/gtxd.meta'

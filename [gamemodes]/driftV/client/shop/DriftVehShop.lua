@@ -108,9 +108,12 @@ function OpenVehShopMenu()
                         RageUI.Button(v.maker.." "..v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
                             onSelected = function()
                                 if v.price <= p:GetMoney() then
-                                    RageUI.CloseAll()
-                                    DeleteEntity(previewVeh.entity)
                                     open = false
+                                    RageUI.CloseAll()
+                                    RageUI.Visible(main, false)
+                                    DeleteEntity(previewVeh.entity)
+                                    cam.render("SHOP", false, false, 0)
+                                    cam.delete("SHOP")
                                     TriggerServerEvent("drift:BuyVehicle", v.price, v.maker.." "..v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
                                 else

@@ -24,7 +24,9 @@ Citizen.CreateThread(function()
         if _SMOKE_ON then
             if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
                 if speed * 3.6 >= 40 and ang >= 10 then
-                    DriftSmoke(base,"scr_wheel_burnout", car, _DENS, _SIZE)
+                    local densBySpeed = (_SIZE * p:speed()) / 100
+                    local densByAngle = densBySpeed + (ang / 1000)
+                    DriftSmoke(base,"scr_wheel_burnout", car, _DENS, densByAngle)
                 end
             end
         end

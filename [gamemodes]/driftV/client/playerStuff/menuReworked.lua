@@ -57,9 +57,10 @@ local mapsArea = {
     {animated = false, tag = "", map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
     {animated = false, tag = "", map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
     {animated = false, tag = "", map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
-    {animated = true, tag = "~y~NEW!", map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
-    {animated = true, tag = "~y~NEW!", map = "Katsuoji", label = "Addon: Route 4 Katsuoji Minoo", pos = vector3(6383.56, 3657.9, 255.96)},
-    {animated = true, tag = "~y~NEW!", map = "Tsukurimono", label = "Addon: Tsukurimono Touge", pos = vector3(-1077.5308837891, 2408.6586914062, 728.42279052734)},
+    {animated = false, tag = "", map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
+    {animated = false, tag = "", map = "Katsuoji", label = "Addon: Route 4 Katsuoji Minoo", pos = vector3(6383.56, 3657.9, 255.96)},
+    {animated = false, tag = "", map = "Tsukurimono", label = "Addon: Tsukurimono Touge", pos = vector3(-1077.5308837891, 2408.6586914062, 728.42279052734)},
+    {animated = true, tag = "~y~NEW!", map = "maxdrift", label = "Addon: MaxDrift", pos = vector3(-3049.3159179688, 2596.5817871094, 634.01617431641)},
 }
 
 local hours = {
