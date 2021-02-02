@@ -3,7 +3,8 @@ local inRace = false
 local race = {
     {
         label = "Harugahara",
-        price = 16000,
+        price = 22500,
+        baseScore = 400000,
         pointPerSec = 550,
         speedLimit = 25,
         start =  vector4(2790.1643066406, 4603.8330078125, 549.78204345703, 11.473360061646),
@@ -43,7 +44,8 @@ local race = {
     {
         label = "Ebisu Drift race",
         start =  vector4(963.13128662109, 1062.2911376953, 459.47320556641, 279.91229248047),
-        price = 10000,
+        price = 4250,
+        baseScore = 200000,
         pointPerSec = 750,
         speedLimit = 40,
         points = {
@@ -59,7 +61,8 @@ local race = {
     },
     {
         label = "Haruna Drift Race",
-        price = 15000,
+        price = 26750,
+        baseScore = 450000,
         pointPerSec = 3000,
         speedLimit = 55,
         start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
@@ -101,7 +104,8 @@ local race = {
     },
     {
         label = "Iro Drift Race",
-        price = 25000,
+        price = 23200,
+        baseScore = 150000,
         pointPerSec = 250,
         speedLimit = 25,
         start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
@@ -140,7 +144,8 @@ local race = {
     },
     {
         label = "Hakone Ohiradai",
-        price = 15000,
+        price = 7100,
+        baseScore = 150000,
         pointPerSec = 1500,
         speedLimit = 49,
         start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
@@ -155,7 +160,8 @@ local race = {
     },
     {
         label = "Hakone Nanamagari",
-        price = 10000,
+        price = 7450,
+        baseScore = 200000,
         pointPerSec = 750,
         speedLimit = 30,
         start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
@@ -175,7 +181,8 @@ local race = {
     },
     {
         label = "Route 4 Katsuoji Minoo",
-        price = 3500,
+        price = 2950,
+        baseScore = 55000,
         pointPerSec = 150,
         speedLimit = 30,
         start =  vector4(6382.7104492188, 3655.3237304688, 255.19998168945, 150.31907653809),
@@ -189,7 +196,8 @@ local race = {
     },
     {
         label = "Tsukurimono Touge",
-        price = 25000,
+        price = 16600,
+        baseScore = 190000,
         pointPerSec = 1000,
         speedLimit = 30,
         start =  vector4(-1098.2868652344, 2427.6655273438, 727.99432373047, 46.58423614502),
@@ -433,6 +441,7 @@ function StartRace(data, raceKey)
         end
 
         endPoints = math.floor(endPoints  + (driftScore / raceSecond))
+        local percentage = (endPoints / data.baseScore * 100)
 
 
 
@@ -499,7 +508,12 @@ function StartRace(data, raceKey)
             label = "Race: "..data.label,
         })
 
-        p:GiveMoney(data.price)
+
+        if endPoints >= data.baseScore then
+            p:GiveMoney(data.price)
+        else
+            p:GiveMoney(endPoints / data.baseScore * data.price)
+        end
         SendNUIMessage( {
             HideSucces = true,
         })

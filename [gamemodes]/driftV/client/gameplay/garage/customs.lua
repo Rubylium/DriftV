@@ -58,7 +58,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -68,7 +68,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -78,7 +78,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -98,7 +98,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -108,7 +108,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -118,7 +118,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -128,7 +128,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -138,7 +138,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -148,7 +148,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
             {
@@ -158,7 +158,7 @@ local customs = {
                 bonePos = vector3(0.0, 0.0, 0.0),
                 max = 1,
                 installed = 0,
-                price = 24000,
+                price = 7500,
                 pricePad = 550,
             },
         },
