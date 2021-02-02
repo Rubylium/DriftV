@@ -14,11 +14,12 @@ Citizen.CreateThread(function()
             TriggerClientEvent("FeedM:showNotification", -1, v, 15000, "info")
 
             print("🌍 ^3Drift^1V  ^9| ^6 Economy  ^9| ^6 Garage  ^9| ^6 Crews  ^9| ^6 Crew Wars  ^9| ^6 Drift Trials  ^9| ^6 Custom framework  ^9| ^6 Pre-Season  ^9| ^6"..tostring(pCount).." Unique Players")
-            SetConvarReplicated("sv_hostname", "🌍 ^3Drift^1V  ^9| ^6 Economy  ^9| ^6 Garage  ^9| ^6 Crews  ^9| ^6 Crew Wars  ^9| ^6 Drift Trials  ^9| ^6 Custom framework  ^9| ^6 Pre-Season  ^9| ^6"..tostring(pCount).." Unique Players")
+            SetConvarReplicated("sv_hostname", "🌍 ^3Drift^1V  ^9| ^6 Economy  ^9| ^6 Garage  ^9| ^6 Crews  ^9| ^6 Crew Wars  ^9| ^6 Drift Trials  ^9| ^6 Custom framework  ^9| ^6 Pre-Season  ^9| ^6"..tostring(pCount).." Unique Players ^7|^6 discord.gg/Z486cyeM78")
             
             SetConvarServerInfo("Players", tostring(GetNumPlayerIndices()))
             SetConvarServerInfo("Type", "Drift")
             SetConvarServerInfo("Framework", "Custom")
+            SetConvarServerInfo("Discord", "discord.gg/Z486cyeM78")
 
             Wait(1*60000)
         end

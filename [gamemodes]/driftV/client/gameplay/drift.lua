@@ -242,6 +242,7 @@ Citizen.CreateThread(function()
                 local newScore = score
 
                 if p:speed() > baseSpeedLimit then
+                    TriggerEvent("driftv:SetAngle", angle(p:currentVeh()))
 
                     if angle(p:currentVeh()) < 10 then
                         holding = 0

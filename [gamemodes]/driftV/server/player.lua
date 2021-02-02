@@ -9,6 +9,7 @@ function InitPlayer(source)
     local license = GetLicense(source)
 
     local db = rockdb:new()
+    db:SaveInt("pCount", pCount)
     local data = db:GetTable("player_"..tostring(license)..saison)
     if data == nil then
         data = {
@@ -75,6 +76,13 @@ function SavePlayer(source)
 end
 
 Citizen.CreateThread(function()
+    local db = rockdb:new()
+    local data = db:GetInt("pCount")
+    if data ~= nil then
+        pCount = data
+    else
+        pCount = 1
+    end
     while true do
         for k,v in pairs(player) do
 
