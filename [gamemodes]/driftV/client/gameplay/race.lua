@@ -432,6 +432,10 @@ function StartRace(data, raceKey)
             endPoints = 0
         end
 
+        endPoints = math.floor(endPoints  + (driftScore / raceSecond))
+
+
+
 
         local pVeh = p:currentVeh()
         local model = GetEntityModel(pVeh)
