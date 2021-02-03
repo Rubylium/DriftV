@@ -434,14 +434,14 @@ function StartRace(data, raceKey)
         local raceSecond = math.floor(raceTime / 1000)
 
         local driftScore = endPoints
-        endPoints = (endPoints - raceSecond * data.pointPerSec)
+        -- endPoints = (endPoints - raceSecond * data.pointPerSec)
 
-        if endPoints < 0 then
-            endPoints = 0
-        end
+        -- if endPoints < 0 then
+        --     endPoints = 0
+        -- end
 
-        endPoints = math.floor(endPoints  + (driftScore / raceSecond))
-        local percentage = (endPoints / data.baseScore * 100)
+        -- endPoints = math.floor(endPoints  + (driftScore / raceSecond))
+        endPoints = math.floor(driftScore/raceSecond)
 
 
 
