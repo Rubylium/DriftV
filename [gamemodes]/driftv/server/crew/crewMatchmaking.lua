@@ -140,7 +140,7 @@ function StartWarsBetweenCrew(crew1, crew2)
     end
 
 
-    while wars[warId].waitingFirstPlayerFinish do
+    while wars[warId].waitingFirstPlayerFinish or wars[warId].needDone ~= wars[warId].done do
         RefreshWarsData()
         Wait(1000)
     end
