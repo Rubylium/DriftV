@@ -681,6 +681,8 @@ function StartCrewWarRace(data)
         endPoints = 0
     end
 
+    endPoints = math.floor(endPoints  + (driftScore / raceSecond))
+
     TriggerServerEvent("crew:CrewCarsAddScore", warID, p:getCrew(), endPoints, driftScore, raceSecond)
     DeleteEntity(p:currentVeh())
     displayTempScoreboard = true
