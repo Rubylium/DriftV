@@ -6,7 +6,9 @@ files {
     "fonts/gravity.otf",
     "fonts/icomoon.ttf",
     "img/*.png",
-    "js/*.js"
+    "img/*.svg",
+    "js/*.js",
+    "sounds/*.ogg"
 }
 
 loadscreen "index.html"
