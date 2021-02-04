@@ -1,13 +1,12 @@
 body, html {
     height: 100%;
+    margin: 0;
   }
   
   .bg {
     /* The image used */
     background-image: url("../img/Loading_screen.png");
   
-    top: 0%;
-    left: 0%;
     /* Full height */
     height: 100%;
    
