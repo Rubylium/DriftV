@@ -2,96 +2,14 @@
     
     <head>    
         <meta charset="utf-8"/>
-        <link type ="text/css" rel ="stylesheet" href ="css/icomoon.css"/>        
-        <link type ="text/css" rel ="stylesheet" href ="css/index.css"/>
-        <link type ="text/css" rel ="stylesheet" href ="css/colors.css"/>
+        <link type ="text/css" rel ="stylesheet" href ="css/main.css"/>        
     </head>
 
     <body>
-        <img id="background"/>
-        <img id="background2"/>
-
-        <img id="cursor"/>
-
-        <div id="music-info">
-            <p id="now-playing">Now playing: n.a.</p>
-            <div id="play-button" class="icon-button icon-pause2" onclick="OnPlayClick()"></div>
-            <div id="skip-button" class="icon-button icon-next2" onclick="OnSkipClick()"></div>
-            <input type="range" min="1" max="100" id="volumeSlider">
-        </div>
-        
-        <img id="logo" style="opacity: 0;" />
-        
-
-        <h1 style="position: absolute;left: 6%;top: 7.5%;color: white;font-size: 1.75vw;font-family: 'Lucida Console';">Join our Discord community: discord.gg/Z486cyeM78</h1>
+        <!-- <img src="../img/Loading_screen.png" width="1920" height="1080" class="background"> -->
+        <div class="bg"></div>
 
 
-        <div class="info1" style="width: 13.5%;height: 19%;position: absolute;left: 6%;top: 64.5%;">
-            <img src="http://simpleicon.com/wp-content/uploads/redo-3.png" style="position: absolute; left: 30%;top: 10%;width: 40%; height: 50%;filter:invert(100%);">
-            <h1 style="color: white;font-size: 1vw;font-family: 'Lucida Console'; text-align: center;margin-top: 55%;">No whitelist!</h1>
-        </div>
-        
-        <div class="info1" style="width: 13.5%;height: 19%;position: absolute;left: 20%;top: 64.5%;">         
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/The_Last_of_Us_Fireflies_Logo.svg/1000px-The_Last_of_Us_Fireflies_Logo.svg.png" style="position: absolute; left: 30%;top: 10%;width: 40%; height: 50%;filter:invert(100%);">
-            <h1 style="color: white;font-size: 1vw;font-family: 'Lucida Console'; text-align: center;margin-top: 55%;">Drift V</h1></div>
-        
-        <div class="info1" style="width: 13.5%;height: 19%;position: absolute;left: 34%;top: 64.5%;">         
-            <img src="http://simpleicon.com/wp-content/uploads/users.png" style="position: absolute; left: 30%;top: 0%;width: 40%; height: 72.5%;filter:invert(100%);">
-            <h1 style="color: white;font-size: 1vw;font-family: 'Lucida Console'; text-align: center;margin-top: 55%;">500 Slots</h1></div>
-        
-        <div class="info1" style="width: 13.5%;height: 19%;position: absolute;left: 48%;top: 64.5%;">         
-            <img src="http://simpleicon.com/wp-content/uploads/loudspeaker.png" style="position: absolute; left: 30%;top: 10%;width: 40%; height: 55%;filter:invert(100%);">
-            <h1 style="color: white;font-size: 1vw;font-family: 'Lucida Console'; text-align: center;margin-top: 55%;">Weekly updates</h1></div>
-
-        <a href="javascript:void(0)" onmouseover="showInfo()" onmouseout="closeInfo()"><h1 style="position: absolute;left: 66.1%;top: 77%;color: white;font-size: 1.8vw;font-family: 'Lucida Console';"> 
-            ━━━━━━ Info ━━━━━━ 
-            <br> Server is still a WIP, expect some bugs.
-        </h1></a>
-
-        <a href="javascript:void(0)" onmouseover="showNotify()" onmouseout="closeNotify()" style="transition: 0.5s;"><h1 style="position: absolute;left: 66.1%;top: 11.75%;color: white;font-size: 1.8vw;font-family: 'Lucida Console';"> 
-            ━━━━━ Updates ━━━━━ 
-            <br> Competitive drift update!
-            <br> 
-            <li>Crew system</li> 
-            <li>Crew wars</li> 
-            <li>Crew ranking</li> 
-            <li>Updated drift counter</li> 
-            
-            <li>New tracks</li> 
-            <li>New cars</li> 
-
-        </h1></a>
-        
-
-        <div id="player"></div>
-
-
-        <script type="text/javascript">
-            function showNotify() {
-              document.getElementById("not").style.opacity = 1;
-            }
-
-            function closeNotify() {
-              document.getElementById("not").style.opacity = 0;
-            }
-            function showInfo() {
-              document.getElementById("info").style.opacity = 1;
-            }
-
-            function closeInfo() {
-              document.getElementById("info").style.opacity = 0;
-            }
-        </script>
     </div>
     </body>
-
-    <script src="js/synn.js"></script>    
-    <script src="js/config.js"></script>
-    <script src="js/logger.js"></script>    
-    <script src="js/progressbar-main.js"></script>
-    <script src="js/progressbar-handler.js"></script>
-    <script src="js/progressbar-renderer.js"></script>
-    <script src="js/music-handler.js"></script>
-    <script src="js/music-controls.js"></script>
-    <script src="js/background-handler.js"></script>
 </html>

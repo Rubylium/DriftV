@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div style="position: relative; height:60px; opacity: 70%; background-color: #2c3e50"></div>
 
     <div class="dailyEventButton">
@@ -20,8 +19,9 @@ export default {
 
   data() {
     return {
-      level: 43,
-      name: "Rubylium",
+        background: { backgroundImage: "url(assets/background_2.jpg)" },
+        level: 43,
+        name: "Rubylium",
     };
   }
 
@@ -29,7 +29,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+
+body {
+    background-image: url("assets/background_2.jpg");
+    background-color: gray;
+    width: 1920px;
+}
 
 .dailyEventButton {
   position: relative;
