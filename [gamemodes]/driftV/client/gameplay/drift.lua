@@ -6,6 +6,7 @@ local inRace = false
 local bonusCops = 0
 local holding = 0
 local baseSpeedLimit = 39
+local vehicleHealth = 1000
 local blacklistVeh = {
     [GetHashKey("dinghy")] = true,
     [GetHashKey("seashadinghy2rk2")] = true,
@@ -176,21 +177,6 @@ function math.precentage(a,b)
     return (a*100)/b
 end
 
--- function angle(veh)
---     if not veh then return false end
---     local vx,vy,vz = table.unpack(GetEntityVelocity(veh))
---     local modV = math.sqrt(vx*vx + vy*vy)
-    
-    
---     local rx,ry,rz = table.unpack(GetEntityRotation(veh,0))
---     local sn,cs = -math.sin(math.rad(rz)), math.cos(math.rad(rz))
-    
---     if GetEntitySpeed(veh)* 3.6 < 30 or GetVehicleCurrentGear(veh) == 0 then return 0,modV end --speed over 30 km/h
-    
---     local cosX = (sn*vx + cs*vy)/modV
---     if cosX > 0.966 or cosX < 0 then return 0,modV end
---     return math.deg(math.acos(cosX))*0.5, modV
--- end
 
 function angle(veh)
 	if not veh then return false end
@@ -213,6 +199,7 @@ end
 
 function ResetMulti(set)
     if set ~= nil then
+        print("Reseted")
         mult = 0.1
         return
     end
@@ -237,25 +224,35 @@ Citizen.CreateThread(function()
             Wait(50)
 
             score = 0
+            holding = 0
+            mult = 1.0
             while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
 
                 local newScore = score
 
-                if p:speed() > baseSpeedLimit then
+                --if p:speed() > baseSpeedLimit then
                     TriggerEvent("driftv:SetAngle", angle(p:currentVeh()))
 
                     if angle(p:currentVeh()) < 10 then
-                        holding = 0
-                        mult = 1.0
-                    else
-                        holding = holding + 1
-                        mult = 1.0
-                        for i = 1, holding do
-                            mult = mult + 0.003
+                        if holding <= 0 then
+                            holding = 0
                         end
+                        mult = mult - 0.003
+                        if mult <= 1.0 then
+                            mult = 1.0
+                            holding = 0
+                        end
+                    else
+                        mult = mult + 0.0007
                         if mult > 10.0 then
                             mult = 10.0
                         end
+                    end
+
+                    if GetEntityHealth(p:currentVeh()) ~= vehicleHealth then
+                        vehicleHealth = GetEntityHealth(p:currentVeh())
+                        holding = 0
+                        mult = 1.0
                     end
 
                     if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
@@ -302,18 +299,19 @@ Citizen.CreateThread(function()
                         end
                     end
 
-                else
-                    holding = 0
-                    mult = 1.0
-                end
+                -- else
+                --     holding = 0
+                --     mult = mult - 0.008
+                --     if mult <= 1.0 then
+                --         mult = 1.0
+                --     end
+                -- end
 
     
                 
 
                 if p:speed() <= 4 and score ~= 0 and not inRace then
                     p:SubmitDriftScore(score * mult, mult)
-                    p:GiveMoney(bonusCops)
-                    bonusCops = 0
                     score = 0
                     waiting = 0
                     SendNUIMessage({HideHud = true})
@@ -325,8 +323,6 @@ Citizen.CreateThread(function()
                         waiting = waiting + 1
                         if waiting >= 300 and score ~= 0 and not inRace then
                             p:SubmitDriftScore(score * mult, mult)
-                            p:GiveMoney(bonusCops)
-                            bonusCops = 0
                             score = 0
                             waiting = 0
                             SendNUIMessage({HideHud = true})
@@ -354,326 +350,3 @@ Citizen.CreateThread(function()
         end
     end
 end)
-
-local policeCarss = {
-    [GetHashKey("polamggtr")] = "polamggtr",
-    [GetHashKey("polgs350")] = "polgs350",
-    [GetHashKey("polmp4")] = "polmp4",
-}
-
-local policeCars = {
-    "polamggtr",
-    "polgs350",
-    "polmp4",
-}
-
-local policePed = {
-    "s_m_y_cop_01"
-}
-local possibleSirenes = {
-    "VEHICLES_HORNS_SIREN_1",
-    "VEHICLES_HORNS_SIREN_2",
-    "VEHICLES_HORNS_AMBULANCE_WARNING",
-    "VEHICLES_HORNS_POLICE_WARNING",
-}
-local spawnedPolice = {}
-
-function GetCopLimitByScore()
-    if score > 100000 and score < 200000 then
-        return 1
-    elseif score < 350000 then
-        return 2
-    elseif score < 600000 then
-        return 3
-    elseif score < 1200000 then
-        return 4
-    elseif score >= 5000000 then
-        return 5
-    end
-    return 1
-end
-
-function SpawnCop()
-    local get, pos, id = GetClosestVehicleNodeWithHeading(p:pos().x + math.random(-50, 50), p:pos().y + math.random(-50, 50), p:pos().z, 0, 3, 0)
-                
-    local ped = policePed[math.random(1, #policePed)]
-    local veh = policeCars[math.random(1, 3)]
-
-    LoadModel(ped)
-    if #(pos - p:pos()) > 20.0 and not inAerorport then
-        local vehicle = entity:CreateVehicle(veh, pos, p:heading())
-        local peds = CreatePedInsideVehicle(vehicle:getEntityId(), 1, GetHashKey(ped), -1, 1, 0)
-        SetVehicleSiren(vehicle:getEntityId(), true)
-        SetVehicleHasMutedSirens(vehicle:getEntityId(), false)
-        SetVehicleDoorsLocked(vehicle:getEntityId(), 4)
-        SetPedCombatAttributes(peds, 3, false)
-        PlaySoundFromEntity(GetSoundId(), possibleSirenes[math.random(1,#possibleSirenes)], vehicle:getEntityId(), 0, 0, 0)
-
-        TaskVehicleChase(peds, p:ped())
-        SetTaskVehicleChaseBehaviorFlag(peds, 1, true)
-        SetTaskVehicleChaseIdealPursuitDistance(peds, 1.0)
-
-
-        -- * Flag 8: Medium-aggressive boxing tactic with a bit of PIT
-        -- * Flag 1: Aggressive ramming of suspect
-        -- * Flag 2: Ram attempts
-        -- * Flag 32: Stay back from suspect, no tactical contact. Convoy-like.
-        -- * Flag 16: Ramming, seems to be slightly less aggressive than 1-2.
-
-        
-        SetDriverAggressiveness(peds, 1.0)
-        SetDriverAbility(peds, 1.0)
-        AddBlipForEntity(peds)
-        SetVehicleForwardSpeed(vehicle:getEntityId(), 50.0)
-        
-        table.insert(spawnedPolice, {veh = vehicle, ped = peds, netPed = NetworkGetNetworkIdFromEntity(peds), netVeh = vehicle:getNetId()})
-    end
-end
-
-
-Citizen.CreateThread(function()
-    local timeBar = NativeUI.TimerBarPool()
-    local time = NativeUI.CreateTimerBar("Cops:")
-    local bonuss = NativeUI.CreateTimerBar("Bonus:")
-    timeBar:Add(time)
-    timeBar:Add(bonuss)
-    while true do
-        if #spawnedPolice ~= 0 then
-            time:SetTextTimerBar(tostring(#spawnedPolice))
-            bonuss:SetTextTimerBar(tostring(bonusCops).."$")
-            timeBar:Draw()
-            Wait(1)
-        else
-            Wait(500)
-        end
-    end
-end)
-
-Citizen.CreateThread(function()
-    while not loaded do Wait(500) end
-    while true do
-        if p:GetMap() == "LS" and p:getTime() == "night" then
-            SetRandomVehicleDensityMultiplierThisFrame(0.0)
-            SetVehicleDensityMultiplierThisFrame(0.0)
-            Wait(1)
-        else
-            Wait(500)
-        end
-    end
-end)
-
-local cooldownSpeed = false
-Citizen.CreateThread(function()
-    while not loaded do Wait(500) end
-    while true do
-        if score > 100000 and p:GetMap() == "LS" and p:getTime() == "night" then
-            if #spawnedPolice < GetCopLimitByScore() then
-                SpawnCop()
-            end
-        end
-
-        if p:speed() >= 100 and p:GetMap() == "LS" and p:getTime() == "night" then
-            if #spawnedPolice < 5 and not cooldownSpeed then
-                SpawnCop()
-                Citizen.CreateThread(function()
-                    cooldownSpeed = true
-                    Wait(1000)
-                    cooldownSpeed = false
-                end)
-            end
-        end
-
-        local near = 0
-        for k,v in pairs(spawnedPolice) do
-            local dst = #(GetEntityCoords(v.ped) - p:pos())
-            if dst > 230 then
-                TriggerServerEvent("DeleteEntity", v.netPed)
-                TriggerServerEvent("DeleteEntity", v.netVeh)
-                if spawnedPolice[k] ~= nil then
-                    table.remove(spawnedPolice, k)
-
-                    Citizen.CreateThread(function()
-                        SendNUIMessage( {
-                            ShowSucces = true,
-                            label = "Police: Escape!",
-                        })
-                        if not inAerorport then
-                            p:SetSucces("Police: Escape!")
-                            p:addExp(10000)
-                            bonusCops = bonusCops + 2500
-                            Wait(3000)
-                            SendNUIMessage( {
-                                HideSucces = true,
-                            })
-                        end
-                    end)
-                else
-                    break
-                end
-            else
-                local mod = math.random(-1,0)
-                TaskVehicleChase(v.ped, p:currentVeh())
-                SetTaskVehicleChaseBehaviorFlag(v.ped, 1, true)
-                SetTaskVehicleChaseIdealPursuitDistance(v.ped, 1.0)
-            end
-
-            while dst <= 15.0 and p:speed() <= 20.0 and near < 100 do
-                dst = #(GetEntityCoords(v.ped) - p:pos())
-                near = near + 1
-
-                Visual.Subtitle("You are being arrested ! You need to move ! ("..near.."/100)", 20)
-
-                if near == 100 then
-                    ArrestPlayer(spawnedPolice)
-                    spawnedPolice = {}
-                    p:GiveMoney(bonusCops)
-                    bonusCops = 0
-                    break
-                end
-                Wait(15)
-            end
-
-        end
-
-        -- SetPlayerWantedLevelNoDrop(p:index(), #spawnedPolice, 1)
-        -- SetPlayerWantedLevelNow(p:index(), 1)
-        ClearAreaOfCops(p:pos().xyz, 400.0)
-        ClearPlayerWantedLevel(p:index())
-        Wait(2000)
-    end
-end)
-
-
-
-
-function ArrestPlayer(spawned)
-    local veh = VehToNet(p:currentVeh())
-    DisplayRadar(false)
-
-    SetPlayerControl(p:index(), false, 1)
-
-    local campos1 = GetOffsetFromEntityInWorldCoords(p:ped(), 5.0, 7.0, 3.0)
-    local campos2 = GetOffsetFromEntityInWorldCoords(p:ped(), 9.0, 8.0, 10.0)
-
-    cam.create("WASTED")
-    cam.setPos("WASTED", campos1)
-    cam.lookAtCoords("WASTED", p:pos())
-    cam.setFov("WASTED", 50.0)
-    cam.setActive("WASTED", true)
-    cam.render("WASTED", true, false, 1)
-
-    cam.create("WASTED_2")
-    cam.setPos("WASTED_2", campos2)
-    cam.lookAtCoords("WASTED_2", p:pos())
-    cam.setFov("WASTED_2", 40.0)
-    cam.setActive("WASTED_2", true)
-    cam.switchToCam("WASTED", "WASTED_2", 10000)
-
-    TaskLeaveAnyVehicle(p:ped(), 1, 1)
-    while IsPedInAnyVehicle(p:ped(), false) do Wait(1) end
-
-
-    for k,v in pairs(spawned) do
-        ClearPedTasksImmediately(v.ped)
-        TaskLeaveAnyVehicle(v.ped, 1, 1)
-        GiveWeaponToPed(v.ped, GetHashKey("weapon_combatpistol"), 255, 0, 1)
-        TaskAimGunAtEntity(v.ped, p:ped(), -1, 1)
-    end
-
-    p:PlayAnim("random@arrests", "idle_2_hands_up", 1)
-    Wait(GetAnimDuration("random@arrests", "idle_2_hands_up") * 1000)
-    p:PlayAnim("random@arrests@busted", "enter", 2)
-    Wait(GetAnimDuration("random@arrests@busted", "enter") * 1000)
-
-    Wait(2000)
-
-
-
-
-    DoScreenFadeOut(500)
-    while not IsScreenFadedOut() do Wait(1) end
-
-    p:PlayAnim("mp_arresting", "arrest_on_floor_front_left_b", 2)
-    LoadModel("s_m_y_cop_01")
-    local ped = CreatePed(1, GetHashKey("s_m_y_cop_01"), GetOffsetFromEntityInWorldCoords(p:ped(), 0.0, -0.8, -1.0), p:heading() + 30.0, 1, 0)
-    TaskSetBlockingOfNonTemporaryEvents(ped, true)
-
-
-    campos2 = GetOffsetFromEntityInWorldCoords(p:ped(), -1.5, -5.0, 3.0)
-    cam.setPos("WASTED", campos2)
-    cam.lookAtCoords("WASTED", p:pos())
-    cam.setActive("WASTED", true)
-    cam.render("WASTED", true, false, 0)
-
-
-    DoScreenFadeIn(500)
-
-
-
-
-    ClearPedTasksImmediately(ped)
-    p:PlayAnimOnPed(ped, "mp_arresting", "arrest_on_floor_front_left_a", 2)
-    Wait(GetAnimDuration("mp_arresting", "arrest_on_floor_front_left_a") * 1000)
-
-
-    TriggerServerEvent("drift:GotBusted", #spawned)
-
-    DoScreenFadeOut(500)
-    while not IsScreenFadedOut() do Wait(1) end
-
-    for k,v in pairs(spawned) do
-        ClearPedTasksImmediately(v.ped)
-        SetEntityAsNoLongerNeeded(v.ped)
-        SetEntityAsNoLongerNeeded(v.veh:getEntityId())
-        RemoveWeaponFromPed(v.ped, GetHashKey("weapon_combatpistol"))
-        TriggerServerEvent("DeleteEntity", v.netPed)
-        TriggerServerEvent("DeleteEntity", v.netVeh)
-        table.remove(spawned, k)
-    end
-    TriggerServerEvent("DeleteEntity", PedToNet(ped))
-
-    for k,v in pairs(GetGamePool("CPed")) do
-        if GetEntityModel(v) == GetHashKey("s_m_y_cop_01") then
-            SetEntityAsNoLongerNeeded(v)
-            DeleteEntity(v)
-        end
-    end
-
-    for k,v in pairs(GetGamePool("CVehicle")) do
-        if policeCarss[GetEntityModel(v)] ~= nil then
-            SetEntityAsNoLongerNeeded(v)
-            DeleteEntity(v)
-        end
-    end
-
-
-
-    TeleportPlayer(vector3(439.21105957031, -981.87091064453, 30.689611434937))
-    ClearPedTasksImmediately(p:ped())
-    TaskGoStraightToCoord(p:ped(), 431.31030273438, -982.06469726562, 30.710628509521, 1.0, -1, 100, 1.0)
-
-    
-    TriggerServerEvent("DeleteEntity", veh)
-    spawnedPolice = {}
-
-    DoScreenFadeIn(2500)
-    cam.setActive("WASTED", false)
-    cam.delete("WASTED")
-    cam.delete("WASTED_2")
-
-    ClearPlayerWantedLevel(p:index())
-    ResetDriftPoint()
-    DisplayRadar(true)
-    SetPlayerControl(p:index(), true, 1)
-
-    SendNUIMessage( {
-        ShowSucces = true,
-        label = "BUSTED",
-    })
-    p:SetSucces("Police: BUSTED!")
-    p:removeExp(300000)
-    Wait(5000)
-    SendNUIMessage( {
-        HideSucces = true,
-    })
-end

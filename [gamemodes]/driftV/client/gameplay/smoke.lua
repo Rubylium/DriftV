@@ -46,7 +46,7 @@ Citizen.CreateThread(function()
     Request(base2)
 
     while true do 
-        Citizen.Wait(0)
+        Citizen.Wait(1)
 
         local didCheck = false
         for k,v in pairs(vehiclesToCheck) do
