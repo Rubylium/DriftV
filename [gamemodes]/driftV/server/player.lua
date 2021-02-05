@@ -113,8 +113,7 @@ AddEventHandler('playerDropped', function (reason)
     end
 end)
 
-RegisterNetEvent("driftV:SubmitDriftPoint")
-AddEventHandler("driftV:SubmitDriftPoint", function(point)
+RegisterSecuredNetEvent(Events.setDriftPoint, function(point)
     local source = source
     player[source].driftPoint = player[source].driftPoint + point
     player[source].money = math.floor(player[source].money + point / 200)
@@ -126,15 +125,13 @@ AddEventHandler("driftV:SubmitDriftPoint", function(point)
 
 end)
 
-RegisterNetEvent("driftV:AddMoney")
-AddEventHandler("driftV:AddMoney", function(money)
+RegisterSecuredNetEvent(Events.addMoney, function(money)
     local source = source
     player[source].money = math.floor(player[source].money + money)
     TriggerClientEvent("FeedM:showNotification", source, "+ ~g~"..tostring(math.floor(money)).."~s~$", 2000, "success")
 end)
 
-RegisterNetEvent("driftV:SubmitExpPoints")
-AddEventHandler("driftV:SubmitExpPoints", function(point)
+RegisterSecuredNetEvent(Events.SetExp, function(point)
     local source = source
     player[source].exp = math.floor(point)
 
@@ -143,14 +140,12 @@ AddEventHandler("driftV:SubmitExpPoints", function(point)
 
 end)
 
-RegisterNetEvent("driftV:SetPlayerArchivement")
-AddEventHandler("driftV:SetPlayerArchivement", function(arch)
+RegisterSecuredNetEvent(Events.setArchivment, function(arch)
     player[source].succes = arch
     player[source].needSave = true
 end)
 
-RegisterNetEvent("drift:RequestSync")
-AddEventHandler("drift:RequestSync", function()
+RegisterSecuredNetEvent(Events.reqSync, function()
     local players = {}
     for k,v in player do
         table.insert(players, {name = GetPlayerName(k), exp = v.exp, servID = k, ping = GetPlayerPing(k), crew = v.crew})
@@ -160,19 +155,17 @@ AddEventHandler("drift:RequestSync", function()
 end)
 
 local inPassive = {}
-RegisterNetEvent("dirft:SetInPassive")
-AddEventHandler("dirft:SetInPassive", function(status)
+RegisterSecuredNetEvent(Events.setPassive, function(status)
     if status then
         inPassive[source] = source
     else
         inPassive[source] = nil
     end
-    TriggerClientEvent("dirft:SetInPassive", -1, inPassive)
+    TriggerClientEvent(Events.setPassive, -1, inPassive)
 end)
 
 
-RegisterNetEvent("drift:BuyVehicle")
-AddEventHandler("drift:BuyVehicle", function(price, label, model)
+RegisterSecuredNetEvent(Events.buyVeh, function(price, label, model)
 
     if price <= player[source].money and price > 49000 then
         player[source].money = player[source].money - price
@@ -184,20 +177,17 @@ AddEventHandler("drift:BuyVehicle", function(price, label, model)
     end
 end)
 
-RegisterNetEvent("drift:UpdateCars")
-AddEventHandler("drift:UpdateCars", function(cars)
+RegisterSecuredNetEvent(Events.refreshCars, function(cars)
     player[source].cars = cars
     player[source].needSave = true
 end)
 
 
-RegisterNetEvent("drift:GotBusted")
-AddEventHandler("drift:GotBusted", function(cops)
+RegisterSecuredNetEvent(Events.busted, function(cops)
     TriggerClientEvent("FeedM:showNotification", -1, "The player "..GetPlayerName(source).." got busted with "..cops.." cops !", 15000, "danger")
 end)
 
-RegisterNetEvent("drift:Pay")
-AddEventHandler("drift:Pay", function(price)
+RegisterSecuredNetEvent(Events.pay, function(price)
     player[source].money = player[source].money - price
     TriggerClientEvent("FeedM:showNotification", source, "- ~r~"..tostring(math.floor(price)).."~s~$", 2000, "success")
     player[source].needSave = true
