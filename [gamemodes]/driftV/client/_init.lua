@@ -1,3 +1,4 @@
+Events = nil
 loaded = false
 local first = true
 local waitingSpawn = true
@@ -20,6 +21,11 @@ Citizen.CreateThread(function()
 
     SetPlayerInvincible(GetPlayerIndex(), true) 
     RequestIpl('shr_int')
+end)
+
+RegisterNetEvent("syncEvents")
+AddEventHandler("syncEvents", function(ev)
+    Events = ev
 end)
 
 RegisterNetEvent("driftV:RefreshData")

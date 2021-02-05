@@ -114,7 +114,7 @@ function OpenVehShopMenu()
                                     DeleteEntity(previewVeh.entity)
                                     cam.render("SHOP", false, false, 0)
                                     cam.delete("SHOP")
-                                    TriggerServerEvent("drift:BuyVehicle", v.price, v.maker.." "..v.label, v.model)
+                                    TriggerServerEvent(Events.buyVeh, v.price, v.maker.." "..v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
                                 else
                                     ShowNotification("Not enough money")

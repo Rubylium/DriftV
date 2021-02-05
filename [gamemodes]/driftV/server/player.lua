@@ -53,6 +53,7 @@ function InitPlayer(source)
         debugPrint("Loaded player for database ("..data.money .. " " .. data.driftPoint ..")")
     end
 
+    TriggerClientEvent("syncEvents", source, Events)
     SetPlayerInstance(source, 1)
     RefreshPlayerData(source)
 end

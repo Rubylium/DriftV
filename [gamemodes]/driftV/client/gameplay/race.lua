@@ -449,7 +449,7 @@ function StartRace(data, raceKey)
         local pVeh = p:currentVeh()
         local model = GetEntityModel(pVeh)
 
-        TriggerServerEvent("drift:EndRace", data.label, endPoints, GetDisplayNameFromVehicleModel(model), raceSecond)
+        TriggerServerEvent(Events.raceEnd, data.label, endPoints, GetDisplayNameFromVehicleModel(model), raceSecond)
 
         SetPedCoordsKeepVehicle(p:ped(), data.start.xyz)
         SetEntityHeading(p:currentVeh(), data.start.w)

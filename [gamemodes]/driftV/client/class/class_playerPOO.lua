@@ -89,7 +89,7 @@ function player:addExp(exp)
     DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, false)
 
     self.level = GetPlayerLevelFromXp(self.exp)
-    TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
+    TriggerServerEvent(Events.SetExp, self.exp)
 end
 
 function player:removeExp(exp)
@@ -104,7 +104,7 @@ function player:removeExp(exp)
     DisplayRankBar(oldXp, self.exp, oldLevel, newLevel, true)
 
     self.level = GetPlayerLevelFromXp(self.exp)
-    TriggerServerEvent("driftV:SubmitExpPoints", self.exp)
+    TriggerServerEvent(Events.SetExp, self.exp)
 end
 
 function player:setInGarage(status)
@@ -152,7 +152,7 @@ function player:SetSucces(value)
         self.succes[value] = 0
     end
     self.succes[value] = self.succes[value] + 1
-    TriggerServerEvent("driftV:SetPlayerArchivement", self.succes)
+    TriggerServerEvent(Events.setArchivment, self.succes)
 end
 
 function player:InitSucces(value)
@@ -172,7 +172,7 @@ function player:SetCarProps(car, props)
             break
         end
     end
-    TriggerServerEvent("drift:UpdateCars", self.cars)
+    TriggerServerEvent(Events.refreshCars, self.cars)
 end
 
 function player:SetMoney(money)
@@ -188,7 +188,7 @@ function player:GetMoney()
 end
 
 function player:Pay(price)
-    TriggerServerEvent("drift:Pay", price)
+    TriggerServerEvent(Events.pay, price)
 end
 
 function player:HaveEnoughMoney(price)
@@ -229,12 +229,12 @@ end
 
 function player:SubmitDriftScore(score, multi)
     self.sessionDriftPoint = self.sessionDriftPoint + score
-    TriggerServerEvent("driftV:SubmitDriftPoint", score)
+    TriggerServerEvent(Events.setDriftPoint, score)
     p:addExp(math.floor(score / 10))
 end
 
 function player:GiveMoney(money)
-    TriggerServerEvent("driftV:AddMoney", money)
+    TriggerServerEvent(Events.addMoney, money)
 end
 
 function player:speed()

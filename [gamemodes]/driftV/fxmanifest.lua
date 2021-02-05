@@ -41,6 +41,9 @@ client_scripts {
 }
 
 server_scripts {
+    "server/_security/*.lua",
     "server/class/*.lua",
-    "server/**/*.lua"
+    "server/crew/*.lua",
+    "server/discord/*.lua",
+    "server/*.lua"
 }
