@@ -1,17 +1,19 @@
 local players = {}
-
-RegisterNetEvent("drift:SyncPlayer")
-AddEventHandler("drift:SyncPlayer", function(plays)
-    players = plays
-
-    for k,v in pairs(players) do
-        v.level = GetPlayerLevelFromXp(v.exp)
-    end
-
+Citizen.CreateThread(function()
+    while Events == nil do Wait(1) end
+    RegisterSecuredNetEvent(Events.getSync, function(plays)
+        players = plays
+    
+        for k,v in pairs(players) do
+            v.level = GetPlayerLevelFromXp(v.exp)
+        end
+    
+    end)
 end)
 
 Citizen.CreateThread(function()
-    TriggerServerEvent("drift:RequestSync")
+    while Events == nil do Wait(1) end
+    TriggerServerEvent(Events.reqSync)
     while true do
         
         if IsControlJustPressed(0, 20) then
@@ -51,9 +53,10 @@ end)
 
 Citizen.CreateThread(function()
 while not loaded do Wait(1) end
+while Events == nil do Wait(1) end
     DecorRegister("LEVEL", 3)
     while true do
-        TriggerServerEvent("drift:RequestSync")
+        TriggerServerEvent(Events.reqSync)
         DecorSetInt(p:ped(), "LEVEL", p:getLevel())
 
         Wait(3000)

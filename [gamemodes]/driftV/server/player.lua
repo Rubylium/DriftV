@@ -152,7 +152,7 @@ RegisterSecuredNetEvent(Events.reqSync, function()
         table.insert(players, {name = GetPlayerName(k), exp = v.exp, servID = k, ping = GetPlayerPing(k), crew = v.crew})
     end
 
-    TriggerClientEvent('drift:SyncPlayer', source, players)
+    TriggerClientEvent(Events.getSync, source, players)
 end)
 
 local inPassive = {}

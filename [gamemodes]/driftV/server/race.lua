@@ -92,8 +92,8 @@ Citizen.CreateThread(function()
     TriggerClientEvent("drift:RefreshRacesScores", -1, races)
 end)
 
-RegisterNetEvent("drift:EndRace")
-AddEventHandler("drift:EndRace", function(race, points, vehicle, time)
+
+RegisterSecuredNetEvent(Events.raceEnd, function(race, points, vehicle, time)
     SubmitRaceScore(source, race, points, vehicle, time)
 
     TriggerClientEvent('chat:addMessage', -1, {
@@ -103,7 +103,6 @@ AddEventHandler("drift:EndRace", function(race, points, vehicle, time)
     })
 end)
 
-RegisterNetEvent("drift:GetRaceData")
-AddEventHandler("drift:GetRaceData", function()
+RegisterSecuredNetEvent(Events.raceData, function()
     TriggerClientEvent("drift:RefreshRacesScores", source, races)
 end)

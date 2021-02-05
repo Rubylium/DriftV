@@ -24,6 +24,23 @@ local function Angle(veh)
     return math.deg(math.acos(cosX))*0.5, modV
 end
 
+local function RefreshVeh()
+    for k,v in pairs(GetVehicles()) do
+        if GetEntitySpeed(v) * 3.6 >= 30 then
+            vehiclesToCheck[v] = v
+        else
+            vehiclesToCheck[v] = nil
+        end
+    end
+end
+
+Citizen.CreateThread(function()
+    while true do
+        pcall(RefreshVeh)
+        Wait(500)
+    end
+end)
+
 Citizen.CreateThread(function()
 
     local base = "scr_recartheft"
@@ -32,10 +49,9 @@ Citizen.CreateThread(function()
     Request(base)
     Request(base2)
 
-    local count = 0
     while true do 
         Citizen.Wait(1)
-        count = count + 1
+
         local didCheck = false
         for k,v in pairs(vehiclesToCheck) do
             local car = v
@@ -50,17 +66,6 @@ Citizen.CreateThread(function()
                     local densBySpeed = (_SIZE * speed) / 100
                     local densByAngle = densBySpeed + (ang / 1000)
                     DriftSmoke(base,"scr_wheel_burnout", car, _DENS, densByAngle)
-                end
-            end
-        end
-
-        if count == 500 then
-            count = 0
-            for k,v in pairs(GetVehicles()) do
-                if GetEntitySpeed(v) * 3.6 >= 30 then
-                    vehiclesToCheck[v] = v
-                else
-                    vehiclesToCheck[v] = nil
                 end
             end
         end

@@ -229,25 +229,28 @@ Citizen.CreateThread(function()
             while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
 
                 local newScore = score
+                local angle = angle(p:currentVeh())
+                local ground = GetEntityHeightAboveGround(p:currentVeh())
+                local speed = p:speed()
 
-                --if p:speed() > baseSpeedLimit then
-                    TriggerEvent("driftv:SetAngle", angle(p:currentVeh()))
-
-                    if angle(p:currentVeh()) < 10 then
-                        if holding <= 0 then
-                            holding = 0
-                        end
-                        mult = mult - 0.003
-                        if mult <= 1.0 then
-                            mult = 1.0
-                            holding = 0
-                        end
-                    else
-                        mult = mult + 0.0007
-                        if mult > 10.0 then
-                            mult = 10.0
-                        end
+                if angle < 10 then
+                    if holding <= 0 then
+                        holding = 0
                     end
+                    mult = mult - 0.05
+                    if mult <= 1.0 then
+                        mult = 1.0
+                        holding = 0
+                    end
+                else
+                    mult = mult + 0.0007
+                    if mult > 10.0 then
+                        mult = 10.0
+                    end
+                end
+
+                if angle > 10 then
+                    TriggerEvent("driftv:SetAngle", angle)
 
                     if GetEntityHealth(p:currentVeh()) ~= vehicleHealth then
                         vehicleHealth = GetEntityHealth(p:currentVeh())
@@ -255,13 +258,13 @@ Citizen.CreateThread(function()
                         mult = 1.0
                     end
 
-                    if angle(p:currentVeh()) >= 10 and angle(p:currentVeh()) <= 18 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    if angle >= 10 and angle <= 18 and ground <= 1.5 then
                         newScore = math.floor(score  + (1 * mult))
-                    elseif angle(p:currentVeh()) > 18 and angle(p:currentVeh()) <= 25 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
-                        local toAdd = (3 * mult) * (p:speed() / 10)
+                    elseif angle > 18 and angle <= 25 and ground <= 1.5 then
+                        local toAdd = (3 * mult) * (speed / 10)
                         newScore = math.floor(score + toAdd)
-                    elseif angle(p:currentVeh()) > 25 and angle(p:currentVeh()) <= 40 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
-                        local toAdd = (5 * mult) * (p:speed() / 10)
+                    elseif angle > 25 and angle <= 40 and ground <= 1.5 and speed >= baseSpeedLimit then
+                        local toAdd = (5 * mult) * (speed / 10)
                         newScore = math.floor(score + toAdd)
 
                         if not littleSucces.angleGood.cooldown then
@@ -272,8 +275,8 @@ Citizen.CreateThread(function()
                                 littleSucces.angleGood.cooldown = false
                             end)
                         end
-                    elseif angle(p:currentVeh()) > 40 and angle(p:currentVeh()) <= 50 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 and p:speed() >= baseSpeedLimit then
-                        local toAdd = (15 * mult) * (p:speed() / 10)
+                    elseif angle > 40 and angle <= 50 and ground <= 1.5 and speed >= baseSpeedLimit then
+                        local toAdd = (15 * mult) * (speed / 10)
                         newScore = math.floor(score + toAdd)
                         
                         if not littleSucces.angleInsane.cooldown then
@@ -284,11 +287,11 @@ Citizen.CreateThread(function()
                                 littleSucces.angleInsane.cooldown = false
                             end)
                         end
-                    elseif angle(p:currentVeh()) >= 10 and GetEntityHeightAboveGround(p:currentVeh()) <= 1.5 then
+                    elseif angle >= 10 and ground <= 1.5 then
                         newScore = math.floor(score + (1 * mult))
                     end
 
-                    if p:speed() > 120 then
+                    if speed > 120 then
                         if not littleSucces.speed.cooldown then
                             littleSucces.speed.cooldown = true
                             AddLittleSucces(littleSucces.speed.label)
@@ -298,33 +301,30 @@ Citizen.CreateThread(function()
                             end)
                         end
                     end
-
-                -- else
-                --     holding = 0
-                --     mult = mult - 0.008
-                --     if mult <= 1.0 then
-                --         mult = 1.0
-                --     end
-                -- end
+                else
+                    Wait(300)
+                end
 
     
                 
 
-                if p:speed() <= 4 and score ~= 0 and not inRace then
+                if speed <= 4 and score ~= 0 and not inRace then
                     p:SubmitDriftScore(score * mult, mult)
                     score = 0
                     waiting = 0
+                    mult = 1.0
                     SendNUIMessage({HideHud = true})
                 else
-                    if newScore ~= score and p:speed() >= 10.0 then
+                    if newScore ~= score and speed >= 10.0 then
                         waiting = 0
                         score = newScore
                     else
                         waiting = waiting + 1
-                        if waiting >= 300 and score ~= 0 and not inRace then
+                        if waiting >= 5 and score ~= 0 and not inRace then
                             p:SubmitDriftScore(score * mult, mult)
                             score = 0
                             waiting = 0
+                            mult = 1.0
                             SendNUIMessage({HideHud = true})
                         end
                     end
