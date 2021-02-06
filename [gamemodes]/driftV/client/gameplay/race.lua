@@ -6,7 +6,7 @@ local race = {
         price = 22500,
         baseScore = 400000,
         pointPerSec = 550,
-        speedLimit = 25,
+        speedLimit = 15,
         start =  vector4(2790.1643066406, 4603.8330078125, 549.78204345703, 11.473360061646),
         points = {
             {pos = vector4(2895.3637695312, 4700.2138671875, 557.28295898438, 11.473360061646), passed = false},
@@ -47,7 +47,7 @@ local race = {
         price = 4250,
         baseScore = 200000,
         pointPerSec = 750,
-        speedLimit = 40,
+        speedLimit = 20,
         points = {
             {pos = vector4(1030.7563476562, 1117.5638427734, 458.73199462891, 65.086318969727), passed = false},
             --{pos = vector4(920.74230957031, 1125.4340820312, 460.48587036133, 298.26525878906), passed = false},
@@ -64,7 +64,7 @@ local race = {
         price = 26750,
         baseScore = 450000,
         pointPerSec = 3000,
-        speedLimit = 55,
+        speedLimit = 35,
         start =  vector4(2207.2216796875, -1905.7115478516, 585.87384033203, 181.34503173828),
         points = {
             {pos = vector4(2205.0871582031, -2020.2974853516, 577.94848632812, 165.34571838379), passed = false},
@@ -107,7 +107,7 @@ local race = {
         price = 23200,
         baseScore = 150000,
         pointPerSec = 250,
-        speedLimit = 25,
+        speedLimit = 10,
         start =  vector4(-5356.0327148438, 4325.556640625, 754.83813476562, 287.53540039062),
         points = {
             {pos = vector4(-5090.6884765625, 4394.7895507812, 749.99359130859, 276.93649291992), passed = false},
@@ -147,7 +147,7 @@ local race = {
         price = 7100,
         baseScore = 150000,
         pointPerSec = 1500,
-        speedLimit = 49,
+        speedLimit = 25,
         start =  vector4(-4330.0463867188, -4615.9516601562, 150.9341583252, 351.76547241211),
         points = {
             {pos = vector4(-4370.8544921875, -4236.6669921875, 156.77291870117, 307.23013305664), passed = false},
@@ -163,7 +163,7 @@ local race = {
         price = 7450,
         baseScore = 200000,
         pointPerSec = 750,
-        speedLimit = 30,
+        speedLimit = 15,
         start =  vector4(-3315.5678710938, 106.1442489624, 133.66456604004, 166.84454345703),
         points = {
             {pos = vector4(-3348.3273925781, 20.953716278076, 124.79309082031, 2.0219919681549), passed = false},
@@ -184,7 +184,7 @@ local race = {
         price = 2950,
         baseScore = 55000,
         pointPerSec = 150,
-        speedLimit = 30,
+        speedLimit = 15,
         start =  vector4(6382.7104492188, 3655.3237304688, 255.19998168945, 150.31907653809),
         points = {
             {pos = vector4(6246.5981445312, 3591.7233886719, 249.77912902832, 103.29760742188), passed = false},
@@ -199,7 +199,7 @@ local race = {
         price = 16600,
         baseScore = 190000,
         pointPerSec = 1000,
-        speedLimit = 30,
+        speedLimit = 15,
         start =  vector4(-1098.2868652344, 2427.6655273438, 727.99432373047, 46.58423614502),
         points = {
             {pos = vector4(-1208.0072021484, 2495.30859375, 728.87322998047, 195.54058837891), passed = false},
@@ -508,12 +508,7 @@ function StartRace(data, raceKey)
             label = "Race: "..data.label,
         })
 
-
-        if endPoints >= data.baseScore then
-            p:GiveMoney(data.price)
-        else
-            p:GiveMoney(endPoints / data.baseScore * data.price)
-        end
+        p:GiveMoney(endPoints / 2500 * data.price)
         SendNUIMessage( {
             HideSucces = true,
         })
