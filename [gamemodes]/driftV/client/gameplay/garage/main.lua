@@ -40,7 +40,7 @@ local possibleVehiclePos = {
     vector4(973.37091064453, -2998.5563964844, -39.824424743652, 234.14663696289),
 }
 
-function JoinGarage()
+function JoinGarage(skipIntro)
     if p:IsInGarage() then
         LeaveGarage()
         return
@@ -58,7 +58,15 @@ function JoinGarage()
     --p:SetMap("garage")
     oldPlayerPos = p:pos()
     oldPlayerHeading = p:heading()
-    p:Teleport(garagePos)
+
+    if skipIntro == nil then
+        p:Teleport(garagePos)
+    else
+        ClearFocus()
+        LoadScene(garagePos.xyz)
+        SetPedCoordsKeepVehicle(p:ped(), garagePos)
+        NewLoadSceneStop()
+    end
     InitGarageFunction()
     TriggerEvent("InteractSound_CL:PlayOnOne", "garage", 0.05)
 end
@@ -110,6 +118,7 @@ local function LoadCarsinGarage()
                 model = v.model,
             })
         end
+        Wait(0)
     end
 end
 
@@ -118,6 +127,9 @@ function InitGarageFunction()
     Citizen.CreateThread(function()
         while p:IsInGarage() do
             for k,v in pairs(loadedVehs) do
+                SetEntityCoordsNoOffset(v.entity:getEntityId(), v.pos.xyz, 0.0, 0.0, 0.0)
+                SetEntityHeading(v.entity:getEntityId(), v.pos.w)
+                SetVehicleOnGroundProperly(v.entity:getEntityId())
                 Draw3DText(v.pos.x, v.pos.y, v.pos.z, v.name, 2, 0.2, 0.2)
             end
 

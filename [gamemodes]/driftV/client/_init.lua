@@ -211,6 +211,9 @@ function startCinematic()
 end
 
 RegisterNUICallback('joinServer', function(data)
+    if not waitingSpawn then
+        return
+    end
     waitingSpawn = false
     
     SendNUIMessage({
@@ -230,4 +233,6 @@ RegisterNUICallback('joinServer', function(data)
     DisplayRadar(true)
     TriggerEvent("FeedM:showNotification", "Welcome back! Press F1 to use the main menu! Have fun on DriftV !", 15000, "info")
     SetAudioFlag("LoadMPData", true)
+    SetBigmapActive(false, false)
+    EnableLobby()
 end)

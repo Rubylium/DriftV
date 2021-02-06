@@ -1,5 +1,7 @@
 description "A simple loading screen!"
 
+loadscreen_manual_shutdown "yes"
+
 files {
     "index.html",
     "css/*.css",
@@ -11,4 +13,5 @@ files {
     "sounds/*.ogg"
 }
 
+client_script "client.lua"
 loadscreen "index.html"

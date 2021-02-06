@@ -11,7 +11,7 @@ local playersInPassiveVeh = {}
 local playerInstances = {}
 local selectedCrewMember = {}
 local selectedCrewKey = 0
-local garageTag = "Personal garage"
+local garageTag = "Lobby"
 local garageTagState = {
     "→    " .. garageTag .. "       ←",
     "→    " .. garageTag .. "      ←",
@@ -47,20 +47,18 @@ local animatedTagState = {
     "→",
 }
 
-local mapsArea = {
-    {animated = false, tag = "", map = "LS", label = "LS: The hub", pos = vector3(229.73329162598, -885.22637939453, 30.949995040894)},
-    {animated = true, tag = "~y~SHOP!", map = "LS", label = "LS: Vehicle Shop", pos = vector3(-51.129165649414, -1110.4876708984, 27.4358253479)},
-    {animated = false, tag = "", map = "Harugahara", label = "Addon: Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
-    {animated = true, tag = "~y~POPULAR!", map = "Ebisu", label = "Addon: Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
-    {animated = false, tag = "", map = "Haruna", label = "Addon: Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
-    {animated = false, tag = "", map = "Ohiradai", label = "Addon: Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
-    {animated = false, tag = "", map = "West", label = "Addon: West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
-    {animated = false, tag = "", map = "Nanamagari", label = "Addon: Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
-    {animated = false, tag = "", map = "Irohazaka", label = "Addon: Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
-    {animated = false, tag = "", map = "HuntePark", label = "Addon: Hunter Park (Training)", pos = vector3(1232.69, 7378.71, 80.22)},
-    {animated = false, tag = "", map = "Katsuoji", label = "Addon: Route 4 Katsuoji Minoo", pos = vector3(6383.56, 3657.9, 255.96)},
-    {animated = false, tag = "", map = "Tsukurimono", label = "Addon: Tsukurimono Touge", pos = vector3(-1077.5308837891, 2408.6586914062, 728.42279052734)},
-    {animated = true, tag = "~y~NEW!", map = "maxdrift", label = "Addon: MaxDrift", pos = vector3(-3049.3159179688, 2596.5817871094, 634.01617431641)},
+mapsArea = {
+    {animated = false, tag = "", map = "Harugahara", label = "Harugahara", pos = vector3(2789.40, 4572.52, 546.86)},
+    {animated = true, tag = "POPULAR", map = "Ebisu", label = "Ebisu Minami", pos = vector3(948.99768066406, 1054.1428222656, 458.58303833008)},
+    {animated = false, tag = "", map = "Haruna", label = "Haruna", pos = vector3(2227.2080078125, -1895.2564697266, 587.02075195312)},
+    {animated = false, tag = "", map = "Ohiradai", label = "Hakone Ohiradai", pos = vector3(-4331.8, -4626.4, 149.7)},
+    {animated = false, tag = "", map = "West", label = "West Zao S", pos = vector3(-5293.8, 2466.95, 533.29)},
+    {animated = false, tag = "", map = "Nanamagari", label = "Hakone Nanamagari", pos = vector3(-3330.8244628906, 132.70896911621, 136.05108642578)},
+    {animated = false, tag = "", map = "Irohazaka", label = "Irohazaka", pos = vector3(-5375.103515625, 4325.025390625, 754.67639160156)},
+    {animated = false, tag = "", map = "HuntePark", label = "Hunter Park", pos = vector3(1232.69, 7378.71, 80.22)},
+    {animated = false, tag = "", map = "Katsuoji", label = "Route 4 Katsuoji Minoo", pos = vector3(6383.56, 3657.9, 255.96)},
+    {animated = false, tag = "", map = "Tsukurimono", label = "Tsukurimono Touge", pos = vector3(-1077.5308837891, 2408.6586914062, 728.42279052734)},
+    {animated = true, tag = "NEW", map = "maxdrift", label = "MaxDrift", pos = vector3(-3049.3159179688, 2596.5817871094, 634.01617431641)},
 }
 
 local hours = {
@@ -122,14 +120,26 @@ function OpenMainMenu()
             while open do
 
                 RageUI.IsVisible(main, function()
-                    RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = ""}, true, {
+                    if not p:IsInGarage() then
+                        RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = ""}, true, {
                         onSelected = function()
                             
                             open = false
                             RageUI.CloseAll()
-                            JoinGarage()
+                            EnableLobby()
                         end,
-                    });
+                        });
+                    else
+                        RageUI.Button("Leave garage", "Return to the lobby", {RightLabel = ""}, true, {
+                        onSelected = function()
+                            open = false
+                            RageUI.CloseAll()
+                            LeaveGarage(nil, false)
+                            EnableLobby()
+                        end,
+                        });
+                        
+                    end
                     RageUI.Button('→    My Vehicles', nil, {RightLabel = ">"}, not p:IsInGarage(), {}, vehicle);
                     RageUI.Button('→    Vehicle options', "Available only inside a vehicle", {RightLabel = ">"}, p:isInVeh(), {}, vehicleOptions);
                     RageUI.Button('→    My information/stats', nil, {RightLabel = ">"}, true, {}, information);
@@ -312,7 +322,7 @@ function OpenMainMenu()
 
                     for _,v in pairs(mapsArea) do
                         if v.animated then
-                            RageUI.Button(v.label, nil, {RightLabel = animatedTag.." "..v.tag}, true, {
+                            RageUI.Button(v.label, nil, {RightLabel = animatedTag.." ~y~"..v.tag}, true, {
                                 onSelected = function()
                                     p:SetMap(v.map)
                                     open = false
@@ -461,7 +471,7 @@ function OpenMainMenu()
 end
 
 Keys.Register('F1', 'F1', 'Open main menu', function()
-    if p:GetCrewWarStatus() then
+    if p:GetCrewWarStatus() or inLobby then
         return
     end
     OpenMainMenu()

@@ -35,6 +35,10 @@ function player:new()
     p = obj
 end
 
+function player:setInstance(instance)
+    TriggerServerEvent("drift:ChangeServerInstance", instance)
+end
+
 function player:GetCrewWarStatus()
     return self.inCrewWar
 end

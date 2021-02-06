@@ -55,6 +55,7 @@ local vehs = {
     },
 }
 
+local backToLobby = false
 local open = false
 local selectedSub = {}
 local previewVeh = {
@@ -73,15 +74,26 @@ main.Closed = function()
     DeleteEntity(previewVeh.entity)
     cam.render("SHOP", false, false, 0)
     cam.delete("SHOP")
+
+    if backToLobby then
+        EnableLobby()
+    end
 end
 main.WidthOffset = 100.0
 sub.WidthOffset = 100.0
 
-function OpenVehShopMenu()
+function OpenVehShopMenu(GoBackToLobby)
     if open then
         open = false
         RageUI.Visible(main, false)
     else
+
+        if GoBackToLobby ~= nil and GoBackToLobby == true then
+            backToLobby = true
+        else
+            backToLobby = false
+        end
+
         open = true
         RageUI.Visible(main, true)
         cam.create("SHOP")
