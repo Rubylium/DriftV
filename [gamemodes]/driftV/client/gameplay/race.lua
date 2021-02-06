@@ -234,6 +234,8 @@ local baseHeight = 0.03 -- Epaisseur
 
 Citizen.CreateThread(function()
     while not loaded do Wait(1) end
+    while Events == nil do Wait(1) end
+    TriggerServerEvent(Events.raceData)
 
     while true do
         if not inRace and not p:GetCrewWarStatus() then
