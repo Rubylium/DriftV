@@ -457,6 +457,8 @@ function StartRace(data, raceKey)
         local displayResult = true
         AnimpostfxPlay("MP_Celeb_Win", -1, true)
 
+        p:GiveMoney(endPoints / 2500 * data.price)
+
         local baseX = 0.5 -- gauche / droite ( plus grand = droite )
         local baseY = 0.5 -- Hauteur ( Plus petit = plus haut )
         local baseWidth = 0.3 -- Longueur
@@ -508,7 +510,7 @@ function StartRace(data, raceKey)
             label = "Race: "..data.label,
         })
 
-        p:GiveMoney(endPoints / 2500 * data.price)
+        
         SendNUIMessage( {
             HideSucces = true,
         })
