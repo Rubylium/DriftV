@@ -1,4 +1,4 @@
-local race_saison = "1"
+local race_saison = "2"
 local races = {}
 
 function SubmitRaceScore(source, race, points, vehicle, time)

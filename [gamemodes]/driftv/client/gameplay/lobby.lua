@@ -320,6 +320,7 @@ function EnableLobby()
                     TriggerEvent("InteractSound_CL:Stop")
                     SetNuiFocus(false, false)
                     cam.render("lobby", false, false, 0)
+                    p:setInstance(1)
 
                     p:SetMap(mapsArea[selectedMapIndex].map)
                     inLobbyMap = false
@@ -338,6 +339,7 @@ function EnableLobby()
             RefreshCursorPos()
             Wait(1)
         end
+        SetNuiFocusKeepInput(false)
         DisplayRadar(true)
 
     end)
