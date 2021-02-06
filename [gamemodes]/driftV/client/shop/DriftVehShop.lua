@@ -128,6 +128,10 @@ function OpenVehShopMenu(GoBackToLobby)
                                     cam.delete("SHOP")
                                     TriggerServerEvent(Events.buyVeh, v.price, v.maker.." "..v.label, v.model)
                                     ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
+
+                                    if backToLobby then
+                                        EnableLobby()
+                                    end
                                 else
                                     ShowNotification("Not enough money")
                                 end

@@ -14,15 +14,20 @@ function EnableLobby()
 
     local function SpawnRandomPlayerVeh()
         local vehs = p:GetCars()
-        print(#vehs)
-        local rVeh = vehs[math.random(1,#vehs)]
-        print(json.encode(rVeh))
 
-        ClearAreaOfEverything(lobbyVehPos.xy, 50.0, 1, 1, 1, 1)
-        local veh = entity:CreateVehicleLocal(rVeh.model, lobbyVehPos.xyz, lobbyVehPos.w)
-        SetVehProps(veh:getEntityId(), rVeh.props)
-        FreezeEntityPosition(veh:getEntityId(), true)
-        lobbyVeh = veh:getEntityId()
+        if #vehs > 0 then
+            local rVeh = vehs[math.random(1,#vehs)]
+            ClearAreaOfEverything(lobbyVehPos.xy, 50.0, 1, 1, 1, 1)
+            local veh = entity:CreateVehicleLocal(rVeh.model, lobbyVehPos.xyz, lobbyVehPos.w)
+            SetVehProps(veh:getEntityId(), rVeh.props)
+            FreezeEntityPosition(veh:getEntityId(), true)
+            lobbyVeh = veh:getEntityId()
+        else
+            ClearAreaOfEverything(lobbyVehPos.xy, 50.0, 1, 1, 1, 1)
+            local veh = entity:CreateVehicleLocal("350zrb", lobbyVehPos.xyz, lobbyVehPos.w)
+            FreezeEntityPosition(veh:getEntityId(), true)
+            lobbyVeh = veh:getEntityId()
+        end
     end
 
 
