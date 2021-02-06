@@ -553,7 +553,7 @@ function OpenCustomMenu(veh, name)
         Citizen.CreateThread(function()
             while open do
 
-                DrawLightWithRangeAndShadow(vCoords.x, vCoords.y, vCoords.z + 3, 255, 255, 255, 8.0, 50.0, 5.0)
+                DrawLightWithRangeAndShadow(vCoords.x, vCoords.y, vCoords.z + 5, 255, 255, 255, 8.0, 50.0, 5.0)
                 DrawMarker(0, vCoords.x, vCoords.y, vCoords.z + 1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.6, 0.6, 255, 255, 255, 255, 1, 0, 2, 0, nil, nil, 0)
 
                 RageUI.IsVisible(main, function()
