@@ -181,7 +181,7 @@ function EnableLobby()
                     end
                     DrawTexts(baseX + v.button.baseX + v.text.baseX, baseY + v.button.baseY + v.text.baseY, v.text.text, v.text.center, v.text.scale, {255, 255, 255, 255}, v.text.police, 0) -- title
                 else
-                    DrawRect(baseX + v.button.baseX, baseY + v.button.baseY, baseWidth + v.button.baseWidth + 0.015, baseHeight + v.button.baseHeight + 0.015, LiseretColor[1], LiseretColor[2], LiseretColor[3], 180) -- Button Garage
+                    DrawRect(baseX + v.button.baseX, baseY + v.button.baseY, baseWidth + v.button.baseWidth + 0.014, baseHeight + v.button.baseHeight + 0.016, LiseretColor[1], LiseretColor[2], LiseretColor[3], 180) -- Button Garage
 
                     DrawRect(baseX + v.button.baseX, baseY + v.button.baseY, baseWidth + v.button.baseWidth + 0.01, baseHeight + v.button.baseHeight + 0.01, 28, 28, 28, 230) -- Button Garage
                     if v.sprite ~= nil then
