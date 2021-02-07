@@ -33,6 +33,7 @@ local vehs = {
             {maker = "Subaru", price = 190000,label = "BRZ Rocket Bunny",model = "brz"},
             {maker = "Subaru", price = 120000,label = "Impreza WRX STI 2004",model = "subwrx"},
             {maker = "Nissan", price = 150000,label = "1994 240SX SE Fastback",model = "240sx"}, -- icon
+            {maker = "Toyota", price = 190000,label = "GT86",model = "toy86"}, -- icon
         }
     },
     {
