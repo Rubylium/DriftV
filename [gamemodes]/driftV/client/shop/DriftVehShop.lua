@@ -32,6 +32,7 @@ local vehs = {
             {maker = "Nissan", price = 140000,label = "350z Rocket Bunny Kit Stanced",model = "350zrb"},
             {maker = "Subaru", price = 190000,label = "BRZ Rocket Bunny",model = "brz"},
             {maker = "Subaru", price = 120000,label = "Impreza WRX STI 2004",model = "subwrx"},
+            {maker = "Nissan", price = 150000,label = "1994 240SX SE Fastback",model = "240sx"}, -- icon
         }
     },
     {
@@ -41,6 +42,7 @@ local vehs = {
             {maker = "Nissan", price = 350000,label = "Skyline GT-R34 (BNR34) 2002",model = "skyline"},
             {maker = "Mitsubishi", price = 230000,label = "Lancer Evo VI",model = "cp9a"},
             {maker = "Ford", price = 450000,label = "2015 Mustang GT",model = "MGT"},
+            
         }
     },
     {
@@ -143,6 +145,7 @@ function OpenVehShopMenu(GoBackToLobby)
                                     local veh = entity:CreateVehicleLocal(v.model, previewCoords.xyz, previewCoords.w)
                                     SetVehicleOnGroundProperly(veh:getEntityId())
                                     FreezeEntityPosition(veh:getEntityId(), true)
+                                    SetVehicleDirtLevel(veh:getEntityId(), 0.0)
                                     previewVeh.entity = veh:getEntityId()
                                     previewVeh.model = v.model
                                 end
