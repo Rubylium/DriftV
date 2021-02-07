@@ -121,7 +121,7 @@ function OpenMainMenu()
 
                 RageUI.IsVisible(main, function()
                     if not p:IsInGarage() then
-                        RageUI.Button(garageTag, "On DriftV your personal garage is your new home! You will find all your vehicles here, but you can also customize them!", {RightLabel = ""}, true, {
+                        RageUI.Button(garageTag, "Return to the lobby", {RightLabel = ""}, true, {
                         onSelected = function()
                             
                             open = false

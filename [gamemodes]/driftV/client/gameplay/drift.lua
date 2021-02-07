@@ -259,12 +259,12 @@ Citizen.CreateThread(function()
                     end
 
                     if angle >= 10 and angle <= 18 and ground <= 1.5 then
-                        newScore = math.floor(score  + (1 * mult))
+                        newScore = math.floor(score  + (2 * mult))
                     elseif angle > 18 and angle <= 25 and ground <= 1.5 then
                         local toAdd = (3 * mult) * (speed / 10)
                         newScore = math.floor(score + toAdd)
                     elseif angle > 25 and angle <= 40 and ground <= 1.5 and speed >= baseSpeedLimit then
-                        local toAdd = (5 * mult) * (speed / 10)
+                        local toAdd = (4 * mult) * (speed / 10)
                         newScore = math.floor(score + toAdd)
 
                         if not littleSucces.angleGood.cooldown then
