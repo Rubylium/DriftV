@@ -1,4 +1,4 @@
-local race_saison = "2"
+local race_saison = Config.raceSeaon
 local races = {}
 
 function SubmitRaceScore(source, race, points, vehicle, time)

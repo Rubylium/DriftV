@@ -28,9 +28,6 @@ function InitPlayer(source)
         pCrew[source] = "None"
         SavePlayer(source)
 
-        --SendTextToWebhook("general_fr", 0x34eb37, "**Nouveau joueur!**", "Le joueur ``".. GetPlayerName(source) .. "`` a rejoint le serveur pour la première fois ! Envie de lui dire bonjour ? Connectes-toi au serveur dès maintenant !")
-        --SendTextToWebhook("general_en", 0x34eb37, "**New player!**", "The player ``".. GetPlayerName(source) .. "`` joined the server for the first time! Want to say hello to him? Connect to the server now!")
-
         debugPrint("Player created into database")
     else
         if data.succes == nil then
