@@ -1,0 +1,55 @@
+header {
+    background-color: $mainColor;
+    color: white;
+    padding: 1rem 2rem;
+
+    nav {        
+        font-family: 'Kanit', sans-serif;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .profile {
+            display: flex;
+            font-size: 3rem;
+            position: relative;
+
+            &-name {
+                text-transform: uppercase;
+                text-align: right;
+                margin-top: 3rem;
+                font-weight: 300;
+                font-size: 3rem;
+
+                &-exp {
+                    width: 25rem;
+                    height: 0.7rem;
+                    background: white;
+                    position: relative;
+
+                    &-progress {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        height: 0.7rem;
+                        width: 20%;
+                        background-color: $blue;
+                    }
+                }
+            }
+
+            &-avatar {
+                position: relative;
+                margin-left: 2rem;
+
+                &-lvl {
+                    font-size: 5rem;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+        }
+    }
+}

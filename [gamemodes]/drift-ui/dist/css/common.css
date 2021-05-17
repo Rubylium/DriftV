@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap");
+html, body, ul, li {
+  padding: 0;
+  margin: 0;
+  font-family: 'Kanit', sans-serif; }
+
+html {
+  font-size: calc(1em * 0.625); }
+  html body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.6rem; }
+    @media screen and (max-width: 1000px) {
+      html body .hide {
+        display: none; } }
+    html body p {
+      line-height: 160%; }
+    html body .layout {
+      max-width: 100%;
+      margin: 0 auto; }
+    html body .flex {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between; }
+      @media screen and (max-width: 1000px) {
+        html body .flex {
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: reverse;
+          -ms-flex-direction: column-reverse;
+          flex-direction: column-reverse;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center; } }
+
+html {
+  background-image: url("../images/bg.png"); }
+
+.news {
+  color: white;
+  position: absolute;
+  left: 10rem;
+  font-family: 'Kanit', sans-serif; }
+  .news h1 {
+    font-size: 6.4rem;
+    width: 20rem;
+    position: relative;
+    font-weight: 500;
+    margin-bottom: 0; }
+    .news h1 span {
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      background: #C90000;
+      font-size: 3rem;
+      padding: 0.5rem;
+      line-height: 2.3rem;
+      border-radius: 6px; }
+  .news ul {
+    margin-left: 3rem; }
+    .news ul li {
+      font-size: 3.6rem;
+      margin-bottom: 2rem; }
+
+.shop {
+  background-color: #394265;
+  font-family: 'Kanit', sans-serif;
+  width: 48rem;
+  position: absolute;
+  bottom: 5rem;
+  left: 10rem;
+  height: 18rem;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s; }
+  .shop:hover {
+    background-color: #02BD98; }
+  .shop-img {
+    position: relative;
+    overflow: hidden;
+    height: 18rem;
+    width: 18rem; }
+    .shop-img img {
+      position: absolute;
+      left: -2rem;
+      top: 1rem;
+      opacity: 0.4; }
+  .shop-news {
+    background-color: #C90000;
+    position: absolute;
+    top: -1rem;
+    right: 2rem;
+    padding: 0.2rem 1.5rem;
+    color: white;
+    font-weight: bold; }
+  .shop-txt {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%); }
+  .shop h2 {
+    text-align: right;
+    margin: 0;
+    font-size: 4.5rem;
+    color: white;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-weight: 300;
+    line-height: 5rem; }
+  .shop .yellow {
+    color: #FFD600;
+    font-weight: 500; }
+
+.menu {
+  position: absolute;
+  right: 7rem;
+  top: 20rem;
+  font-family: 'Kanit', sans-serif; }
+  .menu-box {
+    margin-bottom: 3rem;
+    cursor: pointer; }
+    .menu-box-img {
+      height: 12.9rem; }
+    .menu-box:hover .menu-box-txt {
+      background-color: #02BD98; }
+    .menu-box-txt {
+      background-color: #394265;
+      color: white;
+      padding: 0.5rem 2rem;
+      font-size: 3rem;
+      font-weight: 300;
+      text-align: right;
+      margin: 0;
+      -webkit-transition: 0.3s;
+      transition: 0.3s; }
+
+header {
+  background-color: #394265;
+  color: white;
+  padding: 1rem 2rem; }
+  header nav {
+    font-family: 'Kanit', sans-serif;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; }
+    header nav .profile {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      font-size: 3rem;
+      position: relative; }
+      header nav .profile-name {
+        text-transform: uppercase;
+        text-align: right;
+        margin-top: 3rem;
+        font-weight: 300;
+        font-size: 3rem; }
+        header nav .profile-name-exp {
+          width: 25rem;
+          height: 0.7rem;
+          background: white;
+          position: relative; }
+          header nav .profile-name-exp-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 0.7rem;
+            width: 20%;
+            background-color: #3EB7FC; }
+      header nav .profile-avatar {
+        position: relative;
+        margin-left: 2rem; }
+        header nav .profile-avatar-lvl {
+          font-size: 5rem;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%); }

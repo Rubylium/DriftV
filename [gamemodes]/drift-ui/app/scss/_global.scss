@@ -1,0 +1,134 @@
+html {
+    background-image: url('../images/bg.png');
+}
+
+.news {
+    color: white;
+    position: absolute;
+    left: 10rem;
+    font-family: 'Kanit', sans-serif;
+
+    h1 {
+        font-size: 6.4rem;
+        width: 20rem;
+        position: relative;  
+        font-weight: 500;
+        margin-bottom: 0;
+
+        span {
+            position: absolute;
+            top: -1rem;
+            right: -1rem;
+            background: $red;
+            font-size: 3rem;
+            padding: 0.5rem;
+            line-height: 2.3rem;
+            border-radius: 6px;
+        }
+    }
+
+    ul {
+        margin-left: 3rem;
+
+        li {
+            font-size: 3.6rem;
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+
+.shop {
+    background-color: $mainColor;
+    font-family: 'Kanit', sans-serif;
+    width: 48rem;
+    position: absolute;
+    bottom: 5rem;
+    left: 10rem;
+    height: 18rem;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        background-color: $secondColor;
+    }
+
+    &-img {
+        position: relative;
+        overflow: hidden;
+        height: 18rem;
+        width: 18rem;
+
+        img {
+            position: absolute;
+            left: -2rem;
+            top: 1rem;
+            opacity: 0.4;
+        }
+    }
+
+    &-news {
+        background-color: $red;
+        position: absolute;
+        top: -1rem;
+        right: 2rem;
+        padding: 0.2rem 1.5rem;
+        color: white;
+        font-weight: bold;
+    }
+
+    &-txt {
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    h2 {
+        text-align: right;
+        margin: 0;
+        font-size: 4.5rem;
+        color: white;
+        box-sizing: border-box;        
+        font-weight: 300;
+        line-height: 5rem;
+    }
+
+    .yellow {
+        color: $yellow;
+        font-weight: 500;
+    }
+}
+
+.menu {
+    position: absolute;
+    right: 7rem;
+    top: 20rem;
+    font-family: 'Kanit', sans-serif;
+
+    &-box {
+        margin-bottom: 3rem;
+        cursor: pointer;
+        
+        &-img {
+            height: 12.9rem;
+        }
+
+        &:hover {
+            .menu-box-txt {
+                background-color: $secondColor;
+            }
+        }
+
+        &-txt {
+            background-color: $mainColor;
+            color: white;
+            padding: 0.5rem 2rem;
+            font-size: 3rem;
+            font-weight: 300;
+            text-align: right;
+            margin: 0;
+            transition: 0.3s;
+        }
+    }
+}

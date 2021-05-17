@@ -1,0 +1,55 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+
+// Reset
+html, body, ul, li {
+    padding: 0;
+    margin: 0;
+    font-family: 'Kanit', sans-serif;
+}
+
+// Colors 
+$mainColor: #394265;
+$secondColor: #02BD98;
+$red: #C90000;
+$yellow: #FFD600;
+$blue: #3EB7FC;
+
+// Base
+
+html {
+    font-size: calc(1em * 0.625);
+
+    body {        
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.6rem;
+
+        @media screen and (max-width: 1000px) {
+            .hide {
+                display: none;
+            }
+        }
+        
+        p{
+            line-height: 160%;
+        }
+
+        .layout {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .flex {
+            display: flex;
+            justify-content: space-between;
+
+            
+            @media screen and (max-width: 1000px) {
+                flex-direction: column-reverse;
+                align-items: center;
+            }
+        }
+    }
+}
