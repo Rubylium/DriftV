@@ -11,7 +11,7 @@ ensure chat-theme-gtao
 ensure spawnmanager
 ensure sessionmanager
 
-ensure driftv
+ensure driftV
 ensure drift-assets
 ensure drift-vehicles
 ensure driftV-sounds
