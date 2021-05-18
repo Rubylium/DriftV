@@ -50,6 +50,6 @@ $(function () {
 
   $('.clickJoinButton').on('click', function (e) {
 		e.preventDefault();
-		$.post('https://driftv/joinServer', JSON.stringify(test = false));
+		$.post('https://driftV/joinServer', JSON.stringify(test = false));
 	});
 });
