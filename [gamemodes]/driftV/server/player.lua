@@ -1,5 +1,5 @@
 player = {}
-saison = "_pre_season"
+saison = Config.playerSeason
 pCount = 1
 GlobalState.mode = 'open'
 
