@@ -18,7 +18,7 @@ function InitPlayer(source)
         gotData = false
     else
         MySQL.Async.fetchAll('SELECT * FROM players WHERE license = @license', { ['@license'] = tostring(license)..saison }, function(result)
-            print(json.encode(result))
+            --print(json.encode(result))
 
             data = result[1]
             gotData = true
@@ -62,7 +62,7 @@ function InitPlayer(source)
             },
             function(affectedRows)
                 dataCreated = true
-                print(affectedRows)
+                --print(affectedRows)
             end)
         else
             dataCreated = true
@@ -141,7 +141,7 @@ function SavePlayer(source)
         },
         function(affectedRows)
             save = true
-            print(affectedRows)
+            --print(affectedRows)
         end)
     else
         db:SaveTable("player_"..tostring(license)..saison, player[source])
@@ -173,6 +173,7 @@ Citizen.CreateThread(function()
             else
                 if v.needSave then
                     SavePlayer(k)
+                    v.needSave = false
                 end
             end
         end
