@@ -2,6 +2,8 @@ Config = {}
 
 Config.UseMysql = true
 Config.UseIdentifierAsKey = "steam" -- Can be steam / license / ip / and all other identifier
+Config.IdentifierNotFoundMessage = "Could not found your %s indentifer. Please try again. (if you are using steam, please restart / start your steam launcher"
+Config.CheckingIdentifierMessage = "Hello %s. Your %s ID is being checked."
 
 
 Config.DefaultMoney = 50000
