@@ -10,11 +10,30 @@ function InitPlayer(source)
 
     local db = rockdb:new()
     db:SaveInt("pCount", pCount)
-    local data = db:GetTable("player_"..tostring(license)..saison)
+
+    local data = {}
+    local gotData = false
+    if not Config.UseMysql then
+        data = db:GetTable("player_"..tostring(license)..saison)
+        gotData = false
+    else
+        MySQL.Async.fetchAll('SELECT * FROM players WHERE license = @license', { ['@license'] = tostring(license)..saison }, function(result)
+            print(json.encode(result))
+
+            data = result[1]
+            gotData = true
+        end)
+    end
+
+    while gotData == false do
+        print("Waiting data load ...")
+        Wait(100)
+    end
+
     if data == nil then
         data = {
             license = license,
-            money = 100000,
+            money = Config.DefaultMoney,
             driftPoint = 0,
             exp = 0,
             level = 0,
@@ -26,10 +45,44 @@ function InitPlayer(source)
         }
         player[source] = data
         pCrew[source] = "None"
-        SavePlayer(source)
+
+        local dataCreated = false
+        if Config.UseMysql then
+            MySQL.Async.execute('INSERT INTO players (money, license, driftPoint, exp, level, cars, succes, crew, crewOwner) VALUES (@money, @license, @driftPoint, @exp, @level, @cars, @succes, @crew, @crewOwner)',
+            { 
+                ['money'] = data.money, 
+                ['license'] = tostring(license)..saison, 
+                ['driftPoint'] = math.floor(data.driftPoint), 
+                ['exp'] = math.floor(data.exp),
+                ['level'] = data.level,
+                ['cars'] = json.encode(data.cars),
+                ['succes'] = json.encode(data.succes),
+                ['crew'] = data.crew,
+                ['crewOwner'] = data.crewOwner,
+            },
+            function(affectedRows)
+                dataCreated = true
+                print(affectedRows)
+            end)
+        else
+            dataCreated = true
+        end
+
+        while dataCreated == false do
+            print("Waiting data create ...")
+            Wait(100)
+        end
+
+        if not Config.UseMysql then
+            SavePlayer(source)
+        end
 
         debugPrint("Player created into database")
     else
+        if Config.UseMysql then
+            data.succes = json.decode(data.succes)
+            data.cars = json.decode(data.cars)
+        end
         if data.succes == nil then
             data.succes = {}
         end
@@ -43,6 +96,8 @@ function InitPlayer(source)
         if crew[data.crew] == nil then
             data.crew = "None"
         end
+
+        data.needSave = false
 
         pCrew[source] = data.crew
         player[source] = data
@@ -68,7 +123,36 @@ end
 function SavePlayer(source)
     local db = rockdb:new()
     local license = GetLicense(source)
-    db:SaveTable("player_"..tostring(license)..saison, player[source])
+
+    local saved = false
+    if Config.UseMysql then
+        local data = player[source]
+        MySQL.Async.execute('UPDATE players SET money = @money, driftPoint = @driftPoint, exp = @exp, level = @level, cars = @cars, succes = @succes, crew = @crew, crewOwner = @crewOwner WHERE license = @license',
+        { 
+            ['money'] = data.money, 
+            ['license'] = data.license, 
+            ['driftPoint'] = math.floor(data.driftPoint), 
+            ['exp'] = math.floor(data.exp),
+            ['level'] = data.level,
+            ['cars'] = json.encode(data.cars),
+            ['succes'] = json.encode(data.succes),
+            ['crew'] = data.crew,
+            ['crewOwner'] = data.crewOwner,
+        },
+        function(affectedRows)
+            save = true
+            print(affectedRows)
+        end)
+    else
+        db:SaveTable("player_"..tostring(license)..saison, player[source])
+        save = true
+    end
+
+    while save == false do
+        print("Waiting for save ...") 
+        Wait(100)
+    end
+    
     debugPrint("Player ("..source..") saved")
     player[source].needSave = false
 end
