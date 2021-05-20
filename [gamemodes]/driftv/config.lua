@@ -1,5 +1,10 @@
 Config = {}
 
+Config.UseMysql = true
+Config.UseIdentifierAsKey = "steam" -- Can be steam / license / ip / and all other identifier
+
+
+Config.DefaultMoney = 50000
 Config.DriftAttackWebhook = "" -- Webhook used to display score on drift attack
 Config.DriftAttackWebhookAvatar = "https://cdn.discordapp.com/attachments/582120765923524619/801897092871225404/ned-souris-rx-rdrift.png" -- Link to the avatar that DriftAttackWebhook will use
 
