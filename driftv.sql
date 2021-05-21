@@ -19,6 +19,7 @@ USE `driftv`;
 -- Listage de la structure de la table driftv. players
 CREATE TABLE IF NOT EXISTS `players` (
   `pUniqueID` int(11) NOT NULL AUTO_INCREMENT,
+  `pName` varchar(255) DEFAULT NULL,
   `money` int(11) NOT NULL DEFAULT '0',
   `license` varchar(255) NOT NULL DEFAULT '0',
   `driftPoint` int(11) NOT NULL DEFAULT '0',

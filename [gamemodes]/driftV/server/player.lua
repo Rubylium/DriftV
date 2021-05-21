@@ -32,6 +32,7 @@ function InitPlayer(source)
 
     if data == nil then
         data = {
+            pName = GetPlayerName(source),
             license = license,
             money = Config.DefaultMoney,
             driftPoint = 0,
@@ -48,8 +49,9 @@ function InitPlayer(source)
 
         local dataCreated = false
         if Config.UseMysql then
-            MySQL.Async.execute('INSERT INTO players (money, license, driftPoint, exp, level, cars, succes, crew, crewOwner) VALUES (@money, @license, @driftPoint, @exp, @level, @cars, @succes, @crew, @crewOwner)',
+            MySQL.Async.execute('INSERT INTO players (pName, money, license, driftPoint, exp, level, cars, succes, crew, crewOwner) VALUES (@name, @money, @license, @driftPoint, @exp, @level, @cars, @succes, @crew, @crewOwner)',
             { 
+                ['name'] = data.pName,
                 ['money'] = data.money, 
                 ['license'] = tostring(license)..saison, 
                 ['driftPoint'] = math.floor(data.driftPoint), 
@@ -127,8 +129,9 @@ function SavePlayer(source)
     local saved = false
     if Config.UseMysql then
         local data = player[source]
-        MySQL.Async.execute('UPDATE players SET money = @money, driftPoint = @driftPoint, exp = @exp, level = @level, cars = @cars, succes = @succes, crew = @crew, crewOwner = @crewOwner WHERE license = @license',
+        MySQL.Async.execute('UPDATE players SET pName = @name, money = @money, driftPoint = @driftPoint, exp = @exp, level = @level, cars = @cars, succes = @succes, crew = @crew, crewOwner = @crewOwner WHERE license = @license',
         { 
+            ['name'] = GetPlayerName(source), -- Get player name from native to force refresh if player change name
             ['money'] = data.money, 
             ['license'] = data.license, 
             ['driftPoint'] = math.floor(data.driftPoint), 
