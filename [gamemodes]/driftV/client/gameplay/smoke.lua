@@ -35,13 +35,6 @@ local function RefreshVeh()
 end
 
 Citizen.CreateThread(function()
-    while true do
-        pcall(RefreshVeh)
-        Wait(500)
-    end
-end)
-
-Citizen.CreateThread(function()
 
     local base = "scr_recartheft"
     local base2 = "core"
@@ -49,8 +42,16 @@ Citizen.CreateThread(function()
     Request(base)
     Request(base2)
 
+    local count = 0
     while true do 
         Citizen.Wait(1)
+
+        count = count + 1
+        if count >= 50 then
+            RefreshVeh()
+            count = 0
+            --print("Refresh smoke")
+        end
 
         local didCheck = false
         for k,v in pairs(vehiclesToCheck) do
@@ -71,6 +72,7 @@ Citizen.CreateThread(function()
         end
 
         if not didCheck then
+            RefreshVeh()
             Wait(500)
         end
     end
