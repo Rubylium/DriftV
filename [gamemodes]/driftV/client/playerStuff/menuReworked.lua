@@ -388,17 +388,17 @@ function OpenMainMenu()
                     if not passive then
                         RageUI.Button('Toggle ~g~ON~s~ passive mod', "Enables or disables the passive mod. This allows to disable collisions with other players/player vehicles, the best anti troll!", {}, true, {
                             onSelected = function()
-                                passive = not passive
+                                passive = true
                                 p:setPassive(passive)
-                                TriggerServerEvent("dirft:SetInPassive", passive)
+                                TriggerServerEvent(Events.setPassive, passive)
                             end,
                         });
                     else
                         RageUI.Button('Toggle ~r~OFF~s~ passive mod', "Enables or disables the passive mod. This allows to disable collisions with other players/player vehicles, the best anti troll!", {}, true, {
                             onSelected = function()
-                                passive = not passive
+                                passive = false
                                 p:setPassive(passive)
-                                TriggerServerEvent("dirft:SetInPassive", passive)
+                                TriggerServerEvent(Events.setPassive, passive)
                             end,
                         });
                     end
@@ -503,95 +503,94 @@ Citizen.CreateThread(function()
     end
 end)
 
-
 Citizen.CreateThread(function()
     while not loaded do Wait(1) end
     while true do
+        local pPed = p:ped()
+        local pVeh = p:currentVeh()
         if p:isPassive() then
+
             for _,v in pairs(GetActivePlayers()) do
-                local pPed = GetPlayerPed(v)
-                if pPed ~= p:ped() then
-                    --SetEntityAlpha(pPed, 200, 200)
-                    SetEntityNoCollisionEntity(p:ped(), pPed, false)
+                local ped = GetPlayerPed(v)
+                if ped ~= pPed then
 
-                    if IsPedInAnyVehicle(pPed, false) and GetVehiclePedIsIn(pPed, false) ~= p:currentVeh() then
-                        local veh = GetVehiclePedIsIn(pPed, false)
-                        SetEntityNoCollisionEntity(p:ped(), veh, false)
+                    SetEntityAlpha(ped, 200, false)
+                    SetEntityNoCollisionEntity(pPed, ped, true)
+                    SetEntityNoCollisionEntity(ped, pPed, true)
 
-                        --SetEntityNoCollisionEntity(p:currentVeh(), veh, false)
-                        SetEntityCollision(veh, false, true)
-                        SetEntityAlpha(veh, 200, 200)
+                    if IsPedInAnyVehicle(ped, false) and GetVehiclePedIsIn(ped, false) ~= pVeh then
+                        local veh = GetVehiclePedIsIn(ped, false)
 
-                        cachedEntity[veh] = veh
+                        SetEntityNoCollisionEntity(pPed, veh, true)
+                        SetEntityNoCollisionEntity(veh, pPed, true)
+
+                        SetEntityNoCollisionEntity(pVeh, veh, true)
+                        SetEntityNoCollisionEntity(veh, pVeh, true)
+
+                        --SetEntityCollision(veh, false, true)
+                        SetEntityAlpha(veh, 200, false)
+
                     end
 
-                    cachedEntity[pPed] = pPed
                 end
             end
         else
-            for _,v in pairs(cachedEntity) do
-                SetEntityNoCollisionEntity(p:ped(), v, true)
-                SetEntityNoCollisionEntity(p:currentVeh(), v, true)
-                SetEntityCollision(v, true, true)
-                ResetEntityAlpha(v)
-                cachedEntity[v] = nil
-            end
-        end
 
-        for k, _ in pairs(playersIdInPassive) do
-            local pPed = GetPlayerPed(GetPlayerFromServerId(k))
-            if pPed ~= p:ped() then
-                if IsPedInAnyVehicle(pPed, false) then
-                    local veh = GetVehiclePedIsIn(pPed, false)
-                    SetEntityNoCollisionEntity(p:ped(), veh, false)
-                    SetEntityNoCollisionEntity(p:currentVeh(), veh, false)
-                    SetEntityCollision(veh, false, true)
-                    SetEntityAlpha(veh, 200, 200)
-                    if playersInPassiveVeh[k][veh] == nil then
-                        playersInPassiveVeh[k][veh] = veh
-                    end
+            --print(json.encode(playersIdInPassive))
 
-                else
-                    for i,j in pairs(playersInPassiveVeh[k]) do
-                        ResetEntityAlpha(j)
-                        SetEntityNoCollisionEntity(p:ped(), j, true)
-                        SetEntityNoCollisionEntity(p:currentVeh(), j, true)
-                        SetEntityCollision(j, true, true)
-                        playersInPassiveVeh[k][i] = nil 
+            for _,v in pairs(GetActivePlayers()) do
+
+                local ped = GetPlayerPed(v)
+                local sID = GetPlayerServerId(v)
+                if ped ~= pPed then
+
+                    if playersIdInPassive[sID] ~= nil then
+                        SetEntityAlpha(ped, 200, false)
+                        SetEntityNoCollisionEntity(pPed, ped, true)
+                        SetEntityNoCollisionEntity(ped, pPed, true)
+
+                        if IsPedInAnyVehicle(ped, false) and GetVehiclePedIsIn(ped, false) ~= pVeh then
+                            local veh = GetVehiclePedIsIn(ped, false)
+    
+                            SetEntityNoCollisionEntity(pPed, veh, true)
+                            SetEntityNoCollisionEntity(veh, pPed, true)
+    
+                            SetEntityNoCollisionEntity(pVeh, veh, true)
+                            SetEntityNoCollisionEntity(veh, pVeh, true)
+    
+                           -- SetEntityCollision(veh, false, true)
+                            SetEntityAlpha(veh, 200, false)
+    
+                        end
+                    else
+                        ResetEntityAlpha(ped)
+                        if IsPedInAnyVehicle(ped, false) and GetVehiclePedIsIn(ped, false) ~= pVeh then
+                            ResetEntityAlpha(GetVehiclePedIsIn(ped, false))
+                        end
                     end
                     
+                    
                 end
+
+
             end
         end
-
-        for _,v in pairs(GetActivePlayers()) do
-            local pPed = GetPlayerPed(v)
-            if playersIdInPassive[GetPlayerServerId(v)] == nil and pPed ~= p:ped() then
-                if playersInPassiveVeh[GetPlayerServerId(v)] ~= nil then
-                    for _,j in pairs(playersInPassiveVeh[GetPlayerServerId(v)]) do
-                        ResetEntityAlpha(j)
-                        SetEntityNoCollisionEntity(p:ped(), j, true)
-                        SetEntityNoCollisionEntity(p:currentVeh(), j, true)
-                        SetEntityCollision(j, true, true)
-                    end
-                    playersInPassiveVeh[GetPlayerServerId(v)] = nil
-                end
-            end
-        end
-
-        Wait(500)
+        Wait(1)
     end
 end)
 
-RegisterNetEvent("dirft:SetInPassive")
-AddEventHandler("dirft:SetInPassive", function(list)
-    playersIdInPassive = list
-    for k, _ in pairs(playersIdInPassive) do
-        if playersInPassiveVeh[k] == nil then
-            playersInPassiveVeh[k] = {}
+Citizen.CreateThread(function()
+    while Events == nil do Wait(1) end
+    RegisterSecuredNetEvent(Events.setPassive, function(list)
+        playersIdInPassive = list
+        for k, _ in pairs(playersIdInPassive) do
+            if playersInPassiveVeh[k] == nil then
+                playersInPassiveVeh[k] = {}
+            end
         end
-    end
+    end)
 end)
+
 
 RegisterNetEvent("drift:GetServerInstance")
 AddEventHandler("drift:GetServerInstance", function(info)

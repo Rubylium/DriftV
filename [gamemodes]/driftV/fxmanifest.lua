@@ -22,11 +22,6 @@ files {
 }
 
 client_scripts {
-    '@PolyZone/client.lua',
-    '@PolyZone/BoxZone.lua',
-    '@PolyZone/EntityZone.lua',
-    '@PolyZone/CircleZone.lua',
-    '@PolyZone/ComboZone.lua',
     "@drift-extra-assets/src/NativeUIReloaded.lua",
     "RageUI/RMenu.lua",
     "RageUI/menu/RageUI.lua",
