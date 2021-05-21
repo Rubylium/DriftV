@@ -667,7 +667,7 @@ function StartCrewWarRace(data)
 
     local endPoints = GetCurrentDriftPoint()
     if raceStopped then
-        endPoints = 0
+        endPoints = endPoints
     end
     
     local endTime = GetGameTimer()
