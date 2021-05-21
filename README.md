@@ -1,6 +1,7 @@
 # DriftV
 Drift base for FiveM
 
+This gamemode as been designed to work with OneSync infinity. It will work without it, but performance can be worse.
 
 ensure you need 
 
