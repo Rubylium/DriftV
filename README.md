@@ -11,6 +11,7 @@ ensure chat-theme-gtao
 ensure spawnmanager
 ensure sessionmanager
 
+ensure mysql-async
 ensure driftV
 ensure drift-assets
 ensure drift-vehicles
