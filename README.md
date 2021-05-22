@@ -13,7 +13,7 @@ ensure spawnmanager
 ensure sessionmanager
 
 ensure mysql-async
-ensure driftV
+ensure driftv
 ensure drift-assets
 ensure drift-vehicles
 ensure driftV-sounds
