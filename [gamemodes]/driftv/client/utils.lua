@@ -151,7 +151,7 @@ end
 
 function Draw3DText(x,y,z,textInput,fontId,scaleX,scaleY)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
-    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)    
+    local dist = #(vector3(x, y, z) - vector3(px, py, pz))
     local scale = (1/dist)*20
     local fov = (1/GetGameplayCamFov())*100
     local scale = scale*fov   
@@ -470,7 +470,7 @@ function Trim(value)
 end
 
 function GetClosestPlayer()
-	local pPed = GetPlayerPed(-1)
+	local pPed = PlayerPedId()
 	local players = GetActivePlayers()
 	local coords = GetEntityCoords(pPed)
 	local pCloset = nil
@@ -480,7 +480,7 @@ function GetClosestPlayer()
 		if GetPlayerPed(v) ~= pPed then
 			local oPed = GetPlayerPed(v)
 			local oCoords = GetEntityCoords(oPed)
-			local dst = GetDistanceBetweenCoords(oCoords, coords, true)
+            local dst = #(oCoords - coords)
 			if pCloset == nil then
 				pCloset = v
 				pClosetPos = oCoords
@@ -499,7 +499,7 @@ function GetClosestPlayer()
 end
 
 function DisplayClosetPlayer()
-	local pPed = GetPlayerPed(-1)
+	local pPed = PlayerPedId()
 	local pCoords = GetEntityCoords(pPed)
 	local pCloset = GetClosestPlayer(pCoords)
 	if pCloset ~= -1 then

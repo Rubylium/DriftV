@@ -94,7 +94,7 @@ function OpenAnimationMenu()
                     for _,v in pairs(animations[selectedAnimation].Animations) do
                         RageUI.Button(v, nil, {}, true, {
                             onSelected = function()
-                                ClearPedTasksImmediately(GetPlayerPed(-1))
+                                ClearPedTasksImmediately(PlayerPedId())
                                 print("Dict: ".. animations[selectedAnimation].DictionaryName .." Anim: ".. v .. " Time: ".. GetAnimDuration(animations[selectedAnimation].DictionaryName, v))
                                 PlayAnim(animations[selectedAnimation].DictionaryName, v, settings.flag)
                             end

@@ -85,7 +85,7 @@ Citizen.CreateThread(function()
 		local veh = GetVehiclePedIsUsing(PlayerPedId())
 		local wait = false
 		if veh then
-			if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
+			if GetPedInVehicleSeat(veh, -1) == PlayerPedId() then
 				wait = true
 				if IsVehicleSirenOn(veh) then
 					DisableControlAction(0, CONTROLS['TOGGLE'][2], true)

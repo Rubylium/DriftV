@@ -11,7 +11,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		local Ped = GetPlayerPed(-1)
+		local Ped = PlayerPedId()
 		if(IsPedInAnyVehicle(Ped)) then
 			if GetEntitySpeed(Ped) >= 4 then
 				SendNUIMessage({

@@ -19,7 +19,7 @@ end
 
 Citizen.CreateThread(function()
     while true do
-        local pPed = GetPlayerPed(-1)
+        local pPed = PlayerPedId()
         local pCoords = GetEntityCoords(pPed)
         local pNear = false
 

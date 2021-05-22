@@ -2,7 +2,7 @@ function ToogleNoClip()
     if inNoClip then
         inNoClip = false
         SetEnabled(false)
-        SetNoClipAttributes(GetPlayerPed(-1), false)
+        SetNoClipAttributes(PlayerPedId(), false)
         local pPed = PlayerPedId()
         local pCoords = GetEntityCoords(pPed)
         local get, z = GetGroundZFor_3dCoord(pCoords.x, pCoords.y, pCoords.z, true, 0)
@@ -284,8 +284,8 @@ function CameraLoop()
         pos = pos + (vecY * -moveWS * speedMultiplier)
         pos = pos + (vecZ * moveQZ * speedMultiplier)
 
-        if #(pos - GetEntityCoords(GetPlayerPed(-1))) > 20.0 then
-            pos = GetEntityCoords(GetPlayerPed(-1))
+        if #(pos - GetEntityCoords(PlayerPedId())) > 20.0 then
+            pos = GetEntityCoords(PlayerPedId())
         end
 
         -- Adjust new rotation
@@ -295,7 +295,7 @@ function CameraLoop()
         SetFreecamRotation(rot.x, rot.y, rot.z)
 
         LockControls()
-        SetEntityCoordsNoOffset(GetPlayerPed(-1), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0)
+        SetEntityCoordsNoOffset(PlayerPedId(), pos.x, pos.y, pos.z, 0.0, 0.0, 0.0)
     end
 end
 
