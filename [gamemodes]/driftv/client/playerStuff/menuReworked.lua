@@ -173,7 +173,7 @@ function OpenMainMenu()
                     else
                         RageUI.Separator(p:getCrew())
                         RageUI.Button("Crew Points: ~g~".. GroupDigits(Crew[p:getCrew()].totalPoints), nil, {}, true, {});
-                        RageUI.Button("Members: ~g~"..Crew[p:getCrew()].memberCount.. "~s~/10", nil, {}, true, {});
+                        RageUI.Button("Members: ~g~"..Crew[p:getCrew()].memberCount.. "~s~/"..Config.MaxMembers, nil, {}, true, {});
                         RageUI.Button("Win / Loose: ~g~"..Crew[p:getCrew()].win .."~s~/~r~"..Crew[p:getCrew()].loose, nil, {}, true, {});
                         RageUI.Button("Crew War Elo: ~g~"..Crew[p:getCrew()].elo, nil, {}, true, {});
                         RageUI.Button("Start/stop crew war matchmaking", "The crew war system is a competitive mode where 2 crews compete in a drift race. The team with the highest score wins the crew war. The crew with the best Elo will have a crown displayed above their nickname.", {}, true, {
@@ -226,7 +226,7 @@ function OpenMainMenu()
 
                 RageUI.IsVisible(crewRankings, function()
                     for k,v in pairs(CrewRanking) do
-                        RageUI.Button("[#~b~"..k.."~s~] - "..v.name.." ~g~"..v.members.."~s~/10 | ~b~"..v.elo, "Crew points: "..v.points.." -  Win/Loose: "..v.win.."/"..v.loose, {}, true, {});
+                        RageUI.Button("[#~b~"..k.."~s~] - "..v.name.." ~g~"..v.members.."~s~"..Config.MaxMembers.." | ~b~"..v.elo, "Crew points: "..v.points.." -  Win/Loose: "..v.win.."/"..v.loose, {}, true, {});
                     end
                 end)
                 
