@@ -32,6 +32,7 @@ client_scripts {
     "RageUI/menu/items/*.lua",
     "RageUI/menu/panels/*.lua",
     "RageUI/menu/windows/*.lua",
+    "config.lua",
     "client/_security/*.lua",
     "client/class/*.lua",
     "client/gameplay/**/*.lua",
