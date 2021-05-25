@@ -5,10 +5,6 @@ Config.UseIdentifierAsKey = "steam" -- Can be steam / license / ip / and all oth
 Config.IdentifierNotFoundMessage = "Could not found your %s indentifer. Please try again. (if you are using steam, please restart / start your steam launcher"
 Config.CheckingIdentifierMessage = "Hello %s. Your %s ID is being checked."
 
-Config.BetterSmoke = true
-
-Config.MaxMembers = 10 -- Max members in crews
-
 Config.DefaultMoney = 50000
 Config.DriftAttackWebhook = "" -- Webhook used to display score on drift attack
 Config.DriftAttackWebhookAvatar = "https://cdn.discordapp.com/attachments/582120765923524619/801897092871225404/ned-souris-rx-rdrift.png" -- Link to the avatar that DriftAttackWebhook will use
