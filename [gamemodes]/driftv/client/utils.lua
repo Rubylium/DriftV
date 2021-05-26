@@ -508,7 +508,7 @@ function DisplayClosetPlayer()
 	end
 end
 
-function KeyboardImput(text, max)
+function KeyboardInput(text, max)
     local amount = nil
     if max == nil then
         max = 255

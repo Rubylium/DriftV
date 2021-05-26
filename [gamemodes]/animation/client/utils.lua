@@ -1,4 +1,4 @@
-function KeyboardImput(text)
+function KeyboardInput(text)
     local amount = nil
     AddTextEntry("CUSTOM_AMOUNT", text)
     DisplayOnscreenKeyboard(1, "CUSTOM_AMOUNT", '', "", '', '', '', 255)

@@ -34,47 +34,51 @@ local function RefreshVeh()
     end
 end
 
-Citizen.CreateThread(function()
+CreateThread(function()
 
-    local base = "scr_recartheft"
-    local base2 = "core"
+    if Config.BetterSmoke == true then
 
-    Request(base)
-    Request(base2)
+        local base = "scr_recartheft"
+        local base2 = "core"
 
-    local count = 0
-    while true do 
-        Citizen.Wait(1)
+        Request(base)
+        Request(base2)
 
-        count = count + 1
-        if count >= 50 then
-            RefreshVeh()
-            count = 0
-            --print("Refresh smoke")
-        end
+        local count = 0
+        while true do 
+            Wait(1)
 
-        local didCheck = false
-        for k,v in pairs(vehiclesToCheck) do
-            local car = v
-            local ang,speed = Angle(car)
+            count = count + 1
+            if count >= 50 then
+                RefreshVeh()
+                count = 0
+                --print("Refresh smoke")
+            end
 
-            
+            local didCheck = false
+            for k,v in pairs(vehiclesToCheck) do
+                local car = v
+                local ang,speed = Angle(car)
 
-            if _SMOKE_ON then
-                if speed * 3.6 >= 40 and ang >= 10 then
-                    didCheck = true
-                    local speed = speed * 3.6
-                    local densBySpeed = (_SIZE * speed) / 100
-                    local densByAngle = densBySpeed + (ang / 1000)
-                    DriftSmoke(base,"scr_wheel_burnout", car, _DENS, densByAngle)
+                
+
+                if _SMOKE_ON then
+                    if speed * 3.6 >= 40 and ang >= 10 then
+                        didCheck = true
+                        local speed = speed * 3.6
+                        local densBySpeed = (_SIZE * speed) / 100
+                        local densByAngle = densBySpeed + (ang / 1000)
+                        DriftSmoke(base,"scr_wheel_burnout", car, _DENS, densByAngle)
+                    end
                 end
+            end
+
+            if not didCheck then
+                RefreshVeh()
+                Wait(500)
             end
         end
 
-        if not didCheck then
-            RefreshVeh()
-            Wait(500)
-        end
     end
 end)
 

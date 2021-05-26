@@ -32,6 +32,7 @@ client_scripts {
     "RageUI/menu/items/*.lua",
     "RageUI/menu/panels/*.lua",
     "RageUI/menu/windows/*.lua",
+    "config_cl.lua",
     "client/_security/*.lua",
     "client/class/*.lua",
     "client/gameplay/**/*.lua",
@@ -42,7 +43,7 @@ client_scripts {
 
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
-    "config.lua",
+    "config_sv.lua",
     "server/_security/*.lua",
     "server/class/*.lua",
     "server/crew/*.lua",

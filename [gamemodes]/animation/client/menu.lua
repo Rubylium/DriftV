@@ -46,15 +46,15 @@ function OpenAnimationMenu()
                 RageUI.IsVisible(setting, function()
                     RageUI.Button('Change animation flag ('..tostring(settings.flag)..')', nil, {}, true, {
                         onSelected = function()
-                            local flag = KeyboardImput("Change the flag")
-                            if flag ~= nil then
+                            local flag = KeyboardInput("Change the flag")
+                            if flag ~= nil or flag ~= "" then
                                 settings.flag = flag
                             end
                         end
                     })
                     RageUI.Button("Filter by animation name", "Applying a filter can take some time, the system has to browse through all the animations to filter them. Performance may be impacted during processing", {}, true, {
                         onSelected = function()
-                            local name = KeyboardImput("Change the flag")
+                            local name = KeyboardInput("Change the flag")
                             if name ~= nil and name ~= "" then
                                 settings.filter = name
 
