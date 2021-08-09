@@ -3,6 +3,11 @@ Drift.multiplicatorLoop = false
 Drift.multiplicator = 1.0
 Drift.currentPoints = 0
 Drift.tandemCurrentPoints = 0
+Drift.inRace = false
+
+function Drift.SetInRace(status)
+    Drift.inRace = status
+end
 
 function Drift.GetCurrentDriftPoint()
     return math.floor(Drift.currentPoints)
@@ -64,6 +69,7 @@ function Drift.ResetDriftCounter()
     Drift.multiplicator = 1.0
     Drift.currentPoints = 0
     Drift.tandemCurrentPoints = 0
+    Drift.SendDriftDataToNui()
 end
 
 function Drift.CalculateDriftPoint(speed, angle)
@@ -135,14 +141,17 @@ Citizen.CreateThread(function()
 
             Drift.SendDriftDataToNui()
         else
-            Counter.cooldown = Counter.cooldown - 1
-            if Counter.cooldown == 0 then
-                SendNUIMessage({HideHud = true})
-
-                p:SubmitDriftScore(Drift.currentPoints, Drift.multiplicator)
-                Drift.ResetDriftCounter()
-                Drift.multiplicatorLoop = false
+            if not Drift.inRace then
+                Counter.cooldown = Counter.cooldown - 1
+                if Counter.cooldown == 0 then
+                    SendNUIMessage({HideHud = true})
+    
+                    p:SubmitDriftScore(Drift.currentPoints, Drift.multiplicator)
+                    Drift.ResetDriftCounter()
+                    Drift.multiplicatorLoop = false
+                end
             end
+
         end
         Wait(0)
     end

@@ -308,6 +308,7 @@ local timeBar = nil
 function StartRace(data, raceKey)
     inRace = true
     Drift.ResetDriftCounter()
+    Drift.SetInRace(true)
     SetPlayerInRace(true)
     local raceStopped = false
 
@@ -529,6 +530,7 @@ function StartRace(data, raceKey)
     end)
     TogglePasive(false)
     inRace = false
+    Drift.SetInRace(false)
 end
 
 
