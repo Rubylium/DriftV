@@ -1,6 +1,6 @@
 local Drift = {}
 Drift.multiplicatorLoop = false
-Drift.multiplicator = 0
+Drift.multiplicator = 1.0
 Drift.currentPoints = 0
 Drift.tandemCurrentPoints = 0
 
@@ -37,16 +37,27 @@ function Drift.GetCurrentSpeed()
 end
 
 function Drift.IsPlayerDrifting()
-    if Drift.GetCurrentAngle() > 10 then
-        return true
+    local pPed = PlayerPedId()
+    if IsPedInAnyVehicle(pPed, false) then
+        local pVeh = GetVehiclePedIsIn(pPed, false)
+        if pPed == GetPedInVehicleSeat(pVeh, -1) then
+            if Drift.GetCurrentAngle() > 10 then
+                return true
+            else
+                return false
+            end
+        else
+            return false
+        end
     else
         return false
     end
+
 end
 
 function Drift.ResetDriftCounter()
     Drift.multiplicatorLoop = false
-    Drift.multiplicator = 0
+    Drift.multiplicator = 1.0
     Drift.currentPoints = 0
     Drift.tandemCurrentPoints = 0
 end
@@ -57,7 +68,7 @@ function Drift.CalculateDriftPoint(speed, angle)
             angle = 40 -- To avoid cheated bonus
         end
     
-        local basePointToAddForAngle = 1
+        local basePointToAddForAngle = 1.5
         local points = 0.25 * (basePointToAddForAngle + angle) * basePointToAddForAngle
     
         local basePointToAddForSpeed = 1
@@ -68,23 +79,67 @@ function Drift.CalculateDriftPoint(speed, angle)
     end
 end
 
+function Drift.SendDriftDataToNui()
+    SendNUIMessage(
+        {
+            ShowHud = true,
+            driftPoints = math.floor(Drift.currentPoints),
+            driftDisplayMulti = "x"..Utils.Round(Drift.multiplicator, 1),
+        }
+    )
+end
+
 function Drift.StartMultiplicatorLoop()
     Citizen.CreateThread(function()
+        Drift.multiplicatorLoop = true
         while Drift.multiplicatorLoop do
+            --print("Looping multiplier", Drift.multiplicator )
             local angle = Drift.GetCurrentAngle()
             if angle < 10 or Drift.GetCurrentSpeed() < 25 then
-                Drift.multiplicator = Drift.multiplicator - 0.05
+                Drift.multiplicator = Drift.multiplicator - 0.025
                 if Drift.multiplicator <= 1.0 then
                     Drift.multiplicator = 1.0
                 end
             else
-                Drift.multiplicator = Drift.multiplicator + 0.0007
+                Drift.multiplicator = Drift.multiplicator + 0.01
                 if Drift.multiplicator > 10.0 then
                     Drift.multiplicator = 10.0
                 end
             end
 
-            RealWait(100)
+            Drift.SendDriftDataToNui()
+            Utils.RealWait(100)
         end
     end)
 end
+
+
+
+Citizen.CreateThread(function()
+    local Counter = {}
+    Counter.cooldown = 0
+    while true do
+        if Drift.IsPlayerDrifting() then
+            Counter.cooldown = 150
+            if Drift.multiplicatorLoop == false then
+                Drift.StartMultiplicatorLoop()
+            end
+
+            if Drift.GetCurrentAngle() > 10 then
+                Drift.currentPoints = Drift.currentPoints + Drift.CalculateDriftPoint(Drift.GetCurrentSpeed(), Drift.GetCurrentAngle())
+            end
+
+            Drift.SendDriftDataToNui()
+        else
+            Counter.cooldown = Counter.cooldown - 1
+            if Counter.cooldown == 0 then
+                SendNUIMessage({HideHud = true})
+
+                p:SubmitDriftScore(Drift.currentPoints, Drift.multiplicator)
+                Drift.ResetDriftCounter()
+                Drift.multiplicatorLoop = false
+            end
+        end
+        Wait(0)
+    end
+end)

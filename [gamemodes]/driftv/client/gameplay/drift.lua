@@ -217,136 +217,136 @@ function GetCurrentDriftPoint()
     return score
 end
 
-Citizen.CreateThread(function()
-    while not loaded do Wait(1) end
-    while true do
-        if p:isInVeh() then
-            Wait(50)
+-- Citizen.CreateThread(function()
+--     while not loaded do Wait(1) end
+--     while true do
+--         if p:isInVeh() then
+--             Wait(50)
 
-            score = 0
-            holding = 0
-            mult = 1.0
-            while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
+--             score = 0
+--             holding = 0
+--             mult = 1.0
+--             while p:isInVeh() and GetPedInVehicleSeat(p:currentVeh(), -1) == p:ped() and blacklistVeh[GetEntityModel(p:currentVeh())] == nil and not inAerorport do
 
-                local newScore = score
-                local angle = angle(p:currentVeh())
-                local ground = GetEntityHeightAboveGround(p:currentVeh())
-                local speed = p:speed()
+--                 local newScore = score
+--                 local angle = angle(p:currentVeh())
+--                 local ground = GetEntityHeightAboveGround(p:currentVeh())
+--                 local speed = p:speed()
 
-                if angle < 10 then
-                    if holding <= 0 then
-                        holding = 0
-                    end
-                    mult = mult - 0.05
-                    if mult <= 1.0 then
-                        mult = 1.0
-                        holding = 0
-                    end
-                else
-                    mult = mult + 0.0007
-                    if mult > 10.0 then
-                        mult = 10.0
-                    end
-                end
+--                 if angle < 10 then
+--                     if holding <= 0 then
+--                         holding = 0
+--                     end
+--                     mult = mult - 0.05
+--                     if mult <= 1.0 then
+--                         mult = 1.0
+--                         holding = 0
+--                     end
+--                 else
+--                     mult = mult + 0.0007
+--                     if mult > 10.0 then
+--                         mult = 10.0
+--                     end
+--                 end
 
-                if angle > 10 then
-                    TriggerEvent("driftv:SetAngle", angle)
+--                 if angle > 10 then
+--                     TriggerEvent("driftv:SetAngle", angle)
 
-                    if GetEntityHealth(p:currentVeh()) ~= vehicleHealth then
-                        vehicleHealth = GetEntityHealth(p:currentVeh())
-                        holding = 0
-                        mult = 1.0
-                    end
+--                     if GetEntityHealth(p:currentVeh()) ~= vehicleHealth then
+--                         vehicleHealth = GetEntityHealth(p:currentVeh())
+--                         holding = 0
+--                         mult = 1.0
+--                     end
 
-                    if angle >= 10 and angle <= 18 and ground <= 1.5 then
-                        newScore = math.floor(score  + (2 * mult))
-                    elseif angle > 18 and angle <= 25 and ground <= 1.5 then
-                        local toAdd = (3 * mult) * (speed / 10)
-                        newScore = math.floor(score + toAdd)
-                    elseif angle > 25 and angle <= 40 and ground <= 1.5 and speed >= baseSpeedLimit then
-                        local toAdd = (4 * mult) * (speed / 10)
-                        newScore = math.floor(score + toAdd)
+--                     if angle >= 10 and angle <= 18 and ground <= 1.5 then
+--                         newScore = math.floor(score  + (2 * mult))
+--                     elseif angle > 18 and angle <= 25 and ground <= 1.5 then
+--                         local toAdd = (3 * mult) * (speed / 10)
+--                         newScore = math.floor(score + toAdd)
+--                     elseif angle > 25 and angle <= 40 and ground <= 1.5 and speed >= baseSpeedLimit then
+--                         local toAdd = (4 * mult) * (speed / 10)
+--                         newScore = math.floor(score + toAdd)
 
-                        if not littleSucces.angleGood.cooldown then
-                            littleSucces.angleGood.cooldown = true
-                            AddLittleSucces(littleSucces.angleGood.label)
-                            Citizen.CreateThread(function()
-                                Wait(20000)
-                                littleSucces.angleGood.cooldown = false
-                            end)
-                        end
-                    elseif angle > 40 and angle <= 50 and ground <= 1.5 and speed >= baseSpeedLimit then
-                        local toAdd = (15 * mult) * (speed / 10)
-                        newScore = math.floor(score + toAdd)
+--                         if not littleSucces.angleGood.cooldown then
+--                             littleSucces.angleGood.cooldown = true
+--                             AddLittleSucces(littleSucces.angleGood.label)
+--                             Citizen.CreateThread(function()
+--                                 Wait(20000)
+--                                 littleSucces.angleGood.cooldown = false
+--                             end)
+--                         end
+--                     elseif angle > 40 and angle <= 50 and ground <= 1.5 and speed >= baseSpeedLimit then
+--                         local toAdd = (15 * mult) * (speed / 10)
+--                         newScore = math.floor(score + toAdd)
                         
-                        if not littleSucces.angleInsane.cooldown then
-                            littleSucces.angleInsane.cooldown = true
-                            AddLittleSucces(littleSucces.angleInsane.label)
-                            Citizen.CreateThread(function()
-                                Wait(20000)
-                                littleSucces.angleInsane.cooldown = false
-                            end)
-                        end
-                    elseif angle >= 10 and ground <= 1.5 then
-                        newScore = math.floor(score + (1 * mult))
-                    end
+--                         if not littleSucces.angleInsane.cooldown then
+--                             littleSucces.angleInsane.cooldown = true
+--                             AddLittleSucces(littleSucces.angleInsane.label)
+--                             Citizen.CreateThread(function()
+--                                 Wait(20000)
+--                                 littleSucces.angleInsane.cooldown = false
+--                             end)
+--                         end
+--                     elseif angle >= 10 and ground <= 1.5 then
+--                         newScore = math.floor(score + (1 * mult))
+--                     end
 
-                    if speed > 120 then
-                        if not littleSucces.speed.cooldown then
-                            littleSucces.speed.cooldown = true
-                            AddLittleSucces(littleSucces.speed.label)
-                            Citizen.CreateThread(function()
-                                Wait(15000)
-                                littleSucces.speed.cooldown = false
-                            end)
-                        end
-                    end
-                else
-                    Wait(300)
-                end
+--                     if speed > 120 then
+--                         if not littleSucces.speed.cooldown then
+--                             littleSucces.speed.cooldown = true
+--                             AddLittleSucces(littleSucces.speed.label)
+--                             Citizen.CreateThread(function()
+--                                 Wait(15000)
+--                                 littleSucces.speed.cooldown = false
+--                             end)
+--                         end
+--                     end
+--                 else
+--                     Wait(300)
+--                 end
 
     
                 
 
-                if speed <= 4 and score ~= 0 and not inRace then
-                    p:SubmitDriftScore(score * mult, mult)
-                    score = 0
-                    waiting = 0
-                    mult = 1.0
-                    SendNUIMessage({HideHud = true})
-                else
-                    if newScore ~= score and speed >= 10.0 then
-                        waiting = 0
-                        score = newScore
-                    else
-                        waiting = waiting + 1
-                        if waiting >= 5 and score ~= 0 and not inRace then
-                            p:SubmitDriftScore(score * mult, mult)
-                            score = 0
-                            waiting = 0
-                            mult = 1.0
-                            SendNUIMessage({HideHud = true})
-                        end
-                    end
-                end
+--                 if speed <= 4 and score ~= 0 and not inRace then
+--                     p:SubmitDriftScore(score * mult, mult)
+--                     score = 0
+--                     waiting = 0
+--                     mult = 1.0
+--                     SendNUIMessage({HideHud = true})
+--                 else
+--                     if newScore ~= score and speed >= 10.0 then
+--                         waiting = 0
+--                         score = newScore
+--                     else
+--                         waiting = waiting + 1
+--                         if waiting >= 5 and score ~= 0 and not inRace then
+--                             p:SubmitDriftScore(score * mult, mult)
+--                             score = 0
+--                             waiting = 0
+--                             mult = 1.0
+--                             SendNUIMessage({HideHud = true})
+--                         end
+--                     end
+--                 end
 
                 
-                if score ~= 0 then
-                    --SetMulti()
-                    SendNUIMessage(
-                        {
-                            ShowHud = true,
-                            driftPoints = math.floor(score),
-                            driftDisplayMulti = "x"..round2(mult, 1),
-                        }
-                    )
-                end
-                Wait(1)
-            end
+--                 if score ~= 0 then
+--                     --SetMulti()
+--                     SendNUIMessage(
+--                         {
+--                             ShowHud = true,
+--                             driftPoints = math.floor(score),
+--                             driftDisplayMulti = "x"..round2(mult, 1),
+--                         }
+--                     )
+--                 end
+--                 Wait(1)
+--             end
 
-        else
-            SendNUIMessage({HideHud = true})
-            Wait(500)
-        end
-    end
-end)
+--         else
+--             SendNUIMessage({HideHud = true})
+--             Wait(500)
+--         end
+--     end
+-- end)
