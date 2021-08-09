@@ -44,6 +44,13 @@ function Drift.IsPlayerDrifting()
     end
 end
 
+function Drift.ResetDriftCounter()
+    Drift.multiplicatorLoop = false
+    Drift.multiplicator = 0
+    Drift.currentPoints = 0
+    Drift.tandemCurrentPoints = 0
+end
+
 function Drift.CalculateDriftPoint(speed, angle)
     if angle > 10 and speed > 25 then
         if angle > 40 then

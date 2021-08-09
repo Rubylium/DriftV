@@ -38,6 +38,7 @@ client_scripts {
     "client/gameplay/**/*.lua",
     "client/playerStuff/*.lua",
     "client/shop/*.lua",
+    "client/module/*.lua",
     "client/*.lua"
 }
 
