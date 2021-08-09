@@ -49,9 +49,13 @@ function Drift.IsPlayerDrifting()
     local pPed = PlayerPedId()
     if IsPedInAnyVehicle(pPed, false) then
         local pVeh = GetVehiclePedIsIn(pPed, false)
-        if pPed == GetPedInVehicleSeat(pVeh, -1) then
-            if Drift.GetCurrentAngle() > 10 then
-                return true
+        if GetEntityHeightAboveGround(pVeh) <= 1.5 then
+            if pPed == GetPedInVehicleSeat(pVeh, -1) then
+                if Drift.GetCurrentAngle() > 10 then
+                    return true
+                else
+                    return false
+                end
             else
                 return false
             end
