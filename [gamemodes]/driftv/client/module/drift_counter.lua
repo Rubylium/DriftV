@@ -83,10 +83,10 @@ function Drift.CalculateDriftPoint(speed, angle)
         end
     
         local basePointToAddForAngle = 1.5
-        local points = 0.25 * (basePointToAddForAngle + angle) * basePointToAddForAngle
+        local points = 0.15 * (basePointToAddForAngle + angle) * basePointToAddForAngle
     
         local basePointToAddForSpeed = 1
-        local points = points + (0.25 * (basePointToAddForSpeed + speed) * basePointToAddForSpeed)
+        local points = points + (0.15 * (basePointToAddForSpeed + speed) * basePointToAddForSpeed)
         return points * Drift.multiplicator
     else
         return 0
@@ -153,11 +153,11 @@ Citizen.CreateThread(function()
             if not Drift.inRace then
                 Counter.cooldown = Counter.cooldown - 1
                 if Counter.cooldown == 0 then
-                    SendNUIMessage({HideHud = true})
-    
                     p:SubmitDriftScore(Drift.currentPoints, Drift.multiplicator)
                     Drift.ResetDriftCounter()
                     Drift.multiplicatorLoop = false
+
+                    SendNUIMessage({HideHud = true})
                 end
             end
 
