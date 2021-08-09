@@ -103,6 +103,10 @@ function Drift.SendDriftDataToNui()
     )
 end
 
+function Drift.RefreshAngleFromHud()
+    TriggerEvent("driftv:SetAngle", Drift.GetCurrentAngle()) -- worst way of sending data, but whatever, old code
+end
+
 function Drift.StartMultiplicatorLoop()
     Citizen.CreateThread(function()
         Drift.multiplicatorLoop = true
@@ -144,6 +148,7 @@ Citizen.CreateThread(function()
             end
 
             Drift.SendDriftDataToNui()
+            Drift.RefreshAngleFromHud()
         else
             if not Drift.inRace then
                 Counter.cooldown = Counter.cooldown - 1
