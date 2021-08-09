@@ -1,8 +1,12 @@
-local Drift = {}
+Drift = {}
 Drift.multiplicatorLoop = false
 Drift.multiplicator = 1.0
 Drift.currentPoints = 0
 Drift.tandemCurrentPoints = 0
+
+function Drift.GetCurrentDriftPoint()
+    return math.floor(Drift.currentPoints)
+end
 
 function Drift.GetCurrentAngle()
     local pPed = PlayerPedId()

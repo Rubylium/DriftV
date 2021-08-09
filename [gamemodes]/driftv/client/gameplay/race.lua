@@ -307,7 +307,7 @@ local timeBar = nil
 
 function StartRace(data, raceKey)
     inRace = true
-    ResetDriftPoint()
+    Drift.ResetDriftCounter()
     SetPlayerInRace(true)
     local raceStopped = false
 
@@ -424,7 +424,7 @@ function StartRace(data, raceKey)
     PlaySoundFrontend(-1, "ScreenFlash", "WastedSounds")
     RemoveBlip(blip)
 
-    local endPoints = GetCurrentDriftPoint()
+    local endPoints = Drift.GetCurrentDriftPoint()
     SetPlayerInRace(false)
 
 
