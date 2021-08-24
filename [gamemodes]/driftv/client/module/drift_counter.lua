@@ -76,17 +76,19 @@ function Drift.ResetDriftCounter()
     Drift.SendDriftDataToNui()
 end
 
+local timer = GetGameTimer()
 function Drift.CalculateDriftPoint(speed, angle)
     if angle > 10 and speed > 25 then
+        local frames = (GetGameTimer() - timer)
         if angle > 40 then
             angle = 40 -- To avoid cheated bonus
         end
     
         local basePointToAddForAngle = 1.5
-        local points = 0.15 * (basePointToAddForAngle + angle) * basePointToAddForAngle
+        local points = (0.02 * (basePointToAddForAngle + angle) * basePointToAddForAngle) * frames
     
         local basePointToAddForSpeed = 1
-        local points = points + (0.15 * (basePointToAddForSpeed + speed) * basePointToAddForSpeed)
+        local points = points + ((0.02 * (basePointToAddForSpeed + speed) * basePointToAddForSpeed) * frames)
         return points * Drift.multiplicator
     else
         return 0
@@ -162,6 +164,7 @@ Citizen.CreateThread(function()
             end
 
         end
+        timer = GetGameTimer()
         Wait(0)
     end
 end)
