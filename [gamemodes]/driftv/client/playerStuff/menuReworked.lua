@@ -126,12 +126,6 @@ function OpenMainMenu()
                             
                             open = false
                             RageUI.CloseAll()
-   							for veh in EnumerateVehicles() do
-								if DoesEntityExist(veh) then
-									DeleteEntity(veh)
-									Citizen.Trace("Deleting vehicle...")
-								end
-							end
                             EnableLobby()
                         end,
                         });
