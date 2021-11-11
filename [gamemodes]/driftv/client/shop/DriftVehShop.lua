@@ -106,9 +106,10 @@ function OpenVehShopMenu(GoBackToLobby)
         cam.setActive("SHOP", true)
         cam.render("SHOP", true, false, 0)
 
-        Citizen.CreateThread(function()
+         Citizen.CreateThread(function()
             while open do
                 RageUI.IsVisible(main, function()
+		            RageUI.Button("Money: ~g~$"..GroupDigits(tostring(p:GetMoney())) .. "", nil, {}, true, {});
                     for k,v in pairs(vehs) do
                         RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
                             onSelected = function()
