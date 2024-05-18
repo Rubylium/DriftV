@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CMapParentTxds>
- <txdRelationships>
-  <Item>
-   <parent>minoo_1</parent>
-   <child>minoo</child>
-  </Item>
- </txdRelationships>
-</CMapParentTxds>

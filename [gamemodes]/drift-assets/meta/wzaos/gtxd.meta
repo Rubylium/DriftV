@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CMapParentTxds>
- <txdRelationships>
-  <Item>
-   <parent>wzaos_1</parent>
-   <child>wzaos</child>
-  </Item>
- </txdRelationships>
-</CMapParentTxds>

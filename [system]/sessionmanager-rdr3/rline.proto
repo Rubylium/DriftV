@@ -167,3 +167,26 @@ message scmds_Parameters {
 	int32 ncmds = 2;
 	repeated SessionCommand cmds = 3;
 };
+
+message UriType {
+    string url = 1;
+};
+
+message TransitionReady_PlayerQueue_Parameters {
+    UriType serverUri = 1;
+    uint32 serverSandbox = 2;
+    MpTransitionIdDto id = 3;
+    uint32 sessionType = 4;
+    MpSessionRequestIdDto requestId = 5;
+    MpSessionIdDto transferId = 6;
+};
+
+message TransitionToSession_Parameters {
+	MpTransitionIdDto id = 1;
+	float x = 2;
+	float y = 3;
+};
+
+message TransitionToSessionResult {
+	uint32 code = 1;
+};

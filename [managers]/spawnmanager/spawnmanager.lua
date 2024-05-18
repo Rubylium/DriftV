@@ -1,13 +1,5 @@
 -- in-memory spawnpoint array for this script execution instance
-local spawnPoints = {
-    {
-        model = "a_m_m_bevhills_02",
-        x = 229.73329162598,
-        y = -885.22637939453,
-        z = 30.949995040894,
-        heading = 101.22080230713,
-    }
-}
+local spawnPoints = {}
 
 -- auto-spawn enabled flag
 local autoSpawnEnabled = false
@@ -220,9 +212,34 @@ function spawnPlayer(spawnIdx, cb)
     spawnLock = true
 
     Citizen.CreateThread(function()
+        -- if the spawn isn't set, select a random one
+        if not spawnIdx then
+            spawnIdx = GetRandomIntInRange(1, #spawnPoints + 1)
+        end
 
         -- get the spawn from the array
-        local spawn = spawnPoints[1]
+        local spawn
+
+        if type(spawnIdx) == 'table' then
+            spawn = spawnIdx
+
+            -- prevent errors when passing spawn table
+            spawn.x = spawn.x + 0.00
+            spawn.y = spawn.y + 0.00
+            spawn.z = spawn.z + 0.00
+
+            spawn.heading = spawn.heading and (spawn.heading + 0.00) or 0
+        else
+            spawn = spawnPoints[spawnIdx]
+        end
+
+        if not spawn.skipFade then
+            DoScreenFadeOut(500)
+
+            while not IsScreenFadedOut() do
+                Citizen.Wait(0)
+            end
+        end
 
         -- validate the index
         if not spawn then
