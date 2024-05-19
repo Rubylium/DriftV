@@ -55,3 +55,7 @@ function Races.GetLeaderboard(uid)
     end
     return nil
 end
+
+RegisterNetEvent("main:addScore", function(uid, player, score)
+    Races.AddScore(uid, player, score)
+end)
