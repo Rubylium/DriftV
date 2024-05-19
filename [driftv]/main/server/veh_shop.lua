@@ -33,6 +33,24 @@ function VehicleShop.Sell(source, index)
     Players.SaveDataToDB(source)
 end
 
+function VehicleShop.GetVehicles()
+    local vehicles = {}
+    for k, v in pairs(VehicleShop.List) do
+        table.insert(vehicles, v)
+    end
+    return vehicles
+end
+
+function VehicleShop.GetVehiclesByType(type)
+    local vehicles = {}
+    for k, v in pairs(VehicleShop.List) do
+        if v.type == type then
+            table.insert(vehicles, v)
+        end
+    end
+    return vehicles
+end
+
 RegisterNetEvent("main:buyVehicle", function(name)
     local source = source
     local player = Players.Get(source)
