@@ -2,43 +2,18 @@ VehicleShop = {}
 VehicleShop.List = {
     {
         name = "blista",
+        type = "race",
         price = 5000,
     },
     {
         name = "sultan",
+        type = "race",
         price = 10000,
     },
     {
         name = "elegy",
+        type = "drift",
         price = 15000,
-    },
-    {
-        name = "comet",
-        price = 20000,
-    },
-    {
-        name = "turismo",
-        price = 25000,
-    },
-    {
-        name = "infernus",
-        price = 30000,
-    },
-    {
-        name = "bullet",
-        price = 35000,
-    },
-    {
-        name = "cheetah",
-        price = 40000,
-    },
-    {
-        name = "banshee",
-        price = 45000,
-    },
-    {
-        name = "phoenix",
-        price = 50000,
     },
 }
 
