@@ -18,17 +18,27 @@ end
 function Crew.LoadDataFromDB()
     MySQL.Async.fetchAll("SELECT * FROM crews", {}, function(result)
         for k, v in pairs(result) do
-            local members = json.decode(v.members)
             Crew.New(v.uid, v.name, v.points)
+        end
+    end)
+end
+
+-- Crew members are savec in the player table with the crew uid
+function Crew.UpdateCrewMembersFromDB(crew)
+    MySQL.Async.fetchAll("SELECT * FROM players WHERE crew = @crew", {
+        ["@crew"] = crew.uid,
+    }, function(result)
+        for k, v in pairs(result) do
+            table.insert(crew.members, v.license)
         end
     end)
 end
 
 function Crew.SaveDataToDB()
     for k, v in pairs(Crew.List) do
-        MySQL.Async.execute("UPDATE crews SET members = @members WHERE uid = @uid", {
+        MySQL.Async.execute("UPDATE crews SET points = @points WHERE uid = @uid", {
             ["@uid"] = v.uid,
-            ["@members"] = json.encode(v.members),
+            ["@points"] = v.points,
         })
     end
 end
