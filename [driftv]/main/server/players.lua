@@ -69,3 +69,17 @@ RegisterNetEvent("main:playerLoaded", function()
     Players.New(source)
     Players.LoadDataFromDB(source)
 end)
+
+-- Handle auto save + remove from cache when disconnected
+Citizen.CreateThread(function()
+    while true do
+        for k, v in pairs(Players.List) do
+            Players.SaveDataToDB(k)
+
+            if GetPlayerPing(k) == 0 then
+                Players.List[k] = nil
+            end
+        end
+        Citizen.Wait(60000)
+    end
+end)
