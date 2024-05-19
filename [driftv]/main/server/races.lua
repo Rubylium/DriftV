@@ -10,6 +10,9 @@ function Races.New(name, uid, start_position, end_position)
     self.leaderboard = {}
 
     function self:addScore(player, score)
+        if type(player) ~= "string" or type(score) ~= "number" then
+            error("Invalid player name or score")
+        end
         table.insert(self.leaderboard, {player = player, score = score})
         self:updateLeaderboard()
     end
