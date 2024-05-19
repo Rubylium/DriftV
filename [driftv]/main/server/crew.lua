@@ -43,6 +43,11 @@ function Crew.SaveDataToDB()
     end
 end
 
+function Crew.AddPoints(name, points)
+    local crew = Crew.Get(name)
+    crew.points = crew.points + points
+end
+
 function Crew.CanCrewBeCreated(name)
     if Crew.Get(name) then
         return false
