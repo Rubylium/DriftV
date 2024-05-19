@@ -55,6 +55,15 @@ function Players.GetPlayers()
     return players
 end
 
+function Players.AddCar(source, name, props)
+    local player = Players.Get(source)
+    table.insert(player.cars, {
+        name = name,
+        props = props,
+    })
+    Players.SaveDataToDB(source)
+end
+
 RegisterNetEvent("main:playerLoaded", function()
     local source = source
     Players.New(source)
