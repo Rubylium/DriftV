@@ -60,6 +60,7 @@ local vehs = {
 
 local backToLobby = false
 local open = false
+local ownedVehicles = {} -- Addition to show owned vehicles that you can sell.
 local selectedSub = {}
 local previewVeh = {
     entity = 0,
@@ -71,7 +72,9 @@ local previewCoords = vector4(-44.621406555176, -1096.7896728516, 26.42235946655
 local vehShopCoords = vector3(-43.162559509277, -1100.0212402344, 26.422359466553)
 local camPos = vector3(-45.922637939453, -1102.5314941406, 27.422361373901)
 local main = RageUI.CreateMenu("DriftV", "~b~Drift vehicles shop")
-local sub =  RageUI.CreateSubMenu(main, "DriftV", "~b~Drift vehicles shop")
+local sub = RageUI.CreateSubMenu(main, "DriftV", "~b~Drift vehicles shop")
+local sellSub = RageUI.CreateSubMenu(main, "Sell Vehicle", "~b~Sell your vehicles")
+
 main.Closed = function()
     open = false
     RageUI.CloseAll()
@@ -84,16 +87,16 @@ main.Closed = function()
         EnableLobby()
     end
 end
-main.WidthOffset = 100.0
-sub.WidthOffset = 100.0
-local isCreatingVehicle = false
+
+main.WidthOffset = 125.0
+sub.WidthOffset = 125.0
+sellSub.WidthOffset = 125.00
 
 function OpenVehShopMenu(GoBackToLobby)
     if open then
         open = false
         RageUI.Visible(main, false)
     else
-
         if GoBackToLobby ~= nil and GoBackToLobby == true then
             backToLobby = true
         else
@@ -109,10 +112,13 @@ function OpenVehShopMenu(GoBackToLobby)
         cam.setActive("SHOP", true)
         cam.render("SHOP", true, false, 0)
 
-         Citizen.CreateThread(function()
+        -- Fetch vehicles when opening the "Sell Vehicle" menu
+        TriggerServerEvent("drift:FetchVehicles")
+        Citizen.CreateThread(function()
             while open do
                 RageUI.IsVisible(main, function()
-		            RageUI.Button("Money: ~g~$"..GroupDigits(tostring(p:GetMoney())) .. "", nil, {}, true, {});
+                    RageUI.Button("Money: ~g~$"..GroupDigits(tostring(p:GetMoney())) .. "", nil, {}, true, {})
+                    RageUI.Button("Sell Vehicle", nil, {RightLabel = ">"}, true, {}, sellSub)
                     for k,v in pairs(vehs) do
                         RageUI.Button(v.label, nil, {RightLabel = ">"}, true, {
                             onSelected = function()
@@ -126,21 +132,34 @@ function OpenVehShopMenu(GoBackToLobby)
                     for k,v in pairs(vehs[selectedSub].vehs) do
                         RageUI.Button(v.maker.." "..v.label, nil, {RightLabel = "~g~"..GroupDigits(v.price).."~s~$"}, true, {
                             onSelected = function()
-                                if v.price <= p:GetMoney() then
-                                    open = false
-                                    RageUI.CloseAll()
-                                    RageUI.Visible(main, false)
-                                    DeleteEntity(previewVeh.entity)
-                                    cam.render("SHOP", false, false, 0)
-                                    cam.delete("SHOP")
-                                    TriggerServerEvent(Events.buyVeh, v.price, v.maker.." "..v.label, v.model)
-                                    ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
-
-                                    if backToLobby then
-                                        EnableLobby()
+                                -- Check if the player already owns this vehicle
+                                local alreadyOwned = false
+                                for _, car in ipairs(ownedVehicles) do
+                                    if car.model == v.model then
+                                        alreadyOwned = true
+                                        break
                                     end
+                                end
+
+                                if alreadyOwned then
+                                    ShowNotification("You already own this vehicle!")
                                 else
-                                    ShowNotification("Not enough money")
+                                    if v.price <= p:GetMoney() then
+                                        open = false
+                                        RageUI.CloseAll()
+                                        RageUI.Visible(main, false)
+                                        DeleteEntity(previewVeh.entity)
+                                        cam.render("SHOP", false, false, 0)
+                                        cam.delete("SHOP")
+                                        TriggerServerEvent(Events.buyVeh, v.price, v.maker.." "..v.label, v.model)
+                                        ShowHelpNotification("Your new vehicle has been added to your garage! To take it out, use F1 -> My vehicles !", true)
+
+                                        if backToLobby then
+                                            EnableLobby()
+                                        end
+                                    else
+                                        ShowNotification("Not enough money")
+                                    end
                                 end
                             end,
                             onActive = function()
@@ -148,13 +167,11 @@ function OpenVehShopMenu(GoBackToLobby)
                                     SelectedModel = v.model
                                     isCreatingVehicle = true
                                     Citizen.CreateThread(function()
-                                        -- Delete all existing preview entities
                                         for _, entity in pairs(previewEntitys) do
                                             DeleteEntity(entity)
                                         end
                                         previewEntitys = {}
 
-                                        -- Create and setup the new vehicle
                                         local veh = entity:CreateVehicleLocal(SelectedModel, previewCoords.xyz, previewCoords.w)
                                         local vehId = veh:getEntityId()
 
@@ -163,11 +180,9 @@ function OpenVehShopMenu(GoBackToLobby)
                                         FreezeEntityPosition(vehId, true)
                                         SetVehicleDirtLevel(vehId, 0.0)
 
-                                        -- Update preview vehicle details
                                         previewVeh.entity = vehId
                                         previewVeh.model = SelectedModel
 
-                                        -- Reset the flag after vehicle creation
                                         isCreatingVehicle = false
                                     end)
                                 end
@@ -176,11 +191,61 @@ function OpenVehShopMenu(GoBackToLobby)
                     end
                 end)
 
+                RageUI.IsVisible(sellSub, function()
+                    if #ownedVehicles > 0 then
+                        for _, car in ipairs(ownedVehicles) do
+                            RageUI.Button(car.label, nil, {RightLabel = "~g~$" .. GroupDigits(math.floor(car.price / 2))}, true, {
+                                onSelected = function()
+                                    TriggerServerEvent(Events.sellVeh, car.model) -- Trigger sell event
+                
+                                    -- Transition back to the main Drift Vehicle Shop menu
+                                    RageUI.CloseAll() -- Close all menus
+                                    Wait(200) -- Small delay to ensure clean transition
+                                    RageUI.Visible(main, true) -- Reopen the main menu
+                                end,
+                                onActive = function()
+                                    if SelectedModel ~= car.model and not isCreatingVehicle then
+                                        SelectedModel = car.model
+                                        isCreatingVehicle = true
+                                        Citizen.CreateThread(function()
+                                            for _, entity in pairs(previewEntitys) do
+                                                DeleteEntity(entity)
+                                            end
+                                            previewEntitys = {}
+                
+                                            local veh = entity:CreateVehicleLocal(SelectedModel, previewCoords.xyz, previewCoords.w)
+                                            local vehId = veh:getEntityId()
+                
+                                            table.insert(previewEntitys, vehId)
+                                            SetVehicleOnGroundProperly(vehId)
+                                            FreezeEntityPosition(vehId, true)
+                                            SetVehicleDirtLevel(vehId, 0.0)
+                
+                                            previewVeh.entity = vehId
+                                            previewVeh.model = SelectedModel
+                
+                                            isCreatingVehicle = false
+                                        end)
+                                    end
+                                end
+                            })
+                        end
+                    else
+                        RageUI.Button("You don't Own any vehicles", nil, {}, false, {})
+                    end
+                end)
+                
                 Wait(1)
             end
         end)
     end
 end
+
+-- Listen for server response and update ownedVehicles
+RegisterNetEvent("drift:ReceiveVehicles")
+AddEventHandler("drift:ReceiveVehicles", function(carList)
+    ownedVehicles = carList or {}
+end)
 
 Citizen.CreateThread(function()
     while zone == nil do Wait(1) end
@@ -188,4 +253,3 @@ Citizen.CreateThread(function()
     zone.addZone("veh_shop", vehShopCoords, "Press ~INPUT_CONTEXT~ to open vehicle shop", function() OpenVehShopMenu() end, true, 36, 1.0, {133, 255, 92}, 170)
     AddBlip(vehShopCoords, 326, 2, 0.85, 17, "Drift vehicle shop")
 end)
-

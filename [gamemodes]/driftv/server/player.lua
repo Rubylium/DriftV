@@ -26,6 +26,7 @@ function InitPlayer(source)
             data.license, saison, data.pName, data.money, data.driftPoint, data.exp, data.level, json.encode(data.cars), json.encode(data.succes), data.crew, data.crewOwner
         })
 
+        -- json.encode(data.cars)
         SavePlayer(source)
         debugPrint("Player created into database")
         return data
@@ -33,19 +34,25 @@ function InitPlayer(source)
 
     local function loadExistingPlayer(source, data)
         data.succes = json.decode(data.succes or '{}')
-        data.cars = json.decode(data.cars or '[]')
+        data.cars = json.decode(data.cars or '[]') -- Ensure the cars data is correctly decoded
         data.crew = data.crew or "None"
         data.crewOwner = data.crewOwner or false
-
+    
         if crew[data.crew] == nil then
             data.crew = "None"
         end
 
+        for _, car in ipairs(data.cars) do
+            if not car.price then
+                car.price = 0 -- Default to 0 if price is missing
+            end
+        end
+    
         data.needSave = false
         pCrew[source] = data.crew
         player[source] = data
-
-        debugPrint("Loaded player from database (" .. data.money .. " " .. data.driftPoint .. ")")
+    
+       debugPrint("Loaded player from database (" .. data.money .. " " .. data.driftPoint .. ")")
     end
 
     PlayerCount = PlayerCount + 1
@@ -86,6 +93,7 @@ function SavePlayer(source)
     debugPrint("Player ("..source..") saved")
     player[source].needSave = false
 end
+
 
 Citizen.CreateThread(function()
     local db = rockdb:new()
@@ -174,14 +182,59 @@ RegisterSecuredNetEvent(Events.setPassive, function(status)
     TriggerClientEvent(Events.setPassive, -1, inPassive)
 end)
 
+RegisterNetEvent("drift:FetchVehicles")
+AddEventHandler("drift:FetchVehicles", function()
+    local source = source
+    local license = GetLicense(source)
+    local vehicles = MySQL.scalar.await('SELECT cars FROM players WHERE license = ?', {license})
+    if vehicles then
+        local carList = json.decode(vehicles)
+        TriggerClientEvent("drift:ReceiveVehicles", source, carList)
+    else
+        TriggerClientEvent("drift:ReceiveVehicles", source, {})
+    end
+end)
+
 RegisterSecuredNetEvent(Events.buyVeh, function(price, label, model)
     if price <= player[source].money and price > 49000 then
         player[source].money = player[source].money - price
-        table.insert(player[source].cars, {label = label, model = model, props = {}})
-        TriggerClientEvent("FeedM:showNotification", source, "New vehicle added to your garage !", 5000, "success")
+        table.insert(player[source].cars, {label = label, model = model, price = price, props = {}})
+        TriggerClientEvent("FeedM:showNotification", source, "New vehicle added to your garage!", 5000, "success")
 
         RefreshPlayerData(source)
         player[source].needSave = true
+    else
+        TriggerClientEvent("FeedM:showNotification", source, "Not enough money to purchase vehicle.", 5000, "danger")
+    end
+end)
+
+RegisterSecuredNetEvent(Events.sellVeh, function(vehicleModel)
+    local source = source
+    local playerCars = player[source].cars
+    local vehicleIndex = nil
+    local vehiclePrice = nil
+
+    for i, car in ipairs(playerCars) do
+        if car.model == vehicleModel then
+            vehicleIndex = i
+            vehiclePrice = car.price or 0
+            break
+        end
+    end
+
+    if vehicleIndex and vehiclePrice > 0 then
+        local refund = math.floor(vehiclePrice * 0.5)
+        table.remove(playerCars, vehicleIndex)
+        player[source].money = player[source].money + refund
+        TriggerClientEvent("FeedM:showNotification", source, "Vehicle sold for ~g~$"..refund.."!", 5000, "success")
+        RefreshPlayerData(source)
+        player[source].needSave = true
+    else
+        if not vehicleIndex then
+            TriggerClientEvent("FeedM:showNotification", source, "Vehicle not found in your garage.", 5000, "danger")
+        elseif vehiclePrice <= 0 then
+            TriggerClientEvent("FeedM:showNotification", source, "Vehicle price data is unavailable.", 5000, "danger")
+        end
     end
 end)
 

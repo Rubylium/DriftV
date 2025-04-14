@@ -207,6 +207,27 @@ function player:GetDrift()
     return self.driftPoint
 end
 
+function player:sDriftPoint()
+    return self.sessionDriftPoint
+end
+
+function player:PlayerCrew()
+    return self.crew
+end
+
+function  player:vehDriftPoints()
+    return self.vStats
+end
+
+function player:BoughtVeh()
+    return self.buyVeh
+end
+
+
+function player:currentLevel()
+    return self.level
+end
+
 function player:ped()
     return PlayerPedId()
 end

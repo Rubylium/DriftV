@@ -116,13 +116,12 @@ function OpenMainMenu()
         open = true
         RageUI.Visible(main, true)
         StartLoopAnimation()
-
-        -- Refresh crew ranking every 1 minute
+        
+-- Refresh crew ranking every 1 minute
         if LastCrewrankingTimer < GetGameTimer() then
             LastCrewrankingTimer = GetGameTimer() + 60000
             TriggerServerEvent("driftV:AskRefreshCrewRanking")
         end
-
         Citizen.CreateThread(function()
             while open do
 
@@ -239,8 +238,11 @@ function OpenMainMenu()
 
 
                 RageUI.IsVisible(information, function()
-                    RageUI.Button("Money: "..GroupDigits(tostring(p:GetMoney())) .. "$", nil, {}, true, {});
-                    RageUI.Button("Drift: "..GroupDigits(tostring(math.floor(p:GetDrift()))) .. " point(s)", nil, {}, true, {});
+                    RageUI.Button("Money: "..GroupDigits(tostring(p:GetMoney())) .. "$", nil, {}, true, {}); -- Displays Local Player Current Balance
+                    RageUI.Button("Current Level: "..GroupDigits(tostring(p:currentLevel())), nil, {}, true, {}); -- Displays Local Player Current level
+                    RageUI.Button("Total Drift points : "..GroupDigits(tostring(math.floor(p:GetDrift()))) , nil, {}, true, {}); -- Displays Local Player Total ammount of DriftPoints
+                    RageUI.Button("Session Drift points : "..GroupDigits(tostring(math.floor(p:sDriftPoint()))) , nil, {}, true, {}); -- Displays Local Player Drift points (CURRENT SESSION)
+                    RageUI.Button("Your Crew: "..(p:PlayerCrew() or "none"), nil, {}, true, {}); -- Displays Local Player Crew
                 end)
 
                 RageUI.IsVisible(vehicle, function()
